@@ -312,7 +312,7 @@ const DROPSHIPPING: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "OPÉRATEURS SHOPIFY SÉRIEUX.",
   pricingLead:
-    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $7/mois (3 produits), Pro à $19/mois (10 produits, Drop + COD, upsells), Scale à $39/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
+    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, Drop + COD, upsells), Scale à $79/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
   plans: [
     {
       name: "Essai gratuit",
@@ -331,9 +331,9 @@ const DROPSHIPPING: LandingCopy = {
     },
     {
       name: "Starter",
-      price: "$7",
+      price: "$12",
       period: "/mois",
-      tagline: "Démarrer un premier produit · $67/an (−20 %)",
+      tagline: "Démarrer un premier produit · $115/an (−20 %)",
       features: [
         "3 produits actifs",
         "Dropshipping OU COD (au choix)",
@@ -346,9 +346,9 @@ const DROPSHIPPING: LandingCopy = {
     },
     {
       name: "Pro",
-      price: "$19",
+      price: "$29",
       period: "/mois",
-      tagline: "Valider 1 à 3 winners · $182/an (−20 %)",
+      tagline: "Valider 1 à 3 winners · $278/an (−20 %)",
       features: [
         "10 produits actifs",
         "Dropshipping ET COD en parallèle",
@@ -364,9 +364,9 @@ const DROPSHIPPING: LandingCopy = {
     },
     {
       name: "Scale",
-      price: "$39",
+      price: "$79",
       period: "/mois",
-      tagline: "Scaler avec Analytics Pro · $374/an (−20 %)",
+      tagline: "Scaler avec Analytics Pro · $756/an (−20 %)",
       features: [
         "Produits illimités",
         "Upsells illimités",
@@ -390,11 +390,11 @@ const DROPSHIPPING: LandingCopy = {
     },
     {
       q: "Starter, Pro ou Scale ?",
-      a: "Starter ($7) = 3 produits, Drop OU COD, historique 60j. Pro ($19) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($39) = produits illimités + Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights) + WhatsApp prioritaire.",
+      a: "Starter ($12) = 3 produits, Drop OU COD, historique 60j. Pro ($29) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights) + WhatsApp prioritaire.",
     },
     {
       q: "Mensuel ou annuel ?",
-      a: "Annuel = −20 % à l'année : Starter $67/an, Pro $182/an, Scale $374/an. Tu peux changer ou annuler à tout moment.",
+      a: "Annuel = −20 % à l'année : Starter $115/an, Pro $278/an, Scale $756/an. Tu peux changer ou annuler à tout moment.",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
@@ -604,7 +604,7 @@ const COD: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "VENDEURS COD QUI VEULENT SCALER PROPRE.",
   pricingLead:
-    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $7/mois (3 produits), Pro à $19/mois (10 produits, COD + Drop, upsells, multi-zones), Scale à $39/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
+    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, COD + Drop, upsells, multi-zones), Scale à $79/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
   plans: [
     {
       name: "Essai gratuit",
@@ -623,9 +623,9 @@ const COD: LandingCopy = {
     },
     {
       name: "Starter",
-      price: "$7",
+      price: "$12",
       period: "/mois",
-      tagline: "Démarrer un premier produit COD · $67/an (−20 %)",
+      tagline: "Démarrer un premier produit COD · $115/an (−20 %)",
       features: [
         "3 produits actifs",
         "Mode COD OU Dropshipping (au choix)",
@@ -638,9 +638,9 @@ const COD: LandingCopy = {
     },
     {
       name: "Pro",
-      price: "$19",
+      price: "$29",
       period: "/mois",
-      tagline: "Piloter ton call center & 2–3 winners · $182/an (−20 %)",
+      tagline: "Piloter ton call center & 2–3 winners · $278/an (−20 %)",
       features: [
         "10 produits actifs",
         "COD ET Dropshipping en parallèle",
@@ -656,9 +656,9 @@ const COD: LandingCopy = {
     },
     {
       name: "Scale",
-      price: "$39",
+      price: "$79",
       period: "/mois",
-      tagline: "Scaler avec Analytics Pro · $374/an (−20 %)",
+      tagline: "Scaler avec Analytics Pro · $756/an (−20 %)",
       features: [
         "Produits illimités",
         "Upsells illimités",
@@ -682,7 +682,7 @@ const COD: LandingCopy = {
     },
     {
       q: "Mensuel ou annuel ?",
-      a: "Annuel = −20 % : Starter $67/an, Pro $182/an, Scale $374/an. Tu peux changer ou annuler à tout moment.",
+      a: "Annuel = −20 % : Starter $115/an, Pro $278/an, Scale $756/an. Tu peux changer ou annuler à tout moment.",
     },
     {
       q: "Comment je définis mes zones de livraison ?",

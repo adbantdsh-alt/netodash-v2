@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 /**
  * Mapping interne ↔ label public (nouvelle grille Starter / Pro / Scale) :
  *   - trial    → "Essai gratuit" (14 jours, Pro débloqué)
- *   - basic    → "Starter" ($7/mois, 3 produits, 1 mode au choix, 60j d'historique)
- *   - starter  → "Pro"     ($19/mois, 10 produits, Drop+COD, upsells, multi-zones COD)
- *   - pro      → "Scale"   ($39/mois, illimité + Analytics Pro EXCLUSIF + WhatsApp prio)
+ *   - basic    → "Starter" ($12/mois, 3 produits, 1 mode au choix, 60j d'historique)
+ *   - starter  → "Pro"     ($29/mois, 10 produits, Drop+COD, upsells, multi-zones COD)
+ *   - pro      → "Scale"   ($79/mois, illimité + Analytics Pro EXCLUSIF + WhatsApp prio)
  *   - free     → "Free" (post-essai sans abo, app utilisable très limitée)
  *
  * On conserve les identifiants internes `basic` / `starter` / `pro` pour ne pas
@@ -40,15 +40,15 @@ export type SubscriptionState = {
   isTrialing: boolean;
   /** Toute formule payante OU essai (≠ free). */
   hasPaidAccess: boolean;
-  /** Plan Scale ($39) — le plus haut, illimité + Analytics Pro + WhatsApp prio. */
+  /** Plan Scale ($79) — le plus haut, illimité + Analytics Pro + WhatsApp prio. */
   hasScaleAccess: boolean;
   /** Alias historique de hasScaleAccess. @deprecated utiliser hasScaleAccess. */
   hasPremiumAccess: boolean;
   /** Analytics Pro (waterfall, scoring, break-even, simulateur, insights) — Scale uniquement. */
   hasAnalyticsAccess: boolean;
-  /** Plan Pro ($19) ou plus — débloque Drop+COD parallèle, upsells, multi-zones COD, capture. */
+  /** Plan Pro ($29) ou plus — débloque Drop+COD parallèle, upsells, multi-zones COD, capture. */
   hasProAccess: boolean;
-  /** Plan Starter ($7) ou plus — accès payant minimum. */
+  /** Plan Starter ($12) ou plus — accès payant minimum. */
   hasBasicAccess: boolean;
   /** Compatibilité — utilise une légère période de grâce, à supprimer à terme. */
   needsPayment: boolean;
@@ -166,7 +166,7 @@ export const PLAN_LABELS: Record<EffectivePlan, string> = {
 };
 
 export const PLAN_PRICES = {
-  basic: { amount: 7, currency: "USD", display: "$7/mois" },
-  starter: { amount: 19, currency: "USD", display: "$19/mois" },
-  pro: { amount: 39, currency: "USD", display: "$39/mois" },
+  basic: { amount: 12, currency: "USD", display: "$12/mois" },
+  starter: { amount: 29, currency: "USD", display: "$29/mois" },
+  pro: { amount: 79, currency: "USD", display: "$79/mois" },
 } as const;

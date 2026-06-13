@@ -13,9 +13,9 @@ export const PLAN_PRICING: Record<
   PlanKey,
   { amountXof: number; amountUsd: number; label: string }
 > = {
-  basic: { amountXof: 3000, amountUsd: 5, label: "Basic" },
-  starter: { amountXof: 10000, amountUsd: 17, label: "Pro" },
-  pro: { amountXof: 16000, amountUsd: 27, label: "Premium" },
+  basic: { amountXof: 7200, amountUsd: 12, label: "Basic" },
+  starter: { amountXof: 17400, amountUsd: 29, label: "Pro" },
+  pro: { amountXof: 47400, amountUsd: 79, label: "Premium" },
 };
 
 function getApiKey(): string {

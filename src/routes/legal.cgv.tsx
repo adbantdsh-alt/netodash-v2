@@ -20,10 +20,10 @@ function CgvPage() {
       <h2>Offres et tarifs</h2>
       <p>
         NETODASH propose un essai gratuit de 14 jours (plan Pro débloqué, sans
-        carte bancaire), puis trois abonnements : Starter à $7/mois (3 produits),
-        Pro à $19/mois (10 produits, Drop + COD, upsells, multi-zones) et Scale
-        à $39/mois (produits illimités + Analytics Pro). Une facturation annuelle
-        à −20 % est également proposée (Starter $67/an, Pro $182/an, Scale $374/an).
+        carte bancaire), puis trois abonnements : Starter à $12/mois (3 produits),
+        Pro à $29/mois (10 produits, Drop + COD, upsells, multi-zones) et Scale
+        à $79/mois (produits illimités + Analytics Pro). Une facturation annuelle
+        à −20 % est également proposée (Starter $115/an, Pro $278/an, Scale $756/an).
         Les prix sont affichés en dollar américain, hors taxes locales applicables.
       </p>
 

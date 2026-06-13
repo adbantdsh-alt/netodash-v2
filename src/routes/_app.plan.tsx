@@ -212,7 +212,7 @@ function PlanPage() {
         {sub.plan === "free" && (
           <div className="brutal-border-thin border-accent p-4 mt-4 bg-accent/5">
             <div className="text-sm font-bold text-accent">
-              Tu es en plan Free. Choisis Starter ($7), Pro ($19) ou Scale ($39) pour réactiver ton dashboard.
+              Tu es en plan Free. Choisis Starter ($12), Pro ($29) ou Scale ($79) pour réactiver ton dashboard.
             </div>
           </div>
         )}
@@ -270,7 +270,7 @@ function PlanPage() {
                 onClick={() => setConfirmAction("downgrade_to_pro")}
                 className="brutal-border-thin px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-accent-foreground hover:border-accent"
               >
-                ↓ Rétrograder vers Pro ($19)
+                ↓ Rétrograder vers Pro ($29)
               </button>
             )}
             {(sub.plan === "pro" || sub.plan === "starter") && (
@@ -278,7 +278,7 @@ function PlanPage() {
                 onClick={() => setConfirmAction("downgrade_to_basic")}
                 className="brutal-border-thin px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-accent-foreground hover:border-accent"
               >
-                ↓ Rétrograder vers Starter ($7)
+                ↓ Rétrograder vers Starter ($12)
               </button>
             )}
             <button
@@ -488,9 +488,9 @@ function PlanPage() {
             </h3>
             <p className="font-mono text-xs text-muted-foreground mb-5">
               {confirmAction === "downgrade_to_pro"
-                ? "Tu passes immédiatement sur Pro ($19/mois). Stripe crédite la différence sur ta prochaine facture. Tu perds l'accès Analytics Pro (réservé à Scale) et la limite passe à 10 produits."
+                ? "Tu passes immédiatement sur Pro ($29/mois). Stripe crédite la différence sur ta prochaine facture. Tu perds l'accès Analytics Pro (réservé à Scale) et la limite passe à 10 produits."
                 : confirmAction === "downgrade_to_basic"
-                  ? "Tu passes immédiatement sur Starter ($7/mois). 3 produits, un seul mode (Dropshipping OU COD), historique limité à 60 jours, plus d'upsells ni de multi-zones COD. La différence est créditée."
+                  ? "Tu passes immédiatement sur Starter ($12/mois). 3 produits, un seul mode (Dropshipping OU COD), historique limité à 60 jours, plus d'upsells ni de multi-zones COD. La différence est créditée."
                   : "Ton abonnement reste actif jusqu'à la fin de la période payée, puis tu retombes sur Free. Tes données sont conservées."}
             </p>
             <div className="flex gap-3">

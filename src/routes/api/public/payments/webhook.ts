@@ -15,7 +15,7 @@ function getSupabase() {
 
 function planFromPriceId(priceId: string | undefined | null): "basic" | "starter" | "pro" | null {
   if (!priceId) return null;
-  // v4 = grille tarifaire actuelle (Starter $7 / Pro $19 / Scale $39)
+  // v4 = grille tarifaire actuelle (Starter $12 / Pro $29 / Scale $79)
   // Labels publics → IDs internes : Starter=basic, Pro=starter, Scale=pro
   // Mensuel
   if (priceId === "scale_monthly_v4") return "pro";

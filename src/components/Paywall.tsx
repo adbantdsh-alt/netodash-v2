@@ -7,7 +7,7 @@ type Props = {
 
 /**
  * Full-section paywall shown when the user lacks the required plan.
- * - "analytics": user n'a pas le plan Scale → upsell vers Scale ($39)
+ * - "analytics": user n'a pas le plan Scale → upsell vers Scale ($79)
  * - "trial-expired": global block when trial ended without payment
  */
 export function Paywall({ variant, trialDaysLeft }: Props) {
@@ -38,7 +38,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
           🔒 Accès bloqué
         </div>
         <div className="text-xs uppercase tracking-widest font-bold text-accent mb-2 mt-2">
-          ANALYTICS PRO · EXCLUSIF AU PLAN SCALE ($39)
+          ANALYTICS PRO · EXCLUSIF AU PLAN SCALE ($79)
         </div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-3">
           TON PLAN ACTUEL N'A PAS ACCÈS<br/>À ANALYTICS PRO

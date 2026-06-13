@@ -4,9 +4,9 @@ import type { EffectivePlan } from "./use-subscription";
  * Limites par plan. -1 = illimité.
  * Mapping interne → label public (nouvelle grille) :
  *   - trial    = Essai gratuit 14j (Pro débloqué, 10 produits)
- *   - basic    = "Starter" public ($7, 3 produits, 1 mode)
- *   - starter  = "Pro"     public ($19, 10 produits, Drop+COD)
- *   - pro      = "Scale"   public ($39, illimité + Analytics Pro)
+ *   - basic    = "Starter" public ($12, 3 produits, 1 mode)
+ *   - starter  = "Pro"     public ($29, 10 produits, Drop+COD)
+ *   - pro      = "Scale"   public ($79, illimité + Analytics Pro)
  *   - free     = post-essai sans abonnement
  */
 export const PRODUCT_LIMITS: Record<EffectivePlan, number> = {
@@ -57,7 +57,7 @@ export function canUseDualMode(plan: EffectivePlan, legacyDualMode: boolean): bo
   return plan === "trial" || plan === "starter" || plan === "pro";
 }
 
-/** Capture mobile colorée par mode : Pro ($19) et Scale ($39). */
+/** Capture mobile colorée par mode : Pro ($29) et Scale ($79). */
 export function canUseMobileCapture(plan: EffectivePlan): boolean {
   return plan === "trial" || plan === "starter" || plan === "pro";
 }
@@ -67,7 +67,7 @@ export function canUseUpsells(plan: EffectivePlan): boolean {
   return plan === "starter" || plan === "pro" || plan === "trial";
 }
 
-/** Support WhatsApp : Pro ($19) et Scale ($39). */
+/** Support WhatsApp : Pro ($29) et Scale ($79). */
 export function canUseWhatsAppSupport(plan: EffectivePlan): boolean {
   return plan === "starter" || plan === "pro";
 }

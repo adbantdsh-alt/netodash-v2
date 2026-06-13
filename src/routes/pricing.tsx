@@ -144,7 +144,7 @@ function PricingPage() {
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
           14 jours d'essai gratuit avec le plan Pro débloqué, sans carte bancaire.
-          Puis Starter $7, Pro $19 ou Scale $39 — facture mensuelle ou annuelle (−20 %).
+          Puis Starter $12, Pro $29 ou Scale $79 — facture mensuelle ou annuelle (−20 %).
           Aucun engagement, annule en un clic.
         </p>
 
@@ -257,11 +257,11 @@ function PricingPage() {
               },
               {
                 q: "C'est quoi la facturation annuelle ?",
-                a: "Tu paies une fois par an et tu économises 20 % : Starter à $67/an (≈ $5,58/mois), Pro à $182/an (≈ $15,17/mois), Scale à $374/an (≈ $31,17/mois). Tu peux annuler à tout moment — pas de remboursement au prorata sauf obligation légale.",
+                a: "Tu paies une fois par an et tu économises 20 % : Starter à $115/an (≈ $9,58/mois), Pro à $278/an (≈ $23,17/mois), Scale à $756/an (≈ $63,00/mois). Tu peux annuler à tout moment — pas de remboursement au prorata sauf obligation légale.",
               },
               {
                 q: "Quelle différence entre Starter, Pro et Scale ?",
-                a: "Starter ($7) = 3 produits, Drop OU COD, historique 60 jours. Pro ($19) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($39) = produits illimités + Analytics Pro EXCLUSIF (scoring 0-100, waterfall du bénéfice, break-even, simulateur, insights auto) + support WhatsApp prioritaire.",
+                a: "Starter ($12) = 3 produits, Drop OU COD, historique 60 jours. Pro ($29) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring 0-100, waterfall du bénéfice, break-even, simulateur, insights auto) + support WhatsApp prioritaire.",
               },
               {
                 q: "Puis-je changer de plan ou annuler ?",
