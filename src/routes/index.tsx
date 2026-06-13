@@ -145,7 +145,7 @@ function LandingChooser() {
           </div>
 
           <p className="text-center font-mono text-xs text-muted-foreground mt-12">
-            Tu fais les deux ? <BetaCtaButton variant="inline" /> — dès le plan Starter Drop ($12), COD et Dropshipping inclus (2 modes en parallèle). Programme bêta : accès complet.
+            Tu fais les deux ? <BetaCtaButton variant="inline" /> — dès le plan Starter Drop ($12), COD et Dropshipping inclus. Bêta : Scale 6 mois gratuits + -50 % à vie.
           </p>
 
           <section className="mt-12 md:mt-16 max-w-5xl mx-auto grid md:grid-cols-3 gap-4" aria-label="SEO calculateur ROAS">

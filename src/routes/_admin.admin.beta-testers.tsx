@@ -42,18 +42,19 @@ function AdminBetaTestersPage() {
         <div className="admin-card mb-4 border-l-4 border-l-[color:var(--admin-accent)]">{err}</div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <Kpi label="Places utilisées" value={loading ? "…" : `${data?.betaCount ?? 0} / ${data?.maxSpots ?? 10}`} />
         <Kpi label="Places restantes" value={loading ? "…" : `${data?.spotsLeft ?? 0}`} />
         <Kpi label="Liste d'attente" value={loading ? "…" : `${data?.waitlistCount ?? 0}`} />
-        <Kpi label="Accès gratuit" value="6 mois" />
+        <Kpi label="Accès gratuit" value="Scale · 6 mois" />
+        <Kpi label="Remise à vie" value="-50 %" />
       </div>
 
       <div className="admin-card p-0 overflow-x-auto mb-8">
         <div className="p-4 border-b border-black/10">
           <h2 className="font-black text-lg">Inscrits au programme bêta</h2>
           <p className="text-xs text-muted-foreground mt-1 font-mono">
-            6 mois gratuits · accès complet · max 10 places
+            Plan Scale gratuit 6 mois · -50 % à vie sur tous les plans · max 10 places
           </p>
         </div>
         <table className="admin-table">
@@ -65,6 +66,7 @@ function AdminBetaTestersPage() {
               <th>Compte</th>
               <th>Plan</th>
               <th>Gratuit jusqu'au</th>
+              <th>Remise à vie</th>
               <th>Statut</th>
               <th></th>
             </tr>
@@ -72,13 +74,13 @@ function AdminBetaTestersPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} className="p-6 text-center">
+                <td colSpan={9} className="p-6 text-center">
                   Chargement…
                 </td>
               </tr>
             ) : (data?.testers ?? []).length === 0 ? (
               <tr>
-                <td colSpan={8} className="p-6 text-center">
+                <td colSpan={9} className="p-6 text-center">
                   Aucun bêta-testeur pour le moment
                 </td>
               </tr>
@@ -95,6 +97,7 @@ function AdminBetaTestersPage() {
                   </td>
                   <td>{t.plan ?? "—"}</td>
                   <td>{fmtDate(t.freeUntil ?? t.trialEndsAt)}</td>
+                  <td className="font-bold">-{t.lifetimeDiscountPercent} %</td>
                   <td>
                     <span className="admin-badge" data-tone="accent">
                       {t.status}

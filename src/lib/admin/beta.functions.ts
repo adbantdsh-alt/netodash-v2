@@ -8,6 +8,7 @@ export type AdminBetaTesterRow = {
   userId: string | null;
   status: string;
   freeUntil: string | null;
+  lifetimeDiscountPercent: number;
   createdAt: string;
   hasAccount: boolean;
   plan: string | null;
@@ -31,7 +32,7 @@ export const adminGetBetaProgram = createServerFn({ method: "GET" })
       await Promise.all([
         admin
           .from("beta_testers")
-          .select("id, email, full_name, user_id, status, free_until, created_at")
+          .select("id, email, full_name, user_id, status, free_until, lifetime_discount_percent, created_at")
           .order("created_at", { ascending: false }),
         admin
           .from("beta_waitlist")
@@ -79,6 +80,7 @@ export const adminGetBetaProgram = createServerFn({ method: "GET" })
           userId: uid,
           status: (t.status as string) ?? "active",
           freeUntil: (t.free_until as string | null) ?? null,
+          lifetimeDiscountPercent: Number(t.lifetime_discount_percent ?? 50),
           createdAt: t.created_at as string,
           hasAccount: !!uid,
           plan: sub?.plan ?? null,

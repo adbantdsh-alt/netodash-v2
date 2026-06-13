@@ -17,6 +17,9 @@
 //      pour CHAQUE endpoint (sandbox + live) :
 //        PAYMENTS_SANDBOX_WEBHOOK_SECRET=whsec_xxx
 //        PAYMENTS_LIVE_WEBHOOK_SECRET=whsec_xxx
+//   4. Coupon bêta-testeurs -50 % à vie (Products → Coupons, duration: forever) :
+//        STRIPE_BETA_50_COUPON_SANDBOX=coupon_id_test
+//        STRIPE_BETA_50_COUPON_LIVE=coupon_id_live
 
 import Stripe from "stripe";
 

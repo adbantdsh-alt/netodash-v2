@@ -3,6 +3,7 @@ import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription, PLAN_LABELS } from "@/lib/use-subscription";
+import { useBetaBenefits } from "@/lib/use-beta-benefits";
 import {
   CodPlanCard,
   DropshippingPlanCards,
@@ -86,6 +87,8 @@ function metaFor(plan: CheckoutPlan): PlanMeta {
 function PlanPage() {
   const { user } = useAuth();
   const sub = useSubscription(user?.id);
+  const betaQ = useBetaBenefits(user?.id);
+  const beta = betaQ.data;
   const search = useSearch({ from: "/_app/plan" }) as SearchParams;
   const [stripePlan, setStripePlan] = useState<CheckoutPlan | null>(null);
   const [confirmAction, setConfirmAction] = useState<ChangeSubscriptionAction | null>(null);
@@ -245,6 +248,34 @@ function PlanPage() {
       </section>
 
       <PaymentTestModeBanner />
+
+      {beta?.isBetaTester && (
+        <section className="brutal-border border-accent bg-accent/5 p-5 md:p-6 mb-6">
+          <div className="text-xs uppercase tracking-widest font-black text-accent mb-2">
+            Programme bêta-testeur
+          </div>
+          {beta.isFreePeriodActive && beta.freeUntil ? (
+            <p className="font-mono text-sm leading-relaxed">
+              Plan <strong className="text-foreground">Scale</strong> actif gratuitement encore{" "}
+              <strong className="text-foreground">
+                {beta.freeDaysLeft} jour{beta.freeDaysLeft !== 1 ? "s" : ""}
+              </strong>{" "}
+              (jusqu'au {beta.freeUntil.toLocaleDateString("fr-FR")}).
+            </p>
+          ) : (
+            <p className="font-mono text-sm leading-relaxed">
+              Ta période Scale gratuite est terminée. Tu conserves{" "}
+              <strong className="text-foreground">-{beta.lifetimeDiscountPercent} % à vie</strong>{" "}
+              sur tous les plans au checkout Stripe.
+            </p>
+          )}
+          {!beta.isFreePeriodActive && (
+            <p className="font-mono text-xs text-muted-foreground mt-2">
+              La remise s'applique automatiquement lors du paiement.
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="mb-10">
         <h2 className="text-2xl md:text-3xl font-black tracking-tighter">

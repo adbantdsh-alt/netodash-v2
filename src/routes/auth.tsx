@@ -173,7 +173,7 @@ function AuthPage() {
           setSignupSentTo(parsed.data.email);
           toast.success(
             beta === "1"
-              ? "Compte bêta créé. Vérifie ton email — 6 mois gratuits activés à la confirmation."
+              ? "Compte bêta créé. Vérifie ton email — Scale gratuit 6 mois + -50 % à vie."
               : "Compte créé. Vérifie ton email.",
           );
           return;
@@ -190,7 +190,7 @@ function AuthPage() {
         }
         toast.success(
           beta === "1"
-            ? "Compte bêta créé — 6 mois gratuits, accès complet !"
+            ? "Compte bêta créé — Scale gratuit 6 mois, puis -50 % à vie !"
             : affiliateInfo?.valid
               ? `Compte créé. Essai gratuit ${affiliateInfo.trial_days} jours !`
               : "Compte créé.",
@@ -324,9 +324,11 @@ function AuthPage() {
                 Programme bêta-testeur
               </div>
               <p className="font-mono text-xs text-muted-foreground leading-relaxed">
-                Inscription identique aux autres utilisateurs. Les bêta-testeurs bénéficient de{" "}
-                <strong className="text-foreground">6 mois gratuits</strong> avec accès complet
-                (places limitées à 10).
+                Inscription identique aux autres utilisateurs. Les bêta-testeurs bénéficient du plan{" "}
+                <strong className="text-foreground">Scale</strong> gratuit pendant{" "}
+                <strong className="text-foreground">6 mois</strong>, puis{" "}
+                <strong className="text-foreground">-50 % à vie</strong> sur tous les plans (places
+                limitées à 10).
               </p>
             </div>
           )}

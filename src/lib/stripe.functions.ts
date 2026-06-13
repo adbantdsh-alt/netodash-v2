@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
+import { resolveBetaStripeCoupon } from "@/lib/beta-discount.server";
 
 const ALLOWED_RETURN_ORIGINS = new Set([
   "https://netodash.com",
@@ -40,6 +41,7 @@ export const createStripeCheckoutSession = createServerFn({ method: "POST" })
     if (!prices.data.length) throw new Error("Price not found");
     const stripePrice = prices.data[0];
     const isRecurring = stripePrice.type === "recurring";
+    const betaCouponId = await resolveBetaStripeCoupon(userId, data.environment as StripeEnv);
 
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: stripePrice.id, quantity: 1 }],
@@ -49,6 +51,7 @@ export const createStripeCheckoutSession = createServerFn({ method: "POST" })
       payment_method_types: ["card"],
       ...(userEmail && { customer_email: userEmail }),
       metadata: { userId, priceId: data.priceId },
+      ...(betaCouponId && { discounts: [{ coupon: betaCouponId }] }),
       ...(isRecurring && {
         subscription_data: { metadata: { userId, priceId: data.priceId } },
       }),
