@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getCurrentAdmin, touchAdminLogin } from "@/lib/admin/auth.functions";
+import { getSupabaseAuthHeaders } from "@/lib/admin/auth-headers";
 import { AdminSidebar } from "@/components/admin/Sidebar";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import "@/styles/admin.css";
@@ -46,12 +47,14 @@ function AdminLayout() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await fetchCurrentAdmin();
+        const headers = await getSupabaseAuthHeaders();
+        const data = await fetchCurrentAdmin({ headers });
         setMe({ email: data.email, role: data.role });
-        await markAdminLogin();
-      } catch {
-        setError("Accès refusé");
-        setTimeout(() => navigate({ to: "/admin/login" as never }), 800);
+        await markAdminLogin({ headers });
+      } catch (e) {
+        console.error("[admin] access denied", e);
+        setError(e instanceof Error ? e.message : "Accès refusé");
+        setTimeout(() => navigate({ to: "/admin/login" as never }), 1200);
       }
     })();
   }, [fetchCurrentAdmin, markAdminLogin, navigate]);

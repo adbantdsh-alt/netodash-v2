@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { checkIsAdminAccount } from "@/lib/admin/auth.functions";
+import { getSupabaseAuthHeaders } from "@/lib/admin/auth-headers";
 import { AdminLogo } from "@/components/admin/AdminLogo";
 import "@/styles/admin.css";
 
@@ -16,6 +17,15 @@ export const Route = createFileRoute("/admin/login")({
   }),
   component: AdminLoginPage,
 });
+
+function mapAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes("invalid login credentials")) return "Email ou mot de passe incorrect.";
+  if (m.includes("email not confirmed")) {
+    return "Email non confirmé. Vérifie ta boîte mail (spams inclus) puis réessaie.";
+  }
+  return message;
+}
 
 function AdminLoginPage() {
   const navigate = useNavigate();
@@ -35,13 +45,23 @@ function AdminLoginPage() {
         password,
       });
       if (signInErr || !data.user) {
-        throw new Error("Identifiants invalides.");
+        throw new Error(mapAuthError(signInErr?.message ?? "Identifiants invalides."));
       }
+
+      const { data: sessionCheck } = await supabase.auth.getSession();
+      if (!sessionCheck.session) {
+        throw new Error("Session non établie. Réessaie dans quelques secondes.");
+      }
+
       const check = await checkAdminAccount({ data: { userId: data.user.id } });
       if (!check.isAdmin) {
         await supabase.auth.signOut();
-        throw new Error("Ce compte n'est pas un compte administrateur.");
+        throw new Error(
+          "Ce compte n'est pas autorisé en admin. Utilise adbaxgoat@gmail.com ou contacte le support.",
+        );
       }
+
+      await getSupabaseAuthHeaders();
       navigate({ to: "/admin" as never });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur de connexion.");
