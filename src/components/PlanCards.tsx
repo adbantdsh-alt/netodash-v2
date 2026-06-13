@@ -18,9 +18,9 @@ export const PLAN_PRICING: Record<
   PlanKey,
   { monthly: number; yearly: number; monthlyEquivalent: string }
 > = {
-  basic: { monthly: 7, yearly: 67, monthlyEquivalent: "5,58" },
-  starter: { monthly: 19, yearly: 182, monthlyEquivalent: "15,17" },
-  pro: { monthly: 39, yearly: 374, monthlyEquivalent: "31,17" },
+  basic: { monthly: 12, yearly: 115, monthlyEquivalent: "9,58" },
+  starter: { monthly: 29, yearly: 278, monthlyEquivalent: "23,17" },
+  pro: { monthly: 79, yearly: 756, monthlyEquivalent: "63,00" },
 };
 
 /**

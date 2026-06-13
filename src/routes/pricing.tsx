@@ -5,7 +5,7 @@ import { BillingCycleToggle, type BillingCycle } from "@/components/PlanCards";
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Dashboard rentabilité Dropshipping & COD";
 const PRICING_DESC =
-  "14 jours d'essai gratuit, sans carte. Starter $7, Pro $19, Scale $39 — ou −20 % en annuel. Drop + COD, Analytics Pro.";
+  "14 jours d'essai gratuit, sans carte. Starter $12, Pro $29, Scale $79 — ou −20 % en annuel. Drop + COD, Analytics Pro.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -53,9 +53,9 @@ type PaidPlan = {
 const PAID_PLANS: PaidPlan[] = [
   {
     name: "Starter",
-    monthly: 7,
-    yearly: 67,
-    monthlyEquivalent: "5,58",
+    monthly: 12,
+    yearly: 115,
+    monthlyEquivalent: "9,58",
     tagline: "Démarrer un premier produit",
     features: [
       "3 produits actifs",
@@ -70,9 +70,9 @@ const PAID_PLANS: PaidPlan[] = [
   },
   {
     name: "Pro",
-    monthly: 19,
-    yearly: 182,
-    monthlyEquivalent: "15,17",
+    monthly: 29,
+    yearly: 278,
+    monthlyEquivalent: "23,17",
     tagline: "Valider 1 à 3 winners",
     features: [
       "10 produits actifs",
@@ -89,9 +89,9 @@ const PAID_PLANS: PaidPlan[] = [
   },
   {
     name: "Scale",
-    monthly: 39,
-    yearly: 374,
-    monthlyEquivalent: "31,17",
+    monthly: 79,
+    yearly: 756,
+    monthlyEquivalent: "63,00",
     tagline: "Scaler en volume avec Analytics Pro",
     features: [
       "Produits illimités",
