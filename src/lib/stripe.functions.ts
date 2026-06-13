@@ -6,6 +6,7 @@ import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 const ALLOWED_RETURN_ORIGINS = new Set([
   "https://netodash.com",
   "https://www.netodash.com",
+  "https://netodash-v2.vercel.app",
   "https://netodash.lovable.app",
   "https://id-preview--c8da90f6-5654-47cb-a390-4f9faf5e58ee.lovable.app",
   "http://localhost:5173",
