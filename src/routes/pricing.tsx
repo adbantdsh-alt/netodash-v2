@@ -1,11 +1,10 @@
-import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BillingCycleToggle, type BillingCycle } from "@/components/PlanCards";
+import { COD_PLAN } from "@/components/PlanCards";
 
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Dashboard rentabilité Dropshipping & COD";
 const PRICING_DESC =
-  "14 jours d'essai gratuit, sans carte. Starter $12, Pro $29, Scale $79 — ou −20 % en annuel. Drop + COD, Analytics Pro.";
+  "14 jours d'essai gratuit, sans carte. Plan COD $10, Starter $12, Pro $29, Scale $79 / mois. Paiement par carte Stripe.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -42,28 +41,24 @@ export const Route = createFileRoute("/pricing")({
 type PaidPlan = {
   name: "Starter" | "Pro" | "Scale";
   monthly: number;
-  yearly: number;
-  monthlyEquivalent: string;
   tagline: string;
   features: string[];
   cta: string;
   highlight: boolean;
 };
 
-const PAID_PLANS: PaidPlan[] = [
+const DROPSHIP_PLANS: PaidPlan[] = [
   {
     name: "Starter",
     monthly: 12,
-    yearly: 115,
-    monthlyEquivalent: "9,58",
-    tagline: "Démarrer un premier produit",
+    tagline: "Démarrer en Drop avec le COD inclus",
     features: [
-      "3 produits actifs",
-      "Dropshipping OU COD (au choix)",
+      "3 produits Dropshipping max",
+      "Mode COD inclus (dashboard basique)",
+      "Produits COD illimités",
       "ROAS net multi-plateformes",
-      "Dashboard rentabilité complet",
+      "Historique Drop 60 jours",
       "1 zone de livraison COD",
-      "Historique 60 jours glissants",
     ],
     cta: "Choisir Starter",
     highlight: false,
@@ -71,17 +66,12 @@ const PAID_PLANS: PaidPlan[] = [
   {
     name: "Pro",
     monthly: 29,
-    yearly: 278,
-    monthlyEquivalent: "23,17",
-    tagline: "Valider 1 à 3 winners",
+    tagline: "Valider plusieurs winners Drop + COD avancé",
     features: [
-      "10 produits actifs",
-      "Dropshipping ET COD en parallèle",
-      "Upsells (ventes additionnelles)",
-      "Multi-zones COD avec tarifs",
-      "ROAS net Meta / TikTok / Google",
-      "Capture mobile colorée par mode",
-      "Historique illimité · Export CSV",
+      "10 produits Dropshipping max",
+      "Drop ET COD en parallèle",
+      "Upsells · Multi-zones COD · Export CSV",
+      "Capture mobile · Historique illimité",
       "Support email + WhatsApp",
     ],
     cta: "Choisir Pro",
@@ -90,19 +80,13 @@ const PAID_PLANS: PaidPlan[] = [
   {
     name: "Scale",
     monthly: 79,
-    yearly: 756,
-    monthlyEquivalent: "63,00",
-    tagline: "Scaler en volume avec Analytics Pro",
+    tagline: "Scaler avec Analytics Pro & Decision Engine",
     features: [
-      "Produits illimités",
-      "Upsells illimités",
-      "Tout ce qui est inclus dans Pro",
-      "Analytics Pro EXCLUSIF",
-      "Scoring 0-100 winners/losers",
-      "Waterfall du bénéfice net",
-      "Break-even & simulateur scénarios",
-      "Insights & alertes automatiques",
-      "Support prioritaire WhatsApp",
+      "Produits Dropshipping illimités",
+      "Tout Pro + Analytics Pro EXCLUSIF",
+      "Decision Engine · Scoring · Waterfall",
+      "Break-even · Simulateur · Insights auto",
+      "Support WhatsApp prioritaire",
     ],
     cta: "Choisir Scale",
     highlight: false,
@@ -110,8 +94,6 @@ const PAID_PLANS: PaidPlan[] = [
 ];
 
 function PricingPage() {
-  const [cycle, setCycle] = useState<BillingCycle>("monthly");
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="brutal-border-thin border-t-0 border-l-0 border-r-0">
@@ -139,42 +121,55 @@ function PricingPage() {
           TARIFS
         </div>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter mt-2 max-w-3xl">
-          UN PRIX <span className="text-accent">JUSTE.</span><br />
+          UN PRIX <span className="text-accent">JUSTE.</span>
+          <br />
           PAS DE PIÈGE.
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
-          14 jours d'essai gratuit avec le plan Pro débloqué, sans carte bancaire.
-          Puis Starter $12, Pro $29 ou Scale $79 — facture mensuelle ou annuelle (−20 %).
-          Aucun engagement, annule en un clic.
+          14 jours d'essai gratuit avec accès complet (plan Pro débloqué), sans carte bancaire.
+          Puis COD $10, Starter $12, Pro $29 ou Scale $79 — facturation mensuelle par carte Stripe.
         </p>
 
-        <div className="mt-8 flex justify-center md:justify-start">
-          <BillingCycleToggle cycle={cycle} onChange={setCycle} />
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {/* Carte Essai */}
+        {/* Essai */}
+        <div className="mt-10 max-w-xl">
           <div className="p-7 flex flex-col brutal-border">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">PLAN</div>
-                <div className="text-3xl font-black tracking-tight mt-1">Essai gratuit</div>
-              </div>
-            </div>
-            <div className="flex items-baseline gap-1 mb-2">
+            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">PLAN</div>
+            <div className="text-3xl font-black tracking-tight mt-1">Essai gratuit</div>
+            <div className="flex items-baseline gap-1 my-2">
               <span className="text-5xl font-black tracking-tighter">0 $</span>
               <span className="font-mono text-sm text-muted-foreground">/ 14 jours</span>
             </div>
-            <p className="font-mono text-xs text-muted-foreground mb-5">Pro débloqué, sans carte bancaire</p>
+            <p className="font-mono text-xs text-muted-foreground mb-5">
+              Accès complet 14 jours — peu importe le mode choisi au signup
+            </p>
+            <Link
+              to="/auth"
+              search={{ mode: "signup" }}
+              className="block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
+            >
+              Démarrer l'essai
+            </Link>
+          </div>
+        </div>
+
+        {/* COD uniquement */}
+        <div className="mt-16">
+          <h2 className="text-2xl md:text-3xl font-black tracking-tighter mb-2">
+            JE FAIS DU COD UNIQUEMENT
+          </h2>
+          <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
+            Piloter ton call center sans Dropshipping — produits COD illimités, dashboard 7j / 30j.
+          </p>
+          <div className="brutal-border p-7 flex flex-col max-w-xl">
+            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">PLAN</div>
+            <div className="text-3xl font-black tracking-tight mt-1">{COD_PLAN.name}</div>
+            <div className="flex items-baseline gap-1 my-2">
+              <span className="text-5xl font-black tracking-tighter">${COD_PLAN.price}</span>
+              <span className="font-mono text-sm text-muted-foreground">/mois</span>
+            </div>
+            <p className="font-mono text-xs text-muted-foreground mb-5">{COD_PLAN.tagline}</p>
             <ul className="space-y-2 mb-5 flex-1">
-              {[
-                "Jusqu'à 10 produits suivis",
-                "Dropshipping ET COD en parallèle",
-                "Dashboard rentabilité complet",
-                "Analytics Pro débloqué pendant l'essai",
-                "Saisies cumulées multi-jours",
-                "Aucun engagement",
-              ].map((f) => (
+              {COD_PLAN.features.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm">
                   <span className="text-accent font-black mt-0.5">✓</span>
                   <span>{f}</span>
@@ -186,18 +181,21 @@ function PricingPage() {
               search={{ mode: "signup" }}
               className="block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
             >
-              Démarrer l'essai
+              Choisir COD
             </Link>
           </div>
+        </div>
 
-          {PAID_PLANS.map((p) => {
-            const mainPrice = cycle === "yearly" ? `$${p.yearly}` : `$${p.monthly}`;
-            const period = cycle === "yearly" ? "/an" : "/mois";
-            const secondary =
-              cycle === "yearly"
-                ? `≈ $${p.monthlyEquivalent}/mois — économise 20 %`
-                : `ou $${p.yearly}/an (−20 %)`;
-            return (
+        {/* Dropshipping */}
+        <div className="mt-16">
+          <h2 className="text-2xl md:text-3xl font-black tracking-tighter mb-2">
+            JE FAIS DU DROPSHIPPING
+          </h2>
+          <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
+            Starter, Pro ou Scale — le mode COD est inclus dans chaque plan Drop.
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {DROPSHIP_PLANS.map((p) => (
               <div
                 key={p.name}
                 className={`p-7 flex flex-col ${
@@ -216,10 +214,9 @@ function PricingPage() {
                   )}
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-5xl font-black tracking-tighter">{mainPrice}</span>
-                  <span className="font-mono text-sm text-muted-foreground">{period}</span>
+                  <span className="text-5xl font-black tracking-tighter">${p.monthly}</span>
+                  <span className="font-mono text-sm text-muted-foreground">/mois</span>
                 </div>
-                <div className="font-mono text-xs text-accent mb-2 font-bold">{secondary}</div>
                 <p className="font-mono text-xs text-muted-foreground mb-5">{p.tagline}</p>
                 <ul className="space-y-2 mb-5 flex-1">
                   {p.features.map((f) => (
@@ -241,8 +238,8 @@ function PricingPage() {
                   {p.cta}
                 </Link>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
         <section className="mt-24">
@@ -253,19 +250,15 @@ function PricingPage() {
             {[
               {
                 q: "Comment fonctionne l'essai gratuit ?",
-                a: "14 jours complets, sans carte bancaire. Tu démarres directement avec le plan Pro débloqué (10 produits, Drop + COD, Analytics Pro). À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes simplement, sans frais.",
+                a: "14 jours complets, sans carte bancaire, avec accès complet (Pro débloqué) — quel que soit le mode choisi au signup. À la fin, tu choisis COD ($10), Starter, Pro ou Scale.",
               },
               {
-                q: "C'est quoi la facturation annuelle ?",
-                a: "Tu paies une fois par an et tu économises 20 % : Starter à $115/an (≈ $9,58/mois), Pro à $278/an (≈ $23,17/mois), Scale à $756/an (≈ $63,00/mois). Tu peux annuler à tout moment — pas de remboursement au prorata sauf obligation légale.",
-              },
-              {
-                q: "Quelle différence entre Starter, Pro et Scale ?",
-                a: "Starter ($12) = 3 produits, Drop OU COD, historique 60 jours. Pro ($29) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring 0-100, waterfall du bénéfice, break-even, simulateur, insights auto) + support WhatsApp prioritaire.",
+                q: "Quelle différence entre COD, Starter, Pro et Scale ?",
+                a: "COD ($10) = mode COD uniquement, produits illimités, dashboard basique. Starter ($12) = 3 produits Drop + COD inclus. Pro ($29) = 10 produits Drop, upsells, multi-zones, export CSV. Scale ($79) = Drop illimité + Analytics Pro & Decision Engine.",
               },
               {
                 q: "Puis-je changer de plan ou annuler ?",
-                a: "Oui, à tout moment depuis Mon plan. Tu passes de Starter à Pro/Scale (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu passes de COD à Drop (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
               },
             ].map((item) => (
               <div key={item.q} className="brutal-border-thin p-6">

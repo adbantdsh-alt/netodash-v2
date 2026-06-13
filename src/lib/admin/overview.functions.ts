@@ -25,7 +25,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       const status = String(s.status ?? "");
       const trialActive = s.trial_ends_at && new Date(s.trial_ends_at as string) > now;
       if (plan === "trial" && trialActive) planCounts.trial += 1;
-      else if (["basic", "starter", "pro"].includes(plan) && ["active", "incomplete"].includes(status)) {
+      else if (["cod", "basic", "starter", "pro"].includes(plan) && ["active", "incomplete"].includes(status)) {
         planCounts[plan] += 1;
         mrr += PRICES[plan] ?? 0;
       } else {

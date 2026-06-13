@@ -3,15 +3,19 @@ import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription, PLAN_LABELS } from "@/lib/use-subscription";
-import { PlanCards, BillingCycleToggle, type BillingCycle } from "@/components/PlanCards";
-import { MobileMoneyCheckout } from "@/components/MobileMoneyCheckout";
+import {
+  CodPlanCard,
+  DropshippingPlanCards,
+  COD_PLAN,
+  type DropshipPlanKey,
+} from "@/components/PlanCards";
 import { StripeEmbeddedCheckoutForm } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { changeSubscription, type ChangeSubscriptionAction } from "@/lib/subscription-change.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { supabase } from "@/integrations/supabase/client";
 
-type PlanKey = "basic" | "starter" | "pro";
+type CheckoutPlan = DropshipPlanKey | "cod";
 
 type SearchParams = { payment?: "success" | "cancel"; ref?: string };
 
@@ -27,68 +31,63 @@ export const Route = createFileRoute("/_app/plan")({
 type PlanMeta = {
   label: string;
   priceMonthly: number;
-  priceYearly: number;
-  monthlyEquivalent: string;
   priceIdMonthly: string;
-  priceIdYearly: string;
   bullets: string[];
 };
 
-const PLAN_META: Record<PlanKey, PlanMeta> = {
+const DROPSHIP_META: Record<DropshipPlanKey, PlanMeta> = {
   basic: {
     label: "Starter",
     priceMonthly: 12,
-    priceYearly: 115,
-    monthlyEquivalent: "9,58",
     priceIdMonthly: "basic_monthly_v4",
-    priceIdYearly: "basic_yearly_v4",
     bullets: [
-      "3 produits actifs",
-      "Dropshipping OU COD au choix",
-      "Dashboard rentabilité complet",
-      "1 zone de livraison COD",
-      "Historique 60 jours glissants",
+      "Dropshipping complet + COD inclus",
+      "3 produits Dropshipping max",
+      "Produits COD illimités",
+      "Dashboard basique COD (7j / 30j)",
+      "Historique Drop 60 jours",
     ],
   },
   starter: {
     label: "Pro",
     priceMonthly: 29,
-    priceYearly: 278,
-    monthlyEquivalent: "23,17",
     priceIdMonthly: "pro_monthly_v4",
-    priceIdYearly: "pro_yearly_v4",
     bullets: [
-      "Jusqu'à 10 produits actifs",
-      "Dropshipping ET COD en parallèle",
-      "Upsells, multi-zones COD, capture mobile",
-      "Historique illimité · Export CSV",
+      "10 produits Dropshipping max",
+      "COD inclus · Upsells · Multi-zones · Export CSV",
+      "Capture mobile · Historique illimité",
       "Support email + WhatsApp",
     ],
   },
   pro: {
     label: "Scale",
     priceMonthly: 79,
-    priceYearly: 756,
-    monthlyEquivalent: "63,00",
     priceIdMonthly: "scale_monthly_v4",
-    priceIdYearly: "scale_yearly_v4",
     bullets: [
-      "Produits illimités",
-      "Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights)",
-      "Tout ce qui est inclus dans Pro",
-      "Support prioritaire WhatsApp",
+      "Produits Dropshipping illimités",
+      "Analytics Pro & Decision Engine (Drop)",
+      "COD inclus · Tout Pro",
+      "Support WhatsApp prioritaire",
     ],
   },
 };
+
+const COD_META: PlanMeta = {
+  label: "COD",
+  priceMonthly: COD_PLAN.price,
+  priceIdMonthly: COD_PLAN.priceId,
+  bullets: COD_PLAN.features,
+};
+
+function metaFor(plan: CheckoutPlan): PlanMeta {
+  return plan === "cod" ? COD_META : DROPSHIP_META[plan];
+}
 
 function PlanPage() {
   const { user } = useAuth();
   const sub = useSubscription(user?.id);
   const search = useSearch({ from: "/_app/plan" }) as SearchParams;
-  const [openCheckout, setOpenCheckout] = useState<PlanKey | null>(null);
-  const [method, setMethod] = useState<"stripe" | "momo" | null>(null);
-  const [stripePlan, setStripePlan] = useState<PlanKey | null>(null);
-  const [cycle, setCycle] = useState<BillingCycle>("monthly");
+  const [stripePlan, setStripePlan] = useState<CheckoutPlan | null>(null);
   const [confirmAction, setConfirmAction] = useState<ChangeSubscriptionAction | null>(null);
   const [loadingChange, setLoadingChange] = useState(false);
 
@@ -106,7 +105,7 @@ function PlanPage() {
           ? "Annulation programmée. Tu gardes l'accès jusqu'à la fin de la période payée, puis tu retombes sur Free."
           : action === "downgrade_to_pro"
             ? "Tu es repassé sur Pro. La différence est créditée sur ta prochaine facture."
-            : "Tu es repassé sur Basic. La différence est créditée sur ta prochaine facture.";
+            : "Tu es repassé sur Starter. La différence est créditée sur ta prochaine facture.";
       toast.success(msg);
       setConfirmAction(null);
       setTimeout(() => window.location.reload(), 800);
@@ -147,8 +146,17 @@ function PlanPage() {
     ? Math.ceil((periodEnd.getTime() - Date.now()) / 86_400_000)
     : null;
   const renewalSoon = daysToRenew != null && daysToRenew <= 3 && daysToRenew >= 0;
-  const isPaid = sub.plan === "basic" || sub.plan === "starter" || sub.plan === "pro";
-  const currentBadge: PlanKey | null = isPaid ? (sub.plan as PlanKey) : null;
+  const isPaid =
+    sub.plan === "cod" ||
+    sub.plan === "basic" ||
+    sub.plan === "starter" ||
+    sub.plan === "pro";
+  const dropshipBadge: DropshipPlanKey | null =
+    sub.plan === "basic" || sub.plan === "starter" || sub.plan === "pro"
+      ? sub.plan
+      : null;
+
+  const openStripe = (plan: CheckoutPlan) => setStripePlan(plan);
 
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10">
@@ -204,7 +212,7 @@ function PlanPage() {
               <div className="h-full bg-accent transition-all" style={{ width: `${trialPct}%` }} />
             </div>
             <p className="font-mono text-xs text-muted-foreground mt-2">
-              À la fin de ton essai, choisis Starter, Pro ou Scale ci-dessous pour ne pas perdre l'accès.
+              Essai 14 jours — accès complet Drop + COD. Choisis ton plan ci-dessous avant la fin.
             </p>
           </div>
         )}
@@ -212,7 +220,7 @@ function PlanPage() {
         {sub.plan === "free" && (
           <div className="brutal-border-thin border-accent p-4 mt-4 bg-accent/5">
             <div className="text-sm font-bold text-accent">
-              Tu es en plan Free. Choisis Starter ($12), Pro ($29) ou Scale ($79) pour réactiver ton dashboard.
+              Tu es en plan Free. Choisis le plan COD ($10) ou un plan Dropshipping (Starter $12, Pro $29, Scale $79).
             </div>
           </div>
         )}
@@ -236,27 +244,37 @@ function PlanPage() {
         )}
       </section>
 
-      <section className="mb-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <h2 className="text-2xl font-black">
-            {isPaid ? "RENOUVELLE OU CHANGE" : "CHOISIS TON PLAN"}
-          </h2>
-          <BillingCycleToggle cycle={cycle} onChange={setCycle} />
-        </div>
-        <PaymentTestModeBanner />
-        <PlanCards
-          highlightPro
-          showCurrentBadge={currentBadge}
-          cycle={cycle}
-          onSelectPlan={(p) => {
-            setOpenCheckout(p);
-            setStripePlan(p);
-            setMethod("stripe");
-          }}
+      <PaymentTestModeBanner />
+
+      <section className="mb-10">
+        <h2 className="text-2xl md:text-3xl font-black tracking-tighter">
+          JE FAIS DU COD UNIQUEMENT
+        </h2>
+        <p className="font-mono text-xs text-muted-foreground mt-2 mb-6 max-w-2xl">
+          $10/mois · 14 jours gratuits · Dashboard basique (7j / 30j) · Zéro Dropshipping
+        </p>
+        <CodPlanCard
+          showCurrent={sub.plan === "cod"}
+          onSelectPlan={() => openStripe("cod")}
         />
       </section>
 
-      {isPaid && !sub.raw?.cancel_at_period_end && (
+      <section className="mb-6">
+        <h2 className="text-2xl md:text-3xl font-black tracking-tighter">
+          JE FAIS DU DROPSHIPPING
+        </h2>
+        <p className="font-mono text-xs text-muted-foreground mt-2 mb-6 max-w-2xl">
+          Starter / Pro / Scale · Le mode COD est inclus sur tous ces plans
+        </p>
+        <DropshippingPlanCards
+          highlightPro
+          showCurrentBadge={dropshipBadge}
+          cycle="monthly"
+          onSelectPlan={openStripe}
+        />
+      </section>
+
+      {isPaid && sub.plan !== "cod" && !sub.raw?.cancel_at_period_end && (
         <section className="brutal-border-thin p-5 md:p-6 mb-6">
           <h3 className="text-sm font-black uppercase tracking-widest mb-2">
             Rétrograder ou annuler
@@ -294,9 +312,8 @@ function PlanPage() {
       {sub.raw?.cancel_at_period_end && (
         <section className="brutal-border-thin border-accent p-4 mb-6 bg-accent/5">
           <div className="text-sm font-bold">
-            Ton abonnement est programmé pour s'arrêter à la fin de la période. Tu retomberas
-            automatiquement sur le plan Free. Tu peux relancer un abonnement Starter, Pro ou Scale
-            à tout moment ci-dessus.
+            Ton abonnement est programmé pour s'arrêter à la fin de la période. Tu peux relancer un
+            abonnement à tout moment ci-dessus.
           </div>
         </section>
       )}
@@ -306,9 +323,9 @@ function PlanPage() {
           💡 COMMENT ÇA MARCHE
         </h3>
         <ol className="space-y-1 font-mono text-xs text-muted-foreground list-decimal list-inside">
-          <li>Choisis ta cadence (mensuelle ou annuelle −20 %) et ton plan ci-dessus</li>
-          <li>Paie par carte bancaire (Visa, Mastercard, Amex) via Stripe — ou Mobile Money</li>
-          <li>Ton accès s'active automatiquement pour la période choisie (renouvellement auto)</li>
+          <li>Choisis COD seul ou un plan Dropshipping (COD inclus)</li>
+          <li>Paie par carte bancaire (Visa, Mastercard, Amex) via Stripe</li>
+          <li>Ton accès s'active automatiquement (renouvellement mensuel)</li>
         </ol>
       </section>
 
@@ -319,75 +336,10 @@ function PlanPage() {
         ← Retour aux paramètres du compte
       </Link>
 
-      {openCheckout && method === null && (
-        <div
-          className="fixed inset-0 bg-foreground/40 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-          onClick={() => setOpenCheckout(null)}
-        >
-          <div onClick={(e) => e.stopPropagation()} className="brutal-border bg-background p-6 max-w-md w-full">
-            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-1">
-              MÉTHODE DE PAIEMENT
-            </div>
-            <h3 className="text-2xl font-black tracking-tighter mb-4">
-              Plan {PLAN_META[openCheckout].label}
-            </h3>
-            <div className="grid gap-3">
-              <button
-                onClick={() => {
-                  setStripePlan(openCheckout);
-                  setMethod("stripe");
-                }}
-                className="brutal-border p-4 text-left hover:bg-accent/5"
-              >
-                <div className="font-black uppercase tracking-wider">Carte bancaire</div>
-                <div className="text-xs text-muted-foreground mt-1">Visa, Mastercard, Amex — via Stripe</div>
-              </button>
-              <button
-                onClick={() => setMethod("momo")}
-                className="brutal-border p-4 text-left hover:bg-accent/5"
-              >
-                <div className="font-black uppercase tracking-wider">Mobile Money</div>
-                <div className="text-xs text-muted-foreground mt-1">Wave, Orange Money, Max it</div>
-              </button>
-            </div>
-            <button
-              onClick={() => setOpenCheckout(null)}
-              className="mt-4 text-xs uppercase tracking-widest text-muted-foreground hover:text-accent"
-            >
-              Annuler
-            </button>
-          </div>
-        </div>
-      )}
-
-      {openCheckout && method === "momo" && (
-        <div
-          className="fixed inset-0 bg-foreground/40 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-          onClick={() => {
-            setOpenCheckout(null);
-            setMethod(null);
-          }}
-        >
-          <div onClick={(e) => e.stopPropagation()}>
-            <MobileMoneyCheckout
-              plan={openCheckout}
-              onClose={() => {
-                setOpenCheckout(null);
-                setMethod(null);
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {method === "stripe" && stripePlan && (
+      {stripePlan && (
         <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
           <button
-            onClick={() => {
-              setOpenCheckout(null);
-              setMethod(null);
-              setStripePlan(null);
-            }}
+            onClick={() => setStripePlan(null)}
             className="absolute top-4 right-4 md:top-6 md:right-6 z-10 brutal-border-thin px-3 py-2 text-xs uppercase tracking-widest font-bold bg-background hover:bg-accent hover:text-accent-foreground hover:border-accent"
           >
             ✕ Fermer
@@ -405,37 +357,32 @@ function PlanPage() {
                     Tu vas t'abonner à
                   </div>
                   <div className="text-3xl md:text-4xl font-black tracking-tighter">
-                    Plan {PLAN_META[stripePlan].label}
+                    Plan {metaFor(stripePlan).label}
                   </div>
                   <div className="flex items-baseline gap-2 mt-3">
                     <span className="text-5xl md:text-6xl font-black tracking-tighter">
-                      ${cycle === "yearly" ? PLAN_META[stripePlan].priceYearly : PLAN_META[stripePlan].priceMonthly}
+                      ${metaFor(stripePlan).priceMonthly}
                     </span>
-                    <span className="font-mono text-sm opacity-60">/ {cycle === "yearly" ? "an" : "mois"}</span>
+                    <span className="font-mono text-sm opacity-60">/ mois</span>
                   </div>
-                  {cycle === "yearly" && (
-                    <div className="font-mono text-xs text-accent mt-1 font-bold">
-                      ≈ ${PLAN_META[stripePlan].monthlyEquivalent}/mois — économise 20 %
-                    </div>
-                  )}
 
                   <div className="mt-8 brutal-border-thin border-background/30 p-4 space-y-2 font-mono text-sm">
                     <div className="flex justify-between">
                       <span className="opacity-60">Sous-total</span>
-                      <span>${cycle === "yearly" ? PLAN_META[stripePlan].priceYearly : PLAN_META[stripePlan].priceMonthly},00</span>
+                      <span>${metaFor(stripePlan).priceMonthly},00</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="opacity-60">Récurrence</span>
-                      <span>{cycle === "yearly" ? "Annuel (−20 %)" : "Mensuel"}</span>
+                      <span>Mensuel</span>
                     </div>
                     <div className="border-t border-background/30 pt-2 flex justify-between font-black text-base">
                       <span>Total dû aujourd'hui</span>
-                      <span>${cycle === "yearly" ? PLAN_META[stripePlan].priceYearly : PLAN_META[stripePlan].priceMonthly},00</span>
+                      <span>${metaFor(stripePlan).priceMonthly},00</span>
                     </div>
                   </div>
 
                   <ul className="mt-8 space-y-2 text-sm">
-                    {PLAN_META[stripePlan].bullets.map((f) => (
+                    {metaFor(stripePlan).bullets.map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-accent font-black mt-0.5">✓</span>
                         <span className="opacity-90">{f}</span>
@@ -461,7 +408,7 @@ function PlanPage() {
                   Tes informations de paiement
                 </h2>
                 <StripeEmbeddedCheckoutForm
-                  priceId={cycle === "yearly" ? PLAN_META[stripePlan].priceIdYearly : PLAN_META[stripePlan].priceIdMonthly}
+                  priceId={metaFor(stripePlan).priceIdMonthly}
                   returnUrl={`${window.location.origin}/plan?payment=success`}
                 />
               </div>
@@ -488,10 +435,10 @@ function PlanPage() {
             </h3>
             <p className="font-mono text-xs text-muted-foreground mb-5">
               {confirmAction === "downgrade_to_pro"
-                ? "Tu passes immédiatement sur Pro ($29/mois). Stripe crédite la différence sur ta prochaine facture. Tu perds l'accès Analytics Pro (réservé à Scale) et la limite passe à 10 produits."
+                ? "Tu passes immédiatement sur Pro ($29/mois). Tu perds Analytics Pro (Scale) et la limite passe à 10 produits Drop."
                 : confirmAction === "downgrade_to_basic"
-                  ? "Tu passes immédiatement sur Starter ($12/mois). 3 produits, un seul mode (Dropshipping OU COD), historique limité à 60 jours, plus d'upsells ni de multi-zones COD. La différence est créditée."
-                  : "Ton abonnement reste actif jusqu'à la fin de la période payée, puis tu retombes sur Free. Tes données sont conservées."}
+                  ? "Tu passes immédiatement sur Starter ($12/mois). 3 produits Drop, COD basique inclus, plus d'upsells ni d'export CSV."
+                  : "Ton abonnement reste actif jusqu'à la fin de la période payée, puis tu retombes sur Free."}
             </p>
             <div className="flex gap-3">
               <button

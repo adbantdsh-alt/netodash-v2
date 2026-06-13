@@ -26,12 +26,24 @@ const getEnv = (key: string): string => {
   return value;
 };
 
+/** Clés secrètes Stripe acceptées par l'API : sk_* / rk_* (pas mk_* Lovable). */
+function assertStripeSecretKey(key: string, envKey: string): string {
+  const trimmed = key.trim();
+  if (!trimmed) throw new Error(`${envKey} is not configured`);
+  if (trimmed.startsWith("mk_")) {
+    throw new Error(
+      `${envKey} contient une clé Lovable (mk_...), pas une clé secrète Stripe. ` +
+        "Remplace-la par sk_live_... ou rk_live_... depuis Stripe Dashboard → Developers → API keys.",
+    );
+  }
+  return trimmed;
+}
+
 export type StripeEnv = "sandbox" | "live";
 
 export function getStripeSecretKey(env: StripeEnv): string {
-  return env === "sandbox"
-    ? getEnv("STRIPE_SANDBOX_API_KEY")
-    : getEnv("STRIPE_LIVE_API_KEY");
+  const envKey = env === "sandbox" ? "STRIPE_SANDBOX_API_KEY" : "STRIPE_LIVE_API_KEY";
+  return assertStripeSecretKey(getEnv(envKey), envKey);
 }
 
 export function createStripeClient(env: StripeEnv): Stripe {

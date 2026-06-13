@@ -8,6 +8,7 @@ import { CalendarIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
+import { canUseUpsells } from "@/lib/plan-limits";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
 import { useActiveMode } from "@/lib/use-active-mode";
 import {
@@ -771,7 +772,7 @@ function EntriesPage() {
                   entry={p}
                   products={products}
                   mode={activeMode}
-                  hasProAccess={sub.hasProAccess}
+                  canUseUpsells={canUseUpsells(sub.plan, activeMode)}
                   onChange={(patch) => updatePending(p.key, patch)}
                   onRemove={() => removePending(p.key)}
                   onSave={() => saveOnePending(p)}
@@ -892,7 +893,7 @@ function PendingCard({
   entry,
   products,
   mode,
-  hasProAccess,
+  canUseUpsells,
   onChange,
   onRemove,
   onSave,
@@ -900,7 +901,7 @@ function PendingCard({
   entry: PendingEntry;
   products: any[];
   mode: "cod" | "dropshipping";
-  hasProAccess: boolean;
+  canUseUpsells: boolean;
   onChange: (patch: Partial<PendingEntry>) => void;
   onRemove: () => void;
   onSave: () => void;
@@ -1166,7 +1167,7 @@ function PendingCard({
         entry={entry}
         products={products}
         mode={mode}
-        hasProAccess={hasProAccess}
+        canUseUpsells={canUseUpsells}
         onChange={onChange}
       />
 
@@ -1274,33 +1275,33 @@ function UpsellSection({
   entry,
   products,
   mode,
-  hasProAccess,
+  canUseUpsells,
   onChange,
 }: {
   entry: PendingEntry;
   products: any[];
   mode: "cod" | "dropshipping";
-  hasProAccess: boolean;
+  canUseUpsells: boolean;
   onChange: (patch: Partial<PendingEntry>) => void;
 }) {
   const isCod = mode === "cod";
   const lockedCur: AppCurrency = isCod ? ("EUR" as AppCurrency) : entry.total_revenue_currency;
   const symbol = isCod ? "XOF" : lockedCur;
 
-  if (!hasProAccess) {
+  if (!canUseUpsells) {
     return (
       <div className="brutal-border-thin border-dashed px-3 py-2 flex items-center justify-between gap-2 flex-wrap bg-muted/30">
         <div className="text-[11px] font-mono leading-snug">
           <span className="font-bold uppercase tracking-widest">🔒 Upsell</span>
           <span className="block text-muted-foreground mt-0.5 text-[10px]">
-            Enregistre les ventes additionnelles (panier upsell) — réservé au plan Premium.
+            Ventes additionnelles — réservé au plan Pro Drop ($29) en mode Dropshipping.
           </span>
         </div>
         <Link
           to="/plan"
           className="text-[10px] font-mono font-bold uppercase tracking-widest underline whitespace-nowrap"
         >
-          Passer au Premium →
+          Voir les plans →
         </Link>
       </div>
     );

@@ -12,7 +12,7 @@ function getStatusFromMeta(meta: Record<string, unknown> | null | undefined): st
 const listInput = z
   .object({
     search: z.string().trim().max(200).optional(),
-    plan: z.enum(["free", "trial", "basic", "starter", "pro"]).optional(),
+    plan: z.enum(["free", "trial", "cod", "basic", "starter", "pro"]).optional(),
     status: z.enum(["active", "suspended", "banned"]).optional(),
     country: z.string().max(64).optional(),
     page: z.number().int().min(1).max(10_000).default(1),
@@ -178,7 +178,7 @@ export const adminChangeUserPlan = createServerFn({ method: "POST" })
     z
       .object({
         userId: z.string().uuid(),
-        plan: z.enum(["free", "trial", "basic", "starter", "pro"]),
+        plan: z.enum(["free", "trial", "cod", "basic", "starter", "pro"]),
         reason: z.string().trim().max(500).optional(),
       })
       .parse(input),

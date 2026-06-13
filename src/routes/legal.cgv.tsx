@@ -19,27 +19,24 @@ function CgvPage() {
     <LegalShell title="Conditions Générales de Vente">
       <h2>Offres et tarifs</h2>
       <p>
-        NETODASH propose un essai gratuit de 14 jours (plan Pro débloqué, sans
-        carte bancaire), puis trois abonnements : Starter à $12/mois (3 produits),
-        Pro à $29/mois (10 produits, Drop + COD, upsells, multi-zones) et Scale
-        à $79/mois (produits illimités + Analytics Pro). Une facturation annuelle
-        à −20 % est également proposée (Starter $115/an, Pro $278/an, Scale $756/an).
+        NETODASH propose un essai gratuit de 14 jours (accès complet, sans carte bancaire),
+        puis quatre abonnements : Plan COD à $10/mois (mode COD uniquement, produits illimités),
+        Starter à $12/mois (3 produits Dropshipping + COD inclus), Pro à $29/mois (10 produits Drop,
+        upsells, multi-zones, export CSV) et Scale à $79/mois (Drop illimité + Analytics Pro).
         Les prix sont affichés en dollar américain, hors taxes locales applicables.
       </p>
 
       <h2>Paiement</h2>
       <p>
-        Le paiement s'effectue par Mobile Money (Wave, Orange Money) ou carte
-        bancaire via notre prestataire de paiement sécurisé. La facturation est
-        récurrente et automatique selon la cadence choisie (mensuelle ou annuelle)
-        jusqu'à résiliation.
+        Le paiement s'effectue par carte bancaire via Stripe, notre prestataire de paiement sécurisé.
+        La facturation est récurrente et automatique, mensuelle, jusqu'à résiliation.
       </p>
 
       <h2>Essai gratuit</h2>
       <p>
-        L'essai gratuit de 14 jours est sans carte bancaire. À la fin de
-        l'essai, l'accès est restreint : l'utilisateur doit choisir Starter, Pro
-        ou Scale pour continuer à utiliser NETODASH.
+        L'essai gratuit de 14 jours est sans carte bancaire et offre un accès complet quel que soit
+        le mode choisi à l'inscription. À la fin de l'essai, l'accès est restreint : l'utilisateur
+        doit choisir COD, Starter, Pro ou Scale pour continuer à utiliser NETODASH.
       </p>
 
       <h2>Résiliation et remboursement</h2>

@@ -5,10 +5,16 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { useEntries, useProducts } from "@/lib/queries";
+import { useEntries, useProducts, useProfile } from "@/lib/queries";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { useSubscription } from "@/lib/use-subscription";
-import { canAddProduct, productLimitFor, productLimitLabel } from "@/lib/plan-limits";
+import {
+  canAddProduct,
+  canAccessDropshipping,
+  canUseMultiZonesCod,
+  productLimitFor,
+  productLimitLabel,
+} from "@/lib/plan-limits";
 import {
   computeKPIs,
   dateRangeForPreset,
@@ -69,10 +75,14 @@ function ProductsPage() {
   const qc = useQueryClient();
   const { mode: activeMode } = useActiveMode();
   const productsQ = useProducts(user?.id);
+  const profileQ = useProfile(user?.id);
   const sub = useSubscription(user?.id);
   const productCount = productsQ.data?.length ?? 0;
-  const limit = productLimitFor(sub.plan);
-  const limitReached = !canAddProduct(sub.plan, productCount);
+  const legacyDual = Boolean((profileQ.data as { legacy_dual_mode?: boolean } | undefined)?.legacy_dual_mode);
+  const limit = productLimitFor(sub.plan, activeMode);
+  const limitReached = !canAddProduct(sub.plan, productCount, activeMode);
+  const multiZonesAllowed = canUseMultiZonesCod(sub.plan);
+  const dropBlocked = !isCod && !canAccessDropshipping(sub.plan, legacyDual);
   const range = useMemo(() => dateRangeForPreset("30d"), []);
   const entriesQ = useEntries(user?.id, range);
 
@@ -433,11 +443,26 @@ function ProductsPage() {
         )}
       </div>
 
+      {dropBlocked && (
+        <div className="brutal-border-thin p-4 mb-6 bg-muted/40 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-sm font-mono">
+            <span className="font-bold uppercase tracking-wider">Dropshipping indisponible</span> · Ton plan COD
+            ($10) ne couvre que le mode COD. Passe à Starter Drop pour ajouter des produits Dropshipping.
+          </div>
+          <Link
+            to="/plan"
+            className="brutal-border-thin bg-foreground text-background px-3 py-2 text-xs font-bold uppercase tracking-widest"
+          >
+            Voir les plans Drop →
+          </Link>
+        </div>
+      )}
+
       {limitReached && !showForm && productCount > 0 && (
         <div className="brutal-border-thin p-4 mb-6 bg-amber-50 text-amber-900 flex items-center justify-between flex-wrap gap-3">
           <div className="text-sm">
             <span className="font-bold uppercase tracking-wider">Limite atteinte</span> · Ton plan{" "}
-            <strong>{sub.plan}</strong> autorise {productLimitLabel(sub.plan)} produit
+            <strong>{sub.plan}</strong> autorise {productLimitLabel(sub.plan, activeMode)} produit
             {limit > 1 ? "s" : ""}.
           </div>
           <Link
@@ -619,18 +644,27 @@ function ProductsPage() {
                 </div>
                 <button
                   type="button"
-                  disabled={availableRegions.length === 0}
-                  onClick={() =>
+                  disabled={availableRegions.length === 0 || !multiZonesAllowed}
+                  onClick={() => {
+                    if (!multiZonesAllowed) return;
                     setZones([
                       ...zones,
                       { name: `Zone ${zones.length + 1}`, cost: "", regions: [] },
-                    ])
-                  }
+                    ]);
+                  }}
                   className="brutal-border-thin px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest hover:bg-foreground hover:text-background disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-foreground"
                 >
                   + Zone
                 </button>
               </div>
+              {!multiZonesAllowed && (
+                <div className="brutal-border-thin border-dashed p-3 mb-3 text-[11px] font-mono text-muted-foreground">
+                  🔒 Multi-zones réservé au plan Pro Drop ($29) et au-dessus.{" "}
+                  <Link to="/plan" className="underline font-bold text-foreground">
+                    Upgrade →
+                  </Link>
+                </div>
+              )}
               {availableRegions.length === 0 ? (
                 <div className="brutal-border-thin border-dashed p-4 text-center">
                   <div className="text-2xl mb-1">👆</div>
@@ -669,7 +703,7 @@ function ProductsPage() {
                             placeholder="Coût FCFA"
                             className="brutal-border-thin bg-background px-3 py-2 font-mono text-sm w-32 focus:outline-none focus:border-accent focus:border-2"
                           />
-                          {zones.length > 1 && (
+                          {zones.length > 1 && multiZonesAllowed && (
                             <button
                               type="button"
                               onClick={() => setZones(zones.filter((_, j) => j !== i))}

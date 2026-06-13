@@ -6,14 +6,14 @@ import { PremiumModeSwitch } from "@/components/PremiumModeSwitch";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
 import { supabase } from "@/integrations/supabase/client";
-import { canUseDualMode } from "@/lib/plan-limits";
+import { canAccessDropshipping, canUseDualMode } from "@/lib/plan-limits";
 import { toast } from "sonner";
 
 /**
- * Switch de mode actif (Drop / COD).
- * - Plans Pro/Premium ou comptes "legacy_dual_mode" : switch libre.
- * - Plans Basic / Free : verrouillé sur le mode sélectionné au signup
- *   (`profiles.selected_mode`), avec un lien d'upgrade vers Pro.
+ * Switch Drop / COD.
+ * - Plan COD $10 : verrouillé en COD
+ * - Plans Drop (Starter+) : dual mode (COD inclus)
+ * - legacy_dual_mode : grandfathering comptes basic existants
  */
 export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
   const { mode, setMode, isLoading } = useActiveMode();
@@ -35,15 +35,31 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
   });
 
   const legacy = legacyQ.data ?? false;
+  const dropAllowed = canAccessDropshipping(sub.plan, legacy);
   const dualAllowed = canUseDualMode(sub.plan, legacy);
+  const lockedToCod = sub.plan === "cod";
+
+  useEffect(() => {
+    if (lockedToCod && mode !== "cod") {
+      void setMode("cod");
+    }
+  }, [lockedToCod, mode, setMode]);
 
   const handleChange = (m: BusinessMode) => {
+    if (m === "dropshipping" && !dropAllowed) {
+      toast.error(
+        "Ton plan COD n'inclut pas le Dropshipping. Passe à Starter ($12) ou plus.",
+      );
+      return;
+    }
     if (!dualAllowed && m !== mode) {
-      toast.error("Mode verrouillé sur ton plan Basic. Passe au plan Pro pour activer Drop + COD en parallèle.");
+      toast.error("Mode verrouillé sur ton plan actuel.");
       return;
     }
     void setMode(m);
   };
+
+  const switchDisabled = isLoading || lockedToCod || !dualAllowed;
 
   if (variant === "mobile") {
     return (
@@ -52,7 +68,7 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
           <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
             Mode actif
           </div>
-          {!dualAllowed && (
+          {!dropAllowed && (
             <Link
               to="/plan"
               className="text-[10px] font-mono font-bold uppercase tracking-widest underline"
@@ -64,7 +80,7 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
         <PremiumModeSwitch
           mode={mode}
           onChange={handleChange}
-          disabled={isLoading || !dualAllowed}
+          disabled={switchDisabled}
           size="md"
         />
       </div>
@@ -76,13 +92,22 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
       <PremiumModeSwitch
         mode={mode}
         onChange={handleChange}
-        disabled={isLoading || !dualAllowed}
+        disabled={switchDisabled}
         size="sm"
       />
-      {!dualAllowed && (
+      {lockedToCod && (
         <Link
           to="/plan"
-          title="Plan Basic verrouillé sur un seul mode. Passe au Pro pour activer Drop + COD."
+          title="Plan COD — Dropshipping via Starter ($12)+"
+          className="text-[10px] font-mono font-bold uppercase tracking-widest underline whitespace-nowrap"
+        >
+          🔒 COD
+        </Link>
+      )}
+      {!lockedToCod && !dualAllowed && (
+        <Link
+          to="/plan"
+          title="Passe à un plan Drop pour activer les deux modes"
           className="text-[10px] font-mono font-bold uppercase tracking-widest underline whitespace-nowrap"
         >
           🔒
@@ -92,11 +117,6 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
   );
 }
 
-/**
- * Switch utilisé sur la landing page : pas d'auth, juste un aperçu visuel.
- * Bascule l'accent global (orange COD / bleu Dropshipping) via [data-mode] sur <html>.
- * Contrôlé : passe `mode` + `onChange` depuis le parent pour synchroniser tout le copywriting.
- */
 export function LandingModeSwitch({
   mode,
   onChange,
@@ -107,7 +127,6 @@ export function LandingModeSwitch({
   useEffect(() => {
     document.documentElement.setAttribute("data-mode", mode);
     return () => {
-      // remet le défaut COD (orange) en quittant la landing
       document.documentElement.setAttribute("data-mode", "cod");
     };
   }, [mode]);
@@ -122,7 +141,6 @@ export function LandingModeSwitch({
   );
 }
 
-/** Bandeau discret affiché en haut du contenu de chaque page pour rappeler le mode. */
 export function ModeIndicator() {
   const { mode } = useActiveMode();
   const isCod = mode === "cod";

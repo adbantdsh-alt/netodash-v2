@@ -37,6 +37,25 @@ function AnalyticsPage() {
     );
   }
 
+  if (mode === "cod") {
+    return (
+      <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10 space-y-6">
+        <div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
+            ANALYTICS PRO · MODE COD
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">METRICS</h1>
+        </div>
+        <div className="brutal-border p-6 md:p-8 bg-muted/30">
+          <p className="font-mono text-sm text-muted-foreground max-w-2xl">
+            Analytics Pro est réservé au mode <strong className="text-foreground">Dropshipping</strong> (plan Scale
+            $79). En mode COD, utilise le dashboard basique (7j / 30j) inclus dans ton plan.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!sub.hasAnalyticsAccess) {
     return (
       <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10 space-y-6 md:space-y-8">

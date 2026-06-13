@@ -312,13 +312,13 @@ const DROPSHIPPING: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "OPÉRATEURS SHOPIFY SÉRIEUX.",
   pricingLead:
-    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, Drop + COD, upsells), Scale à $79/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
+    "14 jours d'essai gratuit avec accès complet. Ensuite, COD à $10/mois (COD uniquement), Starter à $12/mois (3 produits Drop + COD), Pro à $29/mois (10 produits, upsells, multi-zones), Scale à $79/mois (illimité + Analytics Pro).",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 $",
       period: "/ 14 jours",
-      tagline: "Plan Pro débloqué, sans carte bancaire",
+      tagline: "Accès complet 14j, sans carte bancaire",
       features: [
         "Jusqu'à 10 produits suivis",
         "Drop ET COD en parallèle",
@@ -333,13 +333,14 @@ const DROPSHIPPING: LandingCopy = {
       name: "Starter",
       price: "$12",
       period: "/mois",
-      tagline: "Démarrer un premier produit · $115/an (−20 %)",
+      tagline: "Démarrer en Drop avec le COD inclus",
       features: [
-        "3 produits actifs",
-        "Dropshipping OU COD (au choix)",
+        "3 produits Dropshipping max",
+        "Mode COD inclus (dashboard basique)",
+        "Produits COD illimités",
         "Dashboard rentabilité complet",
         "1 zone de livraison COD",
-        "Historique 60 jours glissants",
+        "Historique Drop 60 jours",
       ],
       cta: "Choisir Starter",
       highlight: false,
@@ -348,7 +349,7 @@ const DROPSHIPPING: LandingCopy = {
       name: "Pro",
       price: "$29",
       period: "/mois",
-      tagline: "Valider 1 à 3 winners · $278/an (−20 %)",
+      tagline: "Valider 1 à 3 winners",
       features: [
         "10 produits actifs",
         "Dropshipping ET COD en parallèle",
@@ -366,7 +367,7 @@ const DROPSHIPPING: LandingCopy = {
       name: "Scale",
       price: "$79",
       period: "/mois",
-      tagline: "Scaler avec Analytics Pro · $756/an (−20 %)",
+      tagline: "Scaler avec Analytics Pro",
       features: [
         "Produits illimités",
         "Upsells illimités",
@@ -382,19 +383,15 @@ const DROPSHIPPING: LandingCopy = {
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, avec le plan Pro débloqué (10 produits, Drop + COD, Analytics Pro). À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+      a: "14 jours complets, sans carte bancaire, accès complet quel que soit le mode au signup. À la fin, tu choisis COD ($10), Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
     },
     {
       q: "C'est pour quel type d'e-commerce ?",
-      a: "NETODASH gère le Dropshipping (Shopify + Meta/TikTok/Google Ads) ET le COD (Cash on Delivery, vente par appel avec zones de livraison). Tu peux utiliser les deux modes en parallèle dès le plan Pro.",
+      a: "NETODASH gère le Dropshipping (Shopify + Meta/TikTok/Google Ads) ET le COD (Cash on Delivery). Plan COD $10 pour le COD seul, ou plans Drop (Starter/Pro/Scale) avec le COD inclus.",
     },
     {
-      q: "Starter, Pro ou Scale ?",
-      a: "Starter ($12) = 3 produits, Drop OU COD, historique 60j. Pro ($29) = 10 produits, Drop ET COD en parallèle, upsells, multi-zones COD, historique illimité, export CSV. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights) + WhatsApp prioritaire.",
-    },
-    {
-      q: "Mensuel ou annuel ?",
-      a: "Annuel = −20 % à l'année : Starter $115/an, Pro $278/an, Scale $756/an. Tu peux changer ou annuler à tout moment.",
+      q: "COD, Starter, Pro ou Scale ?",
+      a: "COD ($10) = mode COD uniquement, produits illimités. Starter ($12) = 3 produits Drop + COD basique. Pro ($29) = 10 produits Drop, upsells, multi-zones, export CSV. Scale ($79) = Drop illimité + Analytics Pro EXCLUSIF.",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
@@ -604,13 +601,13 @@ const COD: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "VENDEURS COD QUI VEULENT SCALER PROPRE.",
   pricingLead:
-    "14 jours d'essai gratuit avec le plan Pro débloqué. Ensuite, Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, COD + Drop, upsells, multi-zones), Scale à $79/mois (illimité + Analytics Pro). Économise 20 % en facturation annuelle.",
+    "14 jours d'essai gratuit avec accès complet. Ensuite, Plan COD à $10/mois (COD uniquement, produits illimités), Starter à $12/mois (Drop + COD), Pro à $29/mois (upsells, multi-zones), Scale à $79/mois (Analytics Pro).",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 F",
       period: "/ 14 jours",
-      tagline: "Plan Pro débloqué, sans carte bancaire",
+      tagline: "Accès complet 14j, sans carte bancaire",
       features: [
         "Jusqu'à 10 produits",
         "Mode COD ET Dropshipping en parallèle",
@@ -625,13 +622,14 @@ const COD: LandingCopy = {
       name: "Starter",
       price: "$12",
       period: "/mois",
-      tagline: "Démarrer un premier produit COD · $115/an (−20 %)",
+      tagline: "Démarrer en Drop avec le COD inclus",
       features: [
-        "3 produits actifs",
-        "Mode COD OU Dropshipping (au choix)",
+        "3 produits Dropshipping max",
+        "Mode COD inclus (dashboard basique)",
+        "Produits COD illimités",
         "Dashboard COD complet (zones, profit FCFA)",
         "1 zone de livraison",
-        "Historique 60 jours glissants",
+        "Historique 60 jours",
       ],
       cta: "Choisir Starter",
       highlight: false,
@@ -640,7 +638,7 @@ const COD: LandingCopy = {
       name: "Pro",
       price: "$29",
       period: "/mois",
-      tagline: "Piloter ton call center & 2–3 winners · $278/an (−20 %)",
+      tagline: "Piloter ton call center & 2–3 winners",
       features: [
         "10 produits actifs",
         "COD ET Dropshipping en parallèle",
@@ -658,7 +656,7 @@ const COD: LandingCopy = {
       name: "Scale",
       price: "$79",
       period: "/mois",
-      tagline: "Scaler avec Analytics Pro · $756/an (−20 %)",
+      tagline: "Scaler avec Analytics Pro",
       features: [
         "Produits illimités",
         "Upsells illimités",
@@ -674,19 +672,15 @@ const COD: LandingCopy = {
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, avec le plan Pro débloqué (10 produits, COD + Drop en parallèle, multi-zones, Analytics Pro). À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+      a: "14 jours complets, sans carte bancaire, accès complet quel que soit le mode au signup. À la fin, tu choisis Plan COD ($10), Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
     },
     {
       q: "Ça marche pour le COD en Afrique de l'Ouest ?",
       a: "Oui. NETODASH est conçu pour le COD au Sénégal, Côte d'Ivoire, Mali, Bénin, Burkina, Togo, Guinée. Devise FCFA gérée nativement, zones de livraison personnalisables par pays.",
     },
     {
-      q: "Mensuel ou annuel ?",
-      a: "Annuel = −20 % : Starter $115/an, Pro $278/an, Scale $756/an. Tu peux changer ou annuler à tout moment.",
-    },
-    {
       q: "Comment je définis mes zones de livraison ?",
-      a: "Depuis tes produits, tu crées autant de zones que tu veux (Dakar, régions, Thiès, Saint-Louis…). Tu sélectionnes les régions concernées et le coût par livraison. Chaque commande est ensuite imputée à sa zone. Multi-zones dès le plan Pro.",
+      a: "Depuis tes produits, tu définis tes zones (Dakar, régions, Thiès…). Multi-zones dès le plan Pro Drop ($29). Le plan COD $10 inclut 1 zone.",
     },
     {
       q: "Faut-il connecter Shopify ?",

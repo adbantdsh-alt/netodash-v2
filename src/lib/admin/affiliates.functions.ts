@@ -33,7 +33,7 @@ export const getAffiliatesOverview = createServerFn({ method: "GET" })
         .in("user_id", referredUserIds);
       const paying = new Set<string>();
       for (const s of subs ?? []) {
-        if (["basic", "starter", "pro"].includes(String(s.plan)) && ["active", "incomplete"].includes(String(s.status))) {
+        if (["cod", "basic", "starter", "pro"].includes(String(s.plan)) && ["active", "incomplete"].includes(String(s.status))) {
           paying.add(s.user_id as string);
         }
       }

@@ -14,7 +14,7 @@ import {
 } from "recharts";
 import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
-import { historyDaysFor } from "@/lib/plan-limits";
+import { historyDaysFor, canUseDecisionEngine } from "@/lib/plan-limits";
 import { Link as RouterLink } from "@tanstack/react-router";
 import {
   useEntries,
@@ -169,6 +169,8 @@ function DashboardPage() {
   const winners = productRanking.filter((r) => r.kpis.netProfit > 0 && Math.abs(r.marginPct) >= 2).length;
   const toWatch = productRanking.filter((r) => Math.abs(r.marginPct) < 2 && r.kpis.adSpend > 0).length;
   const toKill = productRanking.filter((r) => r.kpis.netProfit < 0).length;
+  const showDecisionEngine =
+    activeMode === "dropshipping" && canUseDecisionEngine(sub.plan);
 
   const marginPct = kpis.revenue > 0 ? (kpis.netProfit / kpis.revenue) * 100 : 0;
   const beRoas = useMemo(
@@ -226,7 +228,7 @@ function DashboardPage() {
         message: `Actuel ${kpis.roas.toFixed(2)}x · break-even ${beRoas.toFixed(2)}x`,
       });
     }
-    if (toKill > 0) {
+    if (showDecisionEngine && toKill > 0) {
       a.push({
         kind: "warn",
         title: `${toKill} produit${toKill > 1 ? "s" : ""} à arrêter`,
@@ -234,7 +236,7 @@ function DashboardPage() {
       });
     }
     return a;
-  }, [hasData, kpis, beRoas, toKill, currency]);
+  }, [hasData, kpis, beRoas, toKill, currency, showDecisionEngine]);
 
   // === Branche dédiée mode COD ===
   if (activeMode === "cod") {
@@ -825,7 +827,7 @@ function DashboardPage() {
 
 
       {/* === PRODUCT PROFIT RANKING === */}
-      {hasData && productRanking.length > 0 && (
+      {hasData && showDecisionEngine && productRanking.length > 0 && (
         <div className="brutal-border border-t-0 p-6 md:p-8">
           <div className="flex items-baseline justify-between mb-6 flex-wrap gap-2">
             <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">

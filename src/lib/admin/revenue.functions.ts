@@ -23,7 +23,7 @@ export const getRevenueOverview = createServerFn({ method: "GET" })
     for (const s of subscriptions) {
       const plan = String(s.plan ?? "free");
       const status = String(s.status ?? "");
-      if (["basic", "starter", "pro"].includes(plan) && ["active", "incomplete"].includes(status)) {
+      if (["cod", "basic", "starter", "pro"].includes(plan) && ["active", "incomplete"].includes(status)) {
         planCounts[plan] += 1;
         mrr += PRICES[plan] ?? 0;
       } else if (plan === "trial" && s.trial_ends_at && new Date(s.trial_ends_at as string) > now) {

@@ -553,7 +553,6 @@ type CompRow = { label: string; netodash: CompCell; triple: CompCell; beprofit: 
 const COMP_ROWS: CompRow[] = [
   { label: "Prix d'entrée / mois", netodash: "$12", triple: "$129", beprofit: "$25", lifetimely: "$19", highlight: true },
   { label: "Plan illimité produits", netodash: "$79", triple: "$299+", beprofit: "$99", lifetimely: "$149" },
-  { label: "Facturation annuelle −20 %", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "Essai gratuit 14 jours", netodash: true, triple: false, beprofit: true, lifetimely: true },
   { label: "Sans carte bancaire", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "ROAS net (après COGS + frais)", netodash: true, triple: true, beprofit: true, lifetimely: true },

@@ -61,9 +61,10 @@ export const Route = createFileRoute("/_app/netodsh")({
 type AdminStats = {
   totalUsers: number;
   trialUsers: number;
+  codUsers: number;
   basicUsers: number;
   starterUsers: number; // affiché comme "Pro"
-  proUsers: number;     // affiché comme "Premium"
+  proUsers: number;     // affiché comme "Scale"
   freeUsers: number;
   newUsers30d: number;
   totalRevenue: number;
@@ -214,6 +215,8 @@ function AdminPage() {
           effective = "pro";
         else if (plan === "starter" && ["active", "incomplete"].includes(status) && (!periodEnd || periodEnd > now))
           effective = "starter";
+        else if (plan === "cod" && ["active", "incomplete"].includes(status) && (!periodEnd || periodEnd > now))
+          effective = "cod";
         else if (plan === "basic" && ["active", "incomplete"].includes(status) && (!periodEnd || periodEnd > now))
           effective = "basic";
         else if (plan === "trial" && trialEnds && trialEnds > now) effective = "trial";
@@ -251,9 +254,10 @@ function AdminPage() {
         };
       });
 
-      const counts = { trial: 0, basic: 0, starter: 0, pro: 0, free: 0 };
+      const counts = { trial: 0, cod: 0, basic: 0, starter: 0, pro: 0, free: 0 };
       for (const u of userRows) {
         if (u.plan === "trial") counts.trial++;
+        else if (u.plan === "cod") counts.cod++;
         else if (u.plan === "basic") counts.basic++;
         else if (u.plan === "starter") counts.starter++;
         else if (u.plan === "pro") counts.pro++;
@@ -268,14 +272,15 @@ function AdminPage() {
         .reduce((s: number, p: any) => s + Number(p.amount), 0);
       const newUsers30d = profiles.filter((p: any) => new Date(p.created_at).getTime() >= d30).length;
 
-      // MRR estimé en USD : basic=$5, starter (public "Pro")=$17, pro (public "Premium")=$27
+      // MRR estimé en USD : cod=$10, basic (Starter)=$12, starter (Pro)=$29, pro (Scale)=$79
       let mrr = 0;
       for (const s of subs) {
         if (!["active", "incomplete"].includes((s as any).status)) continue;
         const plan = (s as any).plan;
-        if (plan === "pro") mrr += 27;
-        else if (plan === "starter") mrr += 17;
-        else if (plan === "basic") mrr += 5;
+        if (plan === "pro") mrr += 79;
+        else if (plan === "starter") mrr += 29;
+        else if (plan === "basic") mrr += 12;
+        else if (plan === "cod") mrr += 10;
       }
 
       // Build 30-day series
@@ -306,6 +311,7 @@ function AdminPage() {
       setStats({
         totalUsers: profiles.length,
         trialUsers: counts.trial,
+        codUsers: counts.cod,
         basicUsers: counts.basic,
         starterUsers: counts.starter,
         proUsers: counts.pro,
@@ -488,9 +494,10 @@ function OverviewTab({
           sparkline={stats.revenueSeries}
         />
         <KpiCard label="Trial actifs" value={formatNumber(stats.trialUsers)} />
-        <KpiCard label="Basic ($5)" value={formatNumber(stats.basicUsers)} />
-        <KpiCard label="Pro ($17)" value={formatNumber(stats.starterUsers)} />
-        <KpiCard label="Premium ($27)" value={formatNumber(stats.proUsers)} accent />
+        <KpiCard label="COD ($10)" value={formatNumber(stats.codUsers)} />
+        <KpiCard label="Starter ($12)" value={formatNumber(stats.basicUsers)} />
+        <KpiCard label="Pro ($29)" value={formatNumber(stats.starterUsers)} />
+        <KpiCard label="Scale ($79)" value={formatNumber(stats.proUsers)} accent />
         <KpiCard label="Free / expirés" value={formatNumber(stats.freeUsers)} />
         <KpiCard label="Revenu total" value={fmt(stats.totalRevenue)} />
       </div>
@@ -910,7 +917,7 @@ function UsersTab({
     });
     if (sortBy === "paid") list = [...list].sort((a, b) => b.total_paid - a.total_paid);
     else if (sortBy === "plan") {
-      const order: Record<string, number> = { pro: 0, starter: 1, basic: 2, trial: 3, free: 4 };
+      const order: Record<string, number> = { pro: 0, starter: 1, basic: 2, cod: 3, trial: 4, free: 5 };
       list = [...list].sort((a, b) => (order[a.plan] ?? 9) - (order[b.plan] ?? 9));
     }
     return list;
@@ -976,9 +983,10 @@ function UsersTab({
         {[
           { k: "all", l: `Tous (${users.length})` },
           { k: "trial", l: `Trial` },
-          { k: "basic", l: "Basic $5" },
-          { k: "starter", l: "Pro $17" },
-          { k: "pro", l: "Premium $27" },
+          { k: "cod", l: "COD $10" },
+          { k: "basic", l: "Starter $12" },
+          { k: "starter", l: "Pro $29" },
+          { k: "pro", l: "Scale $79" },
           { k: "free", l: "Free" },
           { k: "paid", l: "💰 A payé" },
           { k: "expiring", l: "⚠ Expire <3j" },
@@ -1152,14 +1160,16 @@ function PlanBadge({ plan }: { plan: string }) {
     pro: "bg-foreground text-background border-foreground",
     starter: "bg-accent text-background border-accent",
     basic: "bg-sky-100 text-sky-900 border-sky-300",
+    cod: "bg-emerald-100 text-emerald-900 border-emerald-300",
     trial: "bg-amber-100 text-amber-900 border-amber-300",
     free: "bg-muted text-muted-foreground",
   };
   // Mapping interne → label public affiché à l'admin
   const labelMap: Record<string, string> = {
-    pro: "Premium",
+    pro: "Scale",
     starter: "Pro",
-    basic: "Basic",
+    basic: "Starter",
+    cod: "COD",
     trial: "Trial",
     free: "Free",
   };

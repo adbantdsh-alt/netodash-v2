@@ -13,9 +13,11 @@ function getSupabase() {
   return _supabase;
 }
 
-function planFromPriceId(priceId: string | undefined | null): "basic" | "starter" | "pro" | null {
+function planFromPriceId(priceId: string | undefined | null): "cod" | "basic" | "starter" | "pro" | null {
   if (!priceId) return null;
-  // v4 = grille tarifaire actuelle (Starter $12 / Pro $29 / Scale $79)
+  // v5 — plan COD dédié
+  if (priceId === "cod_monthly_v1") return "cod";
+  // v4 = Starter / Pro / Scale (Drop)
   // Labels publics → IDs internes : Starter=basic, Pro=starter, Scale=pro
   // Mensuel
   if (priceId === "scale_monthly_v4") return "pro";

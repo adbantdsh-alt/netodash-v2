@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
+import { useSubscription } from "@/lib/use-subscription";
+import { canExportCsv } from "@/lib/plan-limits";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
 import { formatCurrency, formatNumber, dateRangeForPreset } from "@/lib/calc";
 import { rankProducts, downloadCSV, type ProductRanking } from "@/lib/analytics-insights";
@@ -12,12 +14,14 @@ type SortKey = "score" | "netProfit" | "revenue" | "roas" | "marginPct" | "refun
 
 export function ProductRankingTab({ preset, customRange }: Props) {
   const { user } = useAuth();
+  const sub = useSubscription(user?.id);
   const range = useMemo(() => dateRangeForPreset(preset, customRange), [preset, customRange]);
   const profileQ = useProfile(user?.id);
   const productsQ = useProducts(user?.id);
   const entriesQ = useEntries(user?.id, range);
 
   const { currency, mode: activeMode } = useActiveMode();
+  const csvAllowed = canExportCsv(sub.plan, activeMode);
   const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
 
@@ -75,12 +79,18 @@ export function ProductRankingTab({ preset, customRange }: Props) {
             Trie par score, marge, ROAS… Identifie tes winners & losers en un coup d'œil.
           </p>
         </div>
-        <button
-          onClick={handleExport}
-          className="px-3 py-2 text-xs uppercase tracking-widest font-bold brutal-border-thin hover:bg-foreground hover:text-background"
-        >
-          ↓ Export CSV
-        </button>
+        {csvAllowed ? (
+          <button
+            onClick={handleExport}
+            className="px-3 py-2 text-xs uppercase tracking-widest font-bold brutal-border-thin hover:bg-foreground hover:text-background"
+          >
+            ↓ Export CSV
+          </button>
+        ) : (
+          <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+            🔒 Export CSV · plan Pro Drop
+          </span>
+        )}
       </div>
 
       <div className="brutal-border-thin overflow-x-auto bg-card">

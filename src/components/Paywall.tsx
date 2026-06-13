@@ -1,4 +1,4 @@
-import { PlanCards } from "./PlanCards";
+import { CodPlanCard, DropshippingPlanCards } from "./PlanCards";
 
 type Props = {
   variant: "analytics" | "trial-expired";
@@ -23,7 +23,20 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
               Choisis un plan pour continuer à utiliser NETODASH
             </div>
           </div>
-          <PlanCards highlightPro />
+          <div className="space-y-10">
+            <div>
+              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
+                Je fais du COD uniquement
+              </div>
+              <CodPlanCard />
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
+                Je fais du Dropshipping
+              </div>
+              <DropshippingPlanCards highlightPro />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -127,7 +140,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
         <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
           → Choisis ton plan pour débloquer
         </div>
-        <PlanCards highlightPro />
+        <DropshippingPlanCards highlightPro />
       </div>
 
       <div className="brutal-border-thin p-5 text-xs font-mono text-muted-foreground">

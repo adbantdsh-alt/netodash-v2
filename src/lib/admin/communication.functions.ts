@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
 
-const audienceEnum = z.enum(["all", "free", "trial", "paying", "basic", "starter", "pro"]);
+const audienceEnum = z.enum(["all", "free", "trial", "paying", "cod", "basic", "starter", "pro"]);
 const severityEnum = z.enum(["info", "success", "warning", "critical"]);
 
 export const listAnnouncements = createServerFn({ method: "GET" })
@@ -20,7 +20,7 @@ export const listAnnouncements = createServerFn({ method: "GET" })
         title: string;
         body: string;
         severity: "info" | "success" | "warning" | "critical";
-        audience: "all" | "free" | "trial" | "paying" | "basic" | "starter" | "pro";
+        audience: "all" | "free" | "trial" | "paying" | "cod" | "basic" | "starter" | "pro";
         cta_label: string | null;
         cta_url: string | null;
         active: boolean;

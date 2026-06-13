@@ -2,18 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Mapping interne ↔ label public (nouvelle grille Starter / Pro / Scale) :
- *   - trial    → "Essai gratuit" (14 jours, Pro débloqué)
- *   - basic    → "Starter" ($12/mois, 3 produits, 1 mode au choix, 60j d'historique)
- *   - starter  → "Pro"     ($29/mois, 10 produits, Drop+COD, upsells, multi-zones COD)
- *   - pro      → "Scale"   ($79/mois, illimité + Analytics Pro EXCLUSIF + WhatsApp prio)
- *   - free     → "Free" (post-essai sans abo, app utilisable très limitée)
- *
- * On conserve les identifiants internes `basic` / `starter` / `pro` pour ne pas
- * casser les abonnements Stripe et les colonnes DB existantes. Seuls les LABELS
- * publics et les FEATURES changent.
+ * Mapping interne ↔ label public :
+ *   - trial    → Essai 14j (accès complet)
+ *   - cod      → Plan COD $10 (COD uniquement)
+ *   - basic    → Starter Drop $12 (+ COD inclus)
+ *   - starter  → Pro $29
+ *   - pro      → Scale $79
+ *   - free     → Free
  */
-export type RawPlan = "trial" | "basic" | "starter" | "pro";
+export type RawPlan = "trial" | "cod" | "basic" | "starter" | "pro";
 export type EffectivePlan = RawPlan | "free";
 export type SubscriptionStatus = "active" | "canceled" | "past_due" | "incomplete";
 
@@ -38,19 +35,14 @@ export type SubscriptionState = {
   trialEndsAt: Date | null;
   trialDaysLeft: number | null;
   isTrialing: boolean;
-  /** Toute formule payante OU essai (≠ free). */
   hasPaidAccess: boolean;
-  /** Plan Scale ($79) — le plus haut, illimité + Analytics Pro + WhatsApp prio. */
   hasScaleAccess: boolean;
-  /** Alias historique de hasScaleAccess. @deprecated utiliser hasScaleAccess. */
   hasPremiumAccess: boolean;
-  /** Analytics Pro (waterfall, scoring, break-even, simulateur, insights) — Scale uniquement. */
   hasAnalyticsAccess: boolean;
-  /** Plan Pro ($29) ou plus — débloque Drop+COD parallèle, upsells, multi-zones COD, capture. */
   hasProAccess: boolean;
-  /** Plan Starter ($12) ou plus — accès payant minimum. */
   hasBasicAccess: boolean;
-  /** Compatibilité — utilise une légère période de grâce, à supprimer à terme. */
+  /** Plan COD $10 actif. */
+  hasCodPlanAccess: boolean;
   needsPayment: boolean;
   isFree: boolean;
 };
@@ -71,6 +63,7 @@ function computeEffective(row: SubscriptionRow | null): SubscriptionState {
       hasAnalyticsAccess: false,
       hasProAccess: false,
       hasBasicAccess: false,
+      hasCodPlanAccess: false,
       needsPayment: false,
       isFree: true,
     };
@@ -81,7 +74,10 @@ function computeEffective(row: SubscriptionRow | null): SubscriptionState {
   const trialActive = row.plan === "trial" && trialEndsAt.getTime() > now.getTime();
   const periodActive = !periodEnd || periodEnd.getTime() > now.getTime();
   const paidActive =
-    (row.plan === "basic" || row.plan === "starter" || row.plan === "pro") &&
+    (row.plan === "cod" ||
+      row.plan === "basic" ||
+      row.plan === "starter" ||
+      row.plan === "pro") &&
     (row.status === "active" || row.status === "incomplete") &&
     periodActive;
 
@@ -96,8 +92,8 @@ function computeEffective(row: SubscriptionRow | null): SubscriptionState {
 
   const isScale = plan === "pro";
   const isProOrBetter = plan === "pro" || plan === "starter" || plan === "trial";
+  const isDropPaid = plan === "basic" || plan === "starter" || plan === "pro";
   const isBasicOrBetter = plan !== "free";
-  // Pendant l'essai, on débloque Analytics Pro pour qu'ils voient la valeur de Scale.
   const hasAnalytics = isScale || plan === "trial";
 
   return {
@@ -113,7 +109,8 @@ function computeEffective(row: SubscriptionRow | null): SubscriptionState {
     hasPremiumAccess: isScale,
     hasAnalyticsAccess: hasAnalytics,
     hasProAccess: isProOrBetter,
-    hasBasicAccess: isBasicOrBetter,
+    hasBasicAccess: isDropPaid || plan === "cod" || plan === "trial",
+    hasCodPlanAccess: plan === "cod",
     needsPayment: false,
     isFree: plan === "free",
   };
@@ -133,6 +130,7 @@ const EMPTY_LOADING: SubscriptionState = {
   hasAnalyticsAccess: false,
   hasProAccess: false,
   hasBasicAccess: false,
+  hasCodPlanAccess: false,
   needsPayment: false,
   isFree: false,
 };
@@ -159,6 +157,7 @@ export function useSubscription(userId: string | undefined): SubscriptionState {
 
 export const PLAN_LABELS: Record<EffectivePlan, string> = {
   trial: "Essai gratuit",
+  cod: "COD",
   basic: "Starter",
   starter: "Pro",
   pro: "Scale",
@@ -166,6 +165,7 @@ export const PLAN_LABELS: Record<EffectivePlan, string> = {
 };
 
 export const PLAN_PRICES = {
+  cod: { amount: 10, currency: "USD", display: "$10/mois" },
   basic: { amount: 12, currency: "USD", display: "$12/mois" },
   starter: { amount: 29, currency: "USD", display: "$29/mois" },
   pro: { amount: 79, currency: "USD", display: "$79/mois" },
