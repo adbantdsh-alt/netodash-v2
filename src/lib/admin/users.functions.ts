@@ -225,6 +225,108 @@ export const adminChangeUserPlan = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+const GRANT_PLAN_LABELS: Record<"cod" | "basic" | "starter" | "pro", string> = {
+  cod: "COD",
+  basic: "Starter",
+  starter: "Pro",
+  pro: "Scale",
+};
+
+function addDuration(base: Date, amount: number, unit: "days" | "months" | "years"): Date {
+  const next = new Date(base);
+  if (unit === "days") next.setDate(next.getDate() + amount);
+  else if (unit === "months") next.setMonth(next.getMonth() + amount);
+  else next.setFullYear(next.getFullYear() + amount);
+  return next;
+}
+
+/** Prolonge l'accès gratuit (trial_ends_at + période) avec le plan choisi. */
+export const adminGrantFreeAccess = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        userId: z.string().uuid(),
+        duration: z.number().int().min(1).max(3650),
+        unit: z.enum(["days", "months", "years"]),
+        plan: z.enum(["cod", "basic", "starter", "pro"]),
+      })
+      .parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    ensureRole(context.adminRole, ["super_admin", "support"]);
+    const { admin, adminId, adminEmail } = context;
+
+    const { data: prof } = await admin
+      .from("profiles")
+      .select("email")
+      .eq("id", data.userId)
+      .maybeSingle();
+    const { data: existing } = await admin
+      .from("subscriptions")
+      .select("trial_ends_at, current_period_end")
+      .eq("user_id", data.userId)
+      .maybeSingle();
+
+    const now = new Date();
+    let baseMs = now.getTime();
+    if (existing?.trial_ends_at) {
+      baseMs = Math.max(baseMs, new Date(existing.trial_ends_at).getTime());
+    }
+    if (existing?.current_period_end) {
+      baseMs = Math.max(baseMs, new Date(existing.current_period_end).getTime());
+    }
+    const endsAt = addDuration(new Date(baseMs), data.duration, data.unit);
+    const grantedAt = now.toISOString();
+
+    const upd = {
+      plan: data.plan,
+      status: "active" as const,
+      trial_ends_at: endsAt.toISOString(),
+      current_period_end: endsAt.toISOString(),
+      cancel_at_period_end: false,
+    };
+
+    if (existing) {
+      const { error } = await admin.from("subscriptions").update(upd).eq("user_id", data.userId);
+      if (error) throw new Error(error.message);
+    } else {
+      const { error } = await admin.from("subscriptions").insert({ user_id: data.userId, ...upd });
+      if (error) throw new Error(error.message);
+    }
+
+    const planOffert = GRANT_PLAN_LABELS[data.plan];
+    const duree =
+      data.unit === "days"
+        ? `${data.duration} jour${data.duration > 1 ? "s" : ""}`
+        : data.unit === "months"
+          ? `${data.duration} mois`
+          : `${data.duration} an${data.duration > 1 ? "s" : ""}`;
+
+    await logAdminAction({
+      admin,
+      adminId,
+      adminEmail,
+      action: "grant_free_access",
+      category: "users",
+      targetUserId: data.userId,
+      targetEmail: prof?.email as string | undefined,
+      details: {
+        admin_email: adminEmail,
+        user_email: prof?.email ?? null,
+        plan_offert: planOffert,
+        plan: data.plan,
+        duree,
+        duration: data.duration,
+        unit: data.unit,
+        date: grantedAt,
+        ends_at: endsAt.toISOString(),
+      },
+    });
+
+    return { ok: true, endsAt: endsAt.toISOString(), planOffert, duree };
+  });
+
 export const adminSuspendUser = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
   .inputValidator((input: unknown) =>

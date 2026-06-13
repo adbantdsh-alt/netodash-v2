@@ -28,9 +28,10 @@ const AUDIENCES = [
   { v: "free", label: "Plan Gratuit" },
   { v: "trial", label: "En essai" },
   { v: "paying", label: "Tous les payants" },
-  { v: "basic", label: "Plan Basic" },
-  { v: "starter", label: "Plan Starter" },
-  { v: "pro", label: "Plan Pro" },
+  { v: "cod", label: "Plan COD" },
+  { v: "basic", label: "Plan Starter" },
+  { v: "starter", label: "Plan Pro" },
+  { v: "pro", label: "Plan Scale" },
 ] as const;
 
 const toLocalInput = (iso: string) => {

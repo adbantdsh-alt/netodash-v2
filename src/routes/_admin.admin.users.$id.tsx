@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   adminGetUserProfile,
   adminChangeUserPlan,
+  adminGrantFreeAccess,
   adminSuspendUser,
   adminUnsuspendUser,
   adminBanUser,
@@ -11,7 +12,15 @@ import {
   adminImpersonateUser,
 } from "@/lib/admin/users.functions";
 import { StatusBadge } from "@/components/admin/StatusBadge";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { ArrowLeft, ExternalLink, Gift } from "lucide-react";
+
+const GRANT_PLANS = [
+  { id: "cod", label: "COD ($10)" },
+  { id: "basic", label: "Starter ($12)" },
+  { id: "starter", label: "Pro ($29)" },
+  { id: "pro", label: "Scale ($79)" },
+] as const;
 
 export const Route = createFileRoute("/_admin/admin/users/$id")({
   component: AdminUserDetail,
@@ -27,9 +36,14 @@ function AdminUserDetail() {
   const banUser = useServerFn(adminBanUser);
   const deleteUserData = useServerFn(adminDeleteUserData);
   const impersonateUser = useServerFn(adminImpersonateUser);
+  const grantFreeAccess = useServerFn(adminGrantFreeAccess);
   const [data, setData] = useState<Awaited<ReturnType<typeof adminGetUserProfile>> | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showGrant, setShowGrant] = useState(false);
+  const [grantDuration, setGrantDuration] = useState(30);
+  const [grantUnit, setGrantUnit] = useState<"days" | "months" | "years">("days");
+  const [grantPlan, setGrantPlan] = useState<(typeof GRANT_PLANS)[number]["id"]>("starter");
 
   const load = () => {
     setErr(null);
@@ -107,8 +121,8 @@ function AdminUserDetail() {
 
       <div className="admin-card mb-6">
         <h2 className="mb-3">Plan & abonnement</h2>
-        <div className="flex flex-wrap gap-2">
-          {(["free", "trial", "basic", "starter", "pro"] as const).map((pl) => (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {(["free", "trial", "cod", "basic", "starter", "pro"] as const).map((pl) => (
             <button
               key={pl}
               disabled={busy}
@@ -119,7 +133,74 @@ function AdminUserDetail() {
             </button>
           ))}
         </div>
+        <button
+          disabled={busy}
+          onClick={() => setShowGrant(true)}
+          className="admin-btn inline-flex items-center gap-2"
+        >
+          <Gift size={14} /> Offrir accès gratuit
+        </button>
       </div>
+
+      <ConfirmDialog
+        open={showGrant}
+        title="Offrir accès gratuit"
+        description={`Prolonger l'accès de ${p.email as string} · action tracée dans les audit logs.`}
+        confirmLabel="Confirmer"
+        disabled={busy || grantDuration < 1}
+        onCancel={() => setShowGrant(false)}
+        onConfirm={async () => {
+          await wrap(async () => {
+            const r = await grantFreeAccess({
+              data: { userId, duration: grantDuration, unit: grantUnit, plan: grantPlan },
+            });
+            alert(
+              `Accès offert · ${r.planOffert} · ${r.duree} · jusqu'au ${new Date(r.endsAt).toLocaleDateString("fr-FR")}`,
+            );
+            setShowGrant(false);
+          });
+        }}
+      >
+        <div className="grid gap-3 mb-2">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-1">Durée</label>
+            <input
+              type="number"
+              min={1}
+              max={3650}
+              value={grantDuration}
+              onChange={(e) => setGrantDuration(Math.max(1, Number(e.target.value) || 1))}
+              className="admin-input w-full"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-1">Unité</label>
+            <select
+              className="admin-input w-full"
+              value={grantUnit}
+              onChange={(e) => setGrantUnit(e.target.value as "days" | "months" | "years")}
+            >
+              <option value="days">Jours</option>
+              <option value="months">Mois</option>
+              <option value="years">Années</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-1">Plan offert</label>
+            <select
+              className="admin-input w-full"
+              value={grantPlan}
+              onChange={(e) => setGrantPlan(e.target.value as (typeof GRANT_PLANS)[number]["id"])}
+            >
+              {GRANT_PLANS.map((pl) => (
+                <option key={pl.id} value={pl.id}>
+                  {pl.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </ConfirmDialog>
 
       <div className="admin-card mb-6">
         <h2 className="mb-3">Modération</h2>

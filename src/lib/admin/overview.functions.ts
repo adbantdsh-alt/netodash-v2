@@ -17,9 +17,21 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       .select("plan, status, current_period_end, trial_ends_at, created_at, user_id");
     const subscriptions = subs ?? [];
 
-    const PRICES: Record<string, number> = { basic: 5000, starter: 15000, pro: 30000 };
+    const PRICES: Record<string, number> = {
+      cod: 10000,
+      basic: 12000,
+      starter: 29000,
+      pro: 79000,
+    };
     let mrr = 0;
-    const planCounts: Record<string, number> = { free: 0, trial: 0, basic: 0, starter: 0, pro: 0 };
+    const planCounts: Record<string, number> = {
+      free: 0,
+      trial: 0,
+      cod: 0,
+      basic: 0,
+      starter: 0,
+      pro: 0,
+    };
     for (const s of subscriptions) {
       const plan = String(s.plan ?? "free");
       const status = String(s.status ?? "");
@@ -50,7 +62,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       .eq("status", "canceled")
       .gte("updated_at", startOfMonth);
 
-    const payingNow = planCounts.basic + planCounts.starter + planCounts.pro;
+    const payingNow = planCounts.cod + planCounts.basic + planCounts.starter + planCounts.pro;
     const churn = payingNow > 0 ? ((cancellations ?? 0) / Math.max(payingNow, 1)) * 100 : 0;
 
     // Paiements des 30 derniers jours pour le graphique MRR

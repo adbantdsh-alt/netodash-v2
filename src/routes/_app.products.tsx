@@ -77,6 +77,7 @@ function ProductsPage() {
   const productsQ = useProducts(user?.id);
   const profileQ = useProfile(user?.id);
   const sub = useSubscription(user?.id);
+  const isCod = activeMode === "cod";
   const productCount = productsQ.data?.length ?? 0;
   const legacyDual = Boolean((profileQ.data as { legacy_dual_mode?: boolean } | undefined)?.legacy_dual_mode);
   const limit = productLimitFor(sub.plan, activeMode);
@@ -86,7 +87,6 @@ function ProductsPage() {
   const range = useMemo(() => dateRangeForPreset("30d"), []);
   const entriesQ = useEntries(user?.id, range);
 
-  const isCod = activeMode === "cod";
   const COUNTRIES = isCod ? COD_COUNTRIES : DROPSHIP_COUNTRIES;
   const defaultCountry = isCod ? "SN" : "FR";
 
