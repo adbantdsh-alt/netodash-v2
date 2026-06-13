@@ -49,6 +49,7 @@ import { Route as AdminAdminSecurityRouteImport } from './routes/_admin.admin.se
 import { Route as AdminAdminRevenueRouteImport } from './routes/_admin.admin.revenue'
 import { Route as AdminAdminExportRouteImport } from './routes/_admin.admin.export'
 import { Route as AdminAdminCommunicationRouteImport } from './routes/_admin.admin.communication'
+import { Route as AdminAdminBetaTestersRouteImport } from './routes/_admin.admin.beta-testers'
 import { Route as AdminAdminAffiliatesRouteImport } from './routes/_admin.admin.affiliates'
 import { Route as ApiPublicShopifyInstallRouteImport } from './routes/api/public/shopify/install'
 import { Route as ApiPublicShopifyCallbackRouteImport } from './routes/api/public/shopify/callback'
@@ -254,6 +255,11 @@ const AdminAdminCommunicationRoute = AdminAdminCommunicationRouteImport.update({
   path: '/communication',
   getParentRoute: () => AdminAdminRoute,
 } as any)
+const AdminAdminBetaTestersRoute = AdminAdminBetaTestersRouteImport.update({
+  id: '/beta-testers',
+  path: '/beta-testers',
+  getParentRoute: () => AdminAdminRoute,
+} as any)
 const AdminAdminAffiliatesRoute = AdminAdminAffiliatesRouteImport.update({
   id: '/affiliates',
   path: '/affiliates',
@@ -321,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/cod/': typeof CodIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
+  '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
   '/admin/revenue': typeof AdminAdminRevenueRoute
@@ -365,6 +372,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/cod': typeof CodIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
+  '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
   '/admin/revenue': typeof AdminAdminRevenueRoute
@@ -414,6 +422,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/cod/': typeof CodIndexRoute
   '/_admin/admin/affiliates': typeof AdminAdminAffiliatesRoute
+  '/_admin/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/_admin/admin/communication': typeof AdminAdminCommunicationRoute
   '/_admin/admin/export': typeof AdminAdminExportRoute
   '/_admin/admin/revenue': typeof AdminAdminRevenueRoute
@@ -462,6 +471,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/cod/'
     | '/admin/affiliates'
+    | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
     | '/admin/revenue'
@@ -506,6 +516,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/cod'
     | '/admin/affiliates'
+    | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
     | '/admin/revenue'
@@ -554,6 +565,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/cod/'
     | '/_admin/admin/affiliates'
+    | '/_admin/admin/beta-testers'
     | '/_admin/admin/communication'
     | '/_admin/admin/export'
     | '/_admin/admin/revenue'
@@ -878,6 +890,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminCommunicationRouteImport
       parentRoute: typeof AdminAdminRoute
     }
+    '/_admin/admin/beta-testers': {
+      id: '/_admin/admin/beta-testers'
+      path: '/beta-testers'
+      fullPath: '/admin/beta-testers'
+      preLoaderRoute: typeof AdminAdminBetaTestersRouteImport
+      parentRoute: typeof AdminAdminRoute
+    }
     '/_admin/admin/affiliates': {
       id: '/_admin/admin/affiliates'
       path: '/affiliates'
@@ -937,6 +956,7 @@ const AdminAdminUsersRouteWithChildren = AdminAdminUsersRoute._addFileChildren(
 
 interface AdminAdminRouteChildren {
   AdminAdminAffiliatesRoute: typeof AdminAdminAffiliatesRoute
+  AdminAdminBetaTestersRoute: typeof AdminAdminBetaTestersRoute
   AdminAdminCommunicationRoute: typeof AdminAdminCommunicationRoute
   AdminAdminExportRoute: typeof AdminAdminExportRoute
   AdminAdminRevenueRoute: typeof AdminAdminRevenueRoute
@@ -947,6 +967,7 @@ interface AdminAdminRouteChildren {
 
 const AdminAdminRouteChildren: AdminAdminRouteChildren = {
   AdminAdminAffiliatesRoute: AdminAdminAffiliatesRoute,
+  AdminAdminBetaTestersRoute: AdminAdminBetaTestersRoute,
   AdminAdminCommunicationRoute: AdminAdminCommunicationRoute,
   AdminAdminExportRoute: AdminAdminExportRoute,
   AdminAdminRevenueRoute: AdminAdminRevenueRoute,

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Logo } from "@/components/Logo";
+import { BetaCtaButton } from "@/components/BetaCtaButton";
 
 
 const SEO_TITLE = "Calculateur ROAS Gratuit — Netodash";
@@ -144,7 +145,7 @@ function LandingChooser() {
           </div>
 
           <p className="text-center font-mono text-xs text-muted-foreground mt-12">
-            Tu fais les deux ? <Link to="/auth" search={{ mode: "signup" }} className="underline text-foreground font-bold">Crée ton compte</Link> — le plan Pro débloque les 2 modes en parallèle.
+            Tu fais les deux ? <BetaCtaButton variant="inline" /> — dès le plan Starter Drop ($12), COD et Dropshipping inclus (2 modes en parallèle). Programme bêta : accès complet.
           </p>
 
           <section className="mt-12 md:mt-16 max-w-5xl mx-auto grid md:grid-cols-3 gap-4" aria-label="SEO calculateur ROAS">

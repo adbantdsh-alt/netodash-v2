@@ -12,6 +12,10 @@ import { ALL_COUNTRIES, searchCountries, findCountry } from "@/lib/countries-all
 const searchSchema = z.object({
   mode: z.enum(["login", "signup"]).optional().default("login"),
   ref: z.string().trim().toLowerCase().max(60).optional(),
+  email: z.string().trim().email().max(255).optional(),
+  firstName: z.string().trim().max(100).optional(),
+  lastName: z.string().trim().max(100).optional(),
+  beta: z.enum(["1"]).optional(),
 });
 
 export const Route = createFileRoute("/auth")({
@@ -31,7 +35,8 @@ const credSchema = z.object({
 });
 
 function AuthPage() {
-  const { mode, ref } = Route.useSearch();
+  const { mode, ref, email: emailParam, firstName: firstNameParam, lastName: lastNameParam, beta } =
+    Route.useSearch();
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [hydrated, setHydrated] = useState(false);
@@ -72,6 +77,12 @@ function AuthPage() {
   useEffect(() => {
     if (ref) setIsSignup(true);
   }, [ref]);
+  useEffect(() => {
+    if (emailParam) setEmail(emailParam);
+    if (firstNameParam) setFirstName(firstNameParam);
+    if (lastNameParam) setLastName(lastNameParam);
+    if (beta === "1" || emailParam) setIsSignup(true);
+  }, [emailParam, firstNameParam, lastNameParam, beta]);
   useEffect(() => {
     if (!loading && user) navigate({ to: "/dashboard" });
   }, [user, loading, navigate]);
@@ -147,6 +158,7 @@ function AuthPage() {
         if (firstName.trim() || lastName.trim()) {
           meta.display_name = `${firstName.trim()} ${lastName.trim()}`.trim();
         }
+        if (beta === "1") meta.beta_tester = "1";
         const { data, error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
@@ -159,7 +171,11 @@ function AuthPage() {
         // If email confirmation is required, no session is returned
         if (!data.session) {
           setSignupSentTo(parsed.data.email);
-          toast.success("Compte créé. Vérifie ton email.");
+          toast.success(
+            beta === "1"
+              ? "Compte bêta créé. Vérifie ton email — 6 mois gratuits activés à la confirmation."
+              : "Compte créé. Vérifie ton email.",
+          );
           return;
         }
         // Persist selected mode in profile (handle_new_user trigger n'a pas ces colonnes).
@@ -173,9 +189,11 @@ function AuthPage() {
             .eq("id", data.user.id);
         }
         toast.success(
-          affiliateInfo?.valid
-            ? `Compte créé. Essai gratuit ${affiliateInfo.trial_days} jours !`
-            : "Compte créé.",
+          beta === "1"
+            ? "Compte bêta créé — 6 mois gratuits, accès complet !"
+            : affiliateInfo?.valid
+              ? `Compte créé. Essai gratuit ${affiliateInfo.trial_days} jours !`
+              : "Compte créé.",
         );
         navigate({ to: "/dashboard" });
       } else {
@@ -300,8 +318,24 @@ function AuthPage() {
           <h1 className="text-3xl sm:text-4xl font-black mb-1 tracking-tighter">
             {isSignup ? "CRÉER UN COMPTE" : "CONNEXION"}
           </h1>
+          {isSignup && beta === "1" && (
+            <div className="brutal-border-thin border-accent bg-accent/10 px-4 py-3 mb-4">
+              <div className="text-xs uppercase tracking-widest font-black text-accent mb-1">
+                Programme bêta-testeur
+              </div>
+              <p className="font-mono text-xs text-muted-foreground leading-relaxed">
+                Inscription identique aux autres utilisateurs. Les bêta-testeurs bénéficient de{" "}
+                <strong className="text-foreground">6 mois gratuits</strong> avec accès complet
+                (places limitées à 10).
+              </p>
+            </div>
+          )}
           <p className="text-muted-foreground text-sm mb-8">
-            {isSignup ? "Démarre en 30 secondes." : "Accède à ton dashboard."}
+            {isSignup
+              ? beta === "1"
+                ? "Finalise ton inscription bêta en 30 secondes."
+                : "Démarre en 30 secondes."
+              : "Accède à ton dashboard."}
           </p>
 
           <form onSubmit={handleSubmit} method="post" action="/auth" className="space-y-5" autoComplete="on">

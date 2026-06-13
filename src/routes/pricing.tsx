@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { COD_PLAN } from "@/components/PlanCards";
+import { BetaCtaButton } from "@/components/BetaCtaButton";
 
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Dashboard rentabilité Dropshipping & COD";
@@ -105,13 +106,7 @@ function PricingPage() {
             <Link to="/auth" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
               Connexion
             </Link>
-            <Link
-              to="/auth"
-              search={{ mode: "signup" }}
-              className="brutal-border bg-foreground text-background px-5 py-2.5 font-bold uppercase tracking-wider text-sm hover:bg-accent hover:border-accent"
-            >
-              Commencer
-            </Link>
+            <BetaCtaButton variant="header" />
           </nav>
         </div>
       </header>
@@ -142,13 +137,7 @@ function PricingPage() {
             <p className="font-mono text-xs text-muted-foreground mb-5">
               Accès complet 14 jours — peu importe le mode choisi au signup
             </p>
-            <Link
-              to="/auth"
-              search={{ mode: "signup" }}
-              className="block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
-            >
-              Démarrer l'essai
-            </Link>
+            <BetaCtaButton variant="card" />
           </div>
         </div>
 
@@ -176,13 +165,7 @@ function PricingPage() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/auth"
-              search={{ mode: "signup" }}
-              className="block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
-            >
-              Choisir COD
-            </Link>
+            <BetaCtaButton variant="card" />
           </div>
         </div>
 
@@ -226,17 +209,7 @@ function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/auth"
-                  search={{ mode: "signup" }}
-                  className={`block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider ${
-                    p.highlight
-                      ? "bg-accent text-accent-foreground border-accent hover:opacity-90"
-                      : "bg-foreground text-background hover:bg-accent hover:border-accent"
-                  }`}
-                >
-                  {p.cta}
-                </Link>
+                <BetaCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
               </div>
             ))}
           </div>

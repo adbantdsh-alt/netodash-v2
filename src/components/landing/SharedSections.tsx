@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Lock, XCircle, BadgeCheck, Server } from "lucide-react";
 import stripeLogo from "@/assets/stripe-logo.png";
 import type { LandingCopy } from "@/lib/landing-copy";
+import { BetaCtaButton } from "@/components/BetaCtaButton";
 
 /* ────────────────────────────────────────────────────────────────────────── *
  * Sections réutilisées par les deux landings (Drop & COD)                    *
@@ -462,17 +463,7 @@ export function Pricing({
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/auth"
-                search={{ mode: "signup" }}
-                className={`block text-center brutal-border px-5 py-3 font-black uppercase tracking-wider ${
-                  p.highlight
-                    ? "bg-accent text-accent-foreground border-accent text-base hover:bg-foreground hover:text-background hover:border-foreground"
-                    : "bg-background text-foreground hover:bg-foreground hover:text-background"
-                }`}
-              >
-                {p.cta}
-              </Link>
+              <BetaCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
             </div>
           ))}
         </div>
@@ -531,13 +522,9 @@ export function FinalCta({ copy }: { copy: LandingCopy }) {
         <p className="font-mono text-sm md:text-base mt-6 text-background/70 max-w-xl mx-auto">
           {copy.ctaLead}
         </p>
-        <Link
-          to="/auth"
-          search={{ mode: "signup" }}
-          className="inline-block mt-10 brutal-border border-background bg-background text-foreground px-10 py-5 font-black uppercase tracking-wider text-lg hover:bg-accent hover:text-accent-foreground hover:border-accent"
-        >
-          {copy.ctaButton}
-        </Link>
+        <div className="mt-10">
+          <BetaCtaButton variant="final" />
+        </div>
       </div>
     </section>
   );
@@ -689,13 +676,7 @@ export function CompetitorComparison() {
         </div>
 
         <div className="text-center mt-8">
-          <Link
-            to="/auth"
-            search={{ mode: "signup" }}
-            className="inline-block brutal-border bg-accent text-accent-foreground border-accent px-8 md:px-10 py-3 md:py-4 font-black uppercase tracking-wider text-sm md:text-base hover:bg-foreground hover:text-background hover:border-foreground"
-          >
-            Essayer Netodash gratuitement · 14 jours
-          </Link>
+          <BetaCtaButton variant="hero" />
           <p className="mt-3 text-[11px] font-mono text-muted-foreground">
             Sans CB · Annulation en 1 clic · Tarifs comparés au 06/2026, susceptibles d'évolution chez les concurrents
           </p>

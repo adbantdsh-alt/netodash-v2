@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { COD_COUNTRIES, getCodCountry } from "@/lib/cod-countries";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
+import { BetaCtaButton } from "@/components/BetaCtaButton";
 
 export const Route = createFileRoute("/cod/$country")({
   loader: ({ params }) => {
@@ -239,13 +240,7 @@ function CountryPage() {
             ))}
           </ul>
           <div className="mt-10 flex flex-col sm:flex-row gap-3">
-            <Link
-              to="/auth"
-              search={{ mode: "signup" }}
-              className="brutal-border bg-accent text-accent-foreground border-accent px-8 py-4 font-black uppercase tracking-wider"
-            >
-              Démarrer l'essai gratuit
-            </Link>
+            <BetaCtaButton variant="hero" className="px-8 py-4" />
             <Link
               to="/calculateur-roas"
               className="brutal-border px-8 py-4 font-black uppercase tracking-wider"
