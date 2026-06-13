@@ -7,6 +7,10 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Requis pour Vercel : le preset Lovable (cloudflare-module) est ignoré hors sandbox.
+  nitro: {
+    preset: "vercel",
+  },
   vite: {
     optimizeDeps: {
       include: [
