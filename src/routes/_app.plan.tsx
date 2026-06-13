@@ -37,9 +37,9 @@ type PlanMeta = {
 const PLAN_META: Record<PlanKey, PlanMeta> = {
   basic: {
     label: "Starter",
-    priceMonthly: 7,
-    priceYearly: 67,
-    monthlyEquivalent: "5,58",
+    priceMonthly: 12,
+    priceYearly: 115,
+    monthlyEquivalent: "9,58",
     priceIdMonthly: "basic_monthly_v4",
     priceIdYearly: "basic_yearly_v4",
     bullets: [
@@ -52,9 +52,9 @@ const PLAN_META: Record<PlanKey, PlanMeta> = {
   },
   starter: {
     label: "Pro",
-    priceMonthly: 19,
-    priceYearly: 182,
-    monthlyEquivalent: "15,17",
+    priceMonthly: 29,
+    priceYearly: 278,
+    monthlyEquivalent: "23,17",
     priceIdMonthly: "pro_monthly_v4",
     priceIdYearly: "pro_yearly_v4",
     bullets: [
@@ -67,9 +67,9 @@ const PLAN_META: Record<PlanKey, PlanMeta> = {
   },
   pro: {
     label: "Scale",
-    priceMonthly: 39,
-    priceYearly: 374,
-    monthlyEquivalent: "31,17",
+    priceMonthly: 79,
+    priceYearly: 756,
+    monthlyEquivalent: "63,00",
     priceIdMonthly: "scale_monthly_v4",
     priceIdYearly: "scale_yearly_v4",
     bullets: [
