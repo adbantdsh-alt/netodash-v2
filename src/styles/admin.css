@@ -1,0 +1,296 @@
+/* Charte brutaliste pour le panel admin Netodash.
+   Scopé via [data-admin-root] pour ne pas polluer l'app utilisateur. */
+
+[data-admin-root] {
+  --admin-bg: #ffffff;
+  --admin-fg: #000000;
+  --admin-muted: #6b6b6b;
+  --admin-border: #000000;
+  --admin-accent: #e05c1a;
+  --admin-accent-fg: #ffffff;
+  --admin-danger: #e24b4a;
+  --admin-success: #1f8a4c;
+  --admin-warning: #d28b00;
+  --admin-surface: #fafafa;
+
+  background: var(--admin-bg);
+  color: var(--admin-fg);
+  font-family:
+    "Inter", "Helvetica Neue", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-feature-settings: "ss01", "cv01";
+  min-height: 100vh;
+}
+
+[data-admin-root] *,
+[data-admin-root] *::before,
+[data-admin-root] *::after {
+  border-radius: 0 !important;
+}
+
+[data-admin-root] h1 {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+[data-admin-root] h2 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+[data-admin-root] .admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid var(--admin-border);
+  background: var(--admin-fg);
+  color: var(--admin-bg);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+[data-admin-root] .admin-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 0 var(--admin-fg);
+}
+[data-admin-root] .admin-btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+[data-admin-root] .admin-btn[data-variant="outline"] {
+  background: var(--admin-bg);
+  color: var(--admin-fg);
+}
+[data-admin-root] .admin-btn[data-variant="accent"] {
+  background: var(--admin-accent);
+  color: var(--admin-accent-fg);
+  border-color: var(--admin-accent);
+}
+[data-admin-root] .admin-btn[data-variant="danger"] {
+  background: var(--admin-danger);
+  color: #fff;
+  border-color: var(--admin-danger);
+}
+[data-admin-root] .admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+[data-admin-root] .admin-card {
+  background: var(--admin-bg);
+  border: 2px solid var(--admin-border);
+  padding: 1.25rem;
+}
+
+[data-admin-root] .admin-input,
+[data-admin-root] .admin-select {
+  border: 2px solid var(--admin-border);
+  background: var(--admin-bg);
+  color: var(--admin-fg);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  width: 100%;
+  font-family: inherit;
+}
+[data-admin-root] .admin-input:focus,
+[data-admin-root] .admin-select:focus {
+  outline: 3px solid var(--admin-accent);
+  outline-offset: -1px;
+}
+
+[data-admin-root] .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+[data-admin-root] .admin-table th {
+  text-align: left;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 0.75rem 0.75rem;
+  border-bottom: 2px solid var(--admin-border);
+  background: var(--admin-fg);
+  color: var(--admin-bg);
+}
+[data-admin-root] .admin-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+[data-admin-root] .admin-table tr:hover td {
+  background: var(--admin-surface);
+}
+
+[data-admin-root] .admin-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid currentColor;
+}
+[data-admin-root] .admin-badge[data-tone="success"] {
+  color: #1f8a4c;
+  background: #e3f5ea;
+}
+[data-admin-root] .admin-badge[data-tone="warning"] {
+  color: #b46a00;
+  background: #fff1d6;
+}
+[data-admin-root] .admin-badge[data-tone="danger"] {
+  color: #b32d2c;
+  background: #fde0e0;
+}
+[data-admin-root] .admin-badge[data-tone="neutral"] {
+  color: #333;
+  background: #ececec;
+}
+[data-admin-root] .admin-badge[data-tone="accent"] {
+  color: #fff;
+  background: var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+
+[data-admin-root] .admin-h1 {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+[data-admin-root] .admin-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--admin-accent);
+  margin-bottom: 0.25rem;
+}
+[data-admin-root] .admin-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.9rem;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--admin-fg);
+  color: var(--admin-bg);
+  border: 2px solid var(--admin-fg);
+  cursor: pointer;
+}
+[data-admin-root] .admin-btn-primary:hover { background: var(--admin-accent); border-color: var(--admin-accent); }
+[data-admin-root] .admin-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--admin-fg);
+  border: 2px solid var(--admin-fg);
+  cursor: pointer;
+}
+[data-admin-root] .admin-btn-ghost:hover { background: var(--admin-fg); color: var(--admin-bg); }
+[data-admin-root] .admin-th {
+  text-align: left;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.75rem;
+  background: var(--admin-fg);
+  color: var(--admin-bg);
+}
+[data-admin-root] .admin-td {
+  padding: 0.75rem;
+  vertical-align: middle;
+}
+[data-admin-root] .admin-kpi {
+  border: 2px solid var(--admin-fg);
+  padding: 1.25rem;
+  background: var(--admin-bg);
+}
+[data-admin-root] .admin-kpi-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+[data-admin-root] .admin-kpi-value {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: 0.5rem;
+}
+
+/* ============ MOBILE OPTIMIZATIONS ============ */
+@media (max-width: 767px) {
+  [data-admin-root] {
+    font-size: 14px;
+  }
+  [data-admin-root] h1,
+  [data-admin-root] .admin-h1 {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    word-break: break-word;
+  }
+  [data-admin-root] h2 {
+    font-size: 1rem;
+  }
+  [data-admin-root] .admin-card {
+    padding: 0.875rem;
+  }
+  [data-admin-root] .admin-kpi {
+    padding: 0.875rem;
+  }
+  [data-admin-root] .admin-kpi-value {
+    font-size: 1.5rem;
+  }
+  [data-admin-root] .admin-btn,
+  [data-admin-root] .admin-btn-primary,
+  [data-admin-root] .admin-btn-ghost {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+  [data-admin-root] .admin-input,
+  [data-admin-root] .admin-select {
+    padding: 0.6rem 0.7rem;
+    font-size: 16px; /* iOS no-zoom */
+  }
+  [data-admin-root] .admin-table {
+    font-size: 0.75rem;
+  }
+  [data-admin-root] .admin-th,
+  [data-admin-root] .admin-td {
+    padding: 0.5rem 0.6rem;
+  }
+  /* Toute table dans une admin-card peut scroller horizontalement */
+  [data-admin-root] .admin-card > table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  /* Réduire l'espace en haut du main */
+  [data-admin-root] main {
+    padding: 0.875rem !important;
+  }
+}

@@ -1,0 +1,2 @@
+ALTER TABLE public.daily_entries DROP CONSTRAINT IF EXISTS daily_entries_currency_check;
+ALTER TABLE public.daily_entries ADD CONSTRAINT daily_entries_currency_check CHECK (ad_budget_currency = ANY (ARRAY['USD'::text,'XOF'::text,'EUR'::text,'GBP'::text]));

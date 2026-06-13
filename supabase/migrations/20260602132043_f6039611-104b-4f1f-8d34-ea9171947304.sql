@@ -1,0 +1,1 @@
+ALTER TABLE public.daily_entries ADD COLUMN IF NOT EXISTS include_wave_fees boolean NOT NULL DEFAULT false;
