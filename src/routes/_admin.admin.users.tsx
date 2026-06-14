@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import {
   adminListUsers,
   adminImpersonateUser,
-  adminGenerateMagicLink,
   adminGrantFreeAccess,
 } from "@/lib/admin/users.functions";
+import { adminGenerateForcedMagicLink } from "@/lib/admin/magic-link.functions";
+import { getSupabaseAuthHeaders } from "@/lib/admin/auth-headers";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Search, ChevronLeft, ChevronRight, ExternalLink, KeyRound, Copy, Check, MessageCircle, Phone, Gift } from "lucide-react";
@@ -27,7 +28,7 @@ const GRANT_PLANS = [
 function AdminUsersPage() {
   const listUsers = useServerFn(adminListUsers);
   const impersonateUser = useServerFn(adminImpersonateUser);
-  const generateMagicLink = useServerFn(adminGenerateMagicLink);
+  const generateForcedMagicLink = useServerFn(adminGenerateForcedMagicLink);
   const grantFreeAccess = useServerFn(adminGrantFreeAccess);
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
@@ -37,14 +38,14 @@ function AdminUsersPage() {
   const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [magicEmail, setMagicEmail] = useState("");
-  const [magicBusy, setMagicBusy] = useState(false);
-  const [magicResult, setMagicResult] = useState<
-    | { link: string | null; email: string; emailConfirmedNow: boolean; banLifted: boolean }
-    | null
-  >(null);
-  const [magicErr, setMagicErr] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [forcedLoginUser, setForcedLoginUser] = useState<Row | null>(null);
+  const [forcedLink, setForcedLink] = useState<string | null>(null);
+  const [forcedMeta, setForcedMeta] = useState<{ emailConfirmedNow: boolean; banLifted: boolean } | null>(
+    null,
+  );
+  const [forcedBusy, setForcedBusy] = useState(false);
+  const [forcedErr, setForcedErr] = useState<string | null>(null);
+  const [forcedCopied, setForcedCopied] = useState(false);
   const [grantUser, setGrantUser] = useState<Row | null>(null);
   const [grantDuration, setGrantDuration] = useState(30);
   const [grantUnit, setGrantUnit] = useState<"days" | "months" | "years">("days");
@@ -102,6 +103,36 @@ function AdminUsersPage() {
     setGrantPlan("starter");
   };
 
+  const openForcedLogin = (u: Row) => {
+    setForcedLoginUser(u);
+    setForcedLink(null);
+    setForcedMeta(null);
+    setForcedErr(null);
+    setForcedCopied(false);
+  };
+
+  const generateForcedLink = async () => {
+    if (!forcedLoginUser) return;
+    setForcedBusy(true);
+    setForcedErr(null);
+    try {
+      const headers = await getSupabaseAuthHeaders();
+      const r = await generateForcedMagicLink({
+        data: { email: forcedLoginUser.email },
+        headers,
+      });
+      setForcedLink(r.link);
+      setForcedMeta({
+        emailConfirmedNow: r.emailConfirmedNow,
+        banLifted: r.banLifted,
+      });
+    } catch (e) {
+      setForcedErr(e instanceof Error ? e.message : "Erreur");
+    } finally {
+      setForcedBusy(false);
+    }
+  };
+
   const confirmGrant = async () => {
     if (!grantUser) return;
     setGrantBusy(true);
@@ -137,111 +168,6 @@ function AdminUsersPage() {
           </div>
         </div>
       </div>
-
-      {/* Débloquer un compte payant via magic link */}
-      <div className="admin-card mb-4">
-        <div className="flex items-center gap-2 mb-2">
-          <KeyRound size={16} />
-          <h2 className="text-sm font-bold uppercase tracking-widest m-0">
-            Magic link — débloquer un compte
-          </h2>
-        </div>
-        <p className="text-xs text-muted-foreground mb-3">
-          Génère un lien de connexion immédiate pour l'utilisateur (1 usage, expire vite).
-          Confirme l'email et lève un éventuel bannissement automatiquement.
-        </p>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (!magicEmail.trim()) return;
-            setMagicBusy(true);
-            setMagicErr(null);
-            setMagicResult(null);
-            setCopied(false);
-            try {
-              const r = await generateMagicLink({ data: { email: magicEmail.trim() } });
-              setMagicResult({
-                link: r.link,
-                email: r.email,
-                emailConfirmedNow: r.emailConfirmedNow,
-                banLifted: r.banLifted,
-              });
-            } catch (e2) {
-              setMagicErr(e2 instanceof Error ? e2.message : "Erreur");
-            } finally {
-              setMagicBusy(false);
-            }
-          }}
-          className="flex flex-wrap items-center gap-2"
-        >
-          <input
-            type="email"
-            value={magicEmail}
-            onChange={(e) => setMagicEmail(e.target.value)}
-            placeholder="email@client.com"
-            className="flex-1 min-w-[240px] bg-transparent outline-none text-sm py-2 px-3 brutal-border-thin"
-            required
-          />
-          <button type="submit" disabled={magicBusy} className="admin-btn-primary">
-            {magicBusy ? "Génération…" : "Générer le lien"}
-          </button>
-        </form>
-
-        {magicErr && (
-          <div className="mt-3 text-sm text-destructive">{magicErr}</div>
-        )}
-
-        {magicResult && (
-          <div className="mt-3 space-y-2">
-            <div className="text-xs text-muted-foreground">
-              ✅ Lien généré pour <span className="font-bold">{magicResult.email}</span>
-              {magicResult.emailConfirmedNow && " · email confirmé"}
-              {magicResult.banLifted && " · ban levé"}
-            </div>
-            {magicResult.link ? (
-              <div className="flex items-stretch gap-2">
-                <input
-                  readOnly
-                  value={magicResult.link}
-                  onFocus={(e) => e.currentTarget.select()}
-                  className="flex-1 bg-muted text-xs font-mono py-2 px-3 brutal-border-thin overflow-hidden text-ellipsis"
-                />
-                <button
-                  type="button"
-                  onClick={async () => {
-                    if (!magicResult.link) return;
-                    try {
-                      await navigator.clipboard.writeText(magicResult.link);
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 2000);
-                    } catch {
-                      /* ignore */
-                    }
-                  }}
-                  className="admin-btn-ghost inline-flex items-center gap-1"
-                >
-                  {copied ? <Check size={14} /> : <Copy size={14} />}
-                  {copied ? "Copié" : "Copier"}
-                </button>
-                <a
-                  href={magicResult.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="admin-btn-ghost inline-flex items-center gap-1"
-                >
-                  <ExternalLink size={14} /> Ouvrir
-                </a>
-              </div>
-            ) : (
-              <div className="text-sm text-destructive">Lien indisponible.</div>
-            )}
-            <div className="text-[11px] text-muted-foreground">
-              Envoie ce lien à l'utilisateur par email/WhatsApp. Il sera connecté en un clic.
-            </div>
-          </div>
-        )}
-      </div>
-
 
       <div className="admin-card mb-4 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
         <form
@@ -382,6 +308,12 @@ function AdminUsersPage() {
                     <Gift size={12} /> Offrir accès
                   </button>
                   <button
+                    onClick={() => openForcedLogin(u)}
+                    className="admin-btn-ghost inline-flex items-center justify-center gap-1"
+                  >
+                    <KeyRound size={12} /> Connexion forcée
+                  </button>
+                  <button
                     onClick={() => onImpersonate(u.id, u.email)}
                     className="admin-btn-ghost inline-flex items-center justify-center gap-1"
                   >
@@ -475,9 +407,16 @@ function AdminUsersPage() {
                         <Gift size={12} /> Offrir
                       </button>
                       <button
+                        onClick={() => openForcedLogin(u)}
+                        className="admin-btn-ghost inline-flex items-center gap-1 mr-2"
+                        title="Connexion forcée par magic link"
+                      >
+                        <KeyRound size={12} /> Connexion forcée
+                      </button>
+                      <button
                         onClick={() => onImpersonate(u.id, u.email)}
                         className="admin-btn-ghost inline-flex items-center gap-1"
-                        title="Générer un magic link"
+                        title="Impersonner (ouvre une session)"
                       >
                         <ExternalLink size={12} /> Impersonner
                       </button>
@@ -564,6 +503,81 @@ function AdminUsersPage() {
             </select>
           </div>
         </div>
+      </ConfirmDialog>
+
+      <ConfirmDialog
+        open={!!forcedLoginUser}
+        title="Connexion forcée"
+        description={
+          forcedLoginUser
+            ? "Génère un magic link de connexion directe (expire après 1 heure). Envoie-le par WhatsApp ou autre canal."
+            : undefined
+        }
+        confirmLabel={forcedLink ? "Fermer" : forcedBusy ? "Génération…" : "Générer le magic link"}
+        disabled={forcedBusy}
+        onCancel={() => setForcedLoginUser(null)}
+        onConfirm={async () => {
+          if (forcedLink) {
+            setForcedLoginUser(null);
+            return;
+          }
+          await generateForcedLink();
+        }}
+      >
+        {forcedLoginUser && (
+          <div className="grid gap-3 mb-2">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider mb-1">Email</label>
+              <input
+                readOnly
+                value={forcedLoginUser.email}
+                className="admin-input w-full bg-muted"
+              />
+            </div>
+            {forcedErr && <div className="text-sm text-destructive">{forcedErr}</div>}
+            {forcedLink && (
+              <div className="space-y-2">
+                <div className="text-xs text-muted-foreground">
+                  Lien généré — expire dans 1 heure
+                  {forcedMeta?.emailConfirmedNow && " · email confirmé"}
+                  {forcedMeta?.banLifted && " · ban levé"}
+                </div>
+                <div className="flex items-stretch gap-2">
+                  <input
+                    readOnly
+                    value={forcedLink}
+                    onFocus={(e) => e.currentTarget.select()}
+                    className="flex-1 bg-muted text-xs font-mono py-2 px-3 brutal-border-thin overflow-hidden text-ellipsis"
+                  />
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(forcedLink);
+                        setForcedCopied(true);
+                        setTimeout(() => setForcedCopied(false), 2000);
+                      } catch {
+                        /* ignore */
+                      }
+                    }}
+                    className="admin-btn-ghost inline-flex items-center gap-1 shrink-0"
+                  >
+                    {forcedCopied ? <Check size={14} /> : <Copy size={14} />}
+                    {forcedCopied ? "Copié" : "Copier"}
+                  </button>
+                  <a
+                    href={forcedLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="admin-btn-ghost inline-flex items-center gap-1 shrink-0"
+                  >
+                    <ExternalLink size={14} /> Ouvrir
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </ConfirmDialog>
     </div>
   );
