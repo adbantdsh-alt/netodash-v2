@@ -60,22 +60,24 @@ export function useActiveMode(): ActiveModeState {
       if (error) throw error;
       return next;
     },
-    onSuccess: () => {
-      // Invalider tout — chaque écran rechargera ses données filtrées par mode.
-      qc.invalidateQueries();
+    onSuccess: (_next, _vars, _ctx) => {
+      if (!user?.id) return;
+      qc.invalidateQueries({ queryKey: ["profile", user.id] });
     },
     onError: (e: any) => toast.error(e?.message ?? "Échec du changement de mode"),
   });
 
+  const { mutateAsync } = mutation;
+
   const setMode = useCallback(
     async (next: BusinessMode, options?: { silent?: boolean }) => {
       if (next === mode) return;
-      await mutation.mutateAsync(next);
+      await mutateAsync(next);
       if (!options?.silent) {
         toast.success(next === "cod" ? "Mode COD activé" : "Mode Dropshipping activé");
       }
     },
-    [mode, mutation],
+    [mode, mutateAsync],
   );
 
   return {

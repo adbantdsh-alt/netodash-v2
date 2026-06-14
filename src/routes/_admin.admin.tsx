@@ -2,8 +2,10 @@ import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { getAdminOverview } from "@/lib/admin/overview.functions";
+import { getSupabaseAuthHeaders } from "@/lib/admin/auth-headers";
 
 export const Route = createFileRoute("/_admin/admin")({
+  ssr: false,
   component: AdminRouteContent,
 });
 
@@ -19,9 +21,15 @@ function AdminOverview() {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchOverview()
-      .then(setData)
-      .catch((e) => setErr(e instanceof Error ? e.message : "Erreur"));
+    (async () => {
+      try {
+        const headers = await getSupabaseAuthHeaders();
+        const data = await fetchOverview({ headers });
+        setData(data);
+      } catch (e) {
+        setErr(e instanceof Error ? e.message : "Erreur");
+      }
+    })();
   }, [fetchOverview]);
 
   if (err) return <div className="admin-card">Erreur : {err}</div>;
