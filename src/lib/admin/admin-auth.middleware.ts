@@ -4,8 +4,72 @@ import { createMiddleware } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export type AdminRole = "super_admin" | "support" | "finance";
+
+const SUPER_ADMIN_EMAILS = new Set(
+  (process.env.SUPER_ADMIN_EMAILS ?? "adbaxgoat@gmail.com,adbaecomx@gmail.com")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+);
+
+async function resolveAdminAccount(userId: string, email: string) {
+  const admin = supabaseAdmin;
+
+  const queryAdmin = async () => {
+    const [isAdminRes, roleRes] = (await Promise.all([
+      admin.rpc("is_admin" as never, { _uid: userId } as never),
+      admin.rpc("get_admin_role" as never, { _uid: userId } as never),
+    ])) as unknown as [
+      { data: boolean | null; error: { message: string } | null },
+      { data: string | null; error: { message: string } | null },
+    ];
+    return { isAdminRes, roleRes };
+  };
+
+  let { isAdminRes, roleRes } = await queryAdmin();
+
+  if (isAdminRes.error || roleRes.error) {
+    console.error("[requireAdmin] rpc error", {
+      isAdminErr: isAdminRes.error,
+      roleErr: roleRes.error,
+    });
+    throw new Response(
+      "Admin check failed: " + (isAdminRes.error?.message ?? roleRes.error?.message ?? "unknown"),
+      { status: 500 },
+    );
+  }
+
+  if ((!isAdminRes.data || !roleRes.data) && SUPER_ADMIN_EMAILS.has(email.trim().toLowerCase())) {
+    const { error: bootErr } = await admin.rpc("bootstrap_super_admin" as never, {
+      _uid: userId,
+      _email: email.trim().toLowerCase(),
+    } as never);
+    if (bootErr) {
+      console.error("[requireAdmin] bootstrap_super_admin failed", bootErr);
+    } else {
+      ({ isAdminRes, roleRes } = await queryAdmin());
+    }
+  }
+
+  if (isAdminRes.error || roleRes.error) {
+    throw new Response(
+      "Admin check failed: " + (isAdminRes.error?.message ?? roleRes.error?.message ?? "unknown"),
+      { status: 500 },
+    );
+  }
+  if (!isAdminRes.data || !roleRes.data) {
+    console.error("[requireAdmin] not admin", { userId, isAdmin: isAdminRes.data, role: roleRes.data });
+    throw new Response("Forbidden: not an admin", { status: 403 });
+  }
+
+  return {
+    admin,
+    role: roleRes.data as AdminRole,
+  };
+}
 
 export const requireAdmin = createMiddleware({ type: "function" }).server(
   async ({ next }) => {
@@ -36,43 +100,13 @@ export const requireAdmin = createMiddleware({ type: "function" }).server(
     const userId = data.claims.sub as string;
     const email = (data.claims.email as string) ?? "";
 
-    // Vérifie le statut admin via service role (schéma admin non accessible aux clients)
-    const admin = createClient<Database>(SUPABASE_URL, SERVICE_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
-
-    // Vérifie le statut admin via RPC SECURITY DEFINER (schéma admin non exposé via PostgREST)
-
-    const [isAdminRes, roleRes] = (await Promise.all([
-      admin.rpc("is_admin" as never, { _uid: userId } as never),
-      admin.rpc("get_admin_role" as never, { _uid: userId } as never),
-    ])) as unknown as [
-      { data: boolean | null; error: { message: string } | null },
-      { data: string | null; error: { message: string } | null },
-    ];
-    if (isAdminRes.error || roleRes.error) {
-      console.error("[requireAdmin] rpc error", {
-        isAdminErr: isAdminRes.error,
-        roleErr: roleRes.error,
-      });
-      throw new Response("Admin check failed: " + (isAdminRes.error?.message ?? roleRes.error?.message ?? "unknown"), { status: 500 });
-    }
-    if (!isAdminRes.data || !roleRes.data) {
-      console.error("[requireAdmin] not admin", { userId, isAdmin: isAdminRes.data, role: roleRes.data });
-      throw new Response("Forbidden: not an admin", { status: 403 });
-    }
-    const account = {
-      id: userId,
-      email,
-      role: roleRes.data as AdminRole,
-      status: "active",
-    };
+    const { admin, role } = await resolveAdminAccount(userId, email);
 
     return next({
       context: {
-        adminId: account.id,
-        adminEmail: account.email || email,
-        adminRole: account.role,
+        adminId: userId,
+        adminEmail: email,
+        adminRole: role,
         supabase,
         admin,
       },

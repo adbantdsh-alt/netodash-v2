@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { ensureRole, logAdminAction, requireAdmin } from "@/lib/admin/admin-auth.middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const MAGIC_LINK_TTL_SECONDS = 3600;
 
@@ -31,7 +32,7 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
     if (profErr) throw new Error(profErr.message);
     if (!prof) throw new Error(`Aucun utilisateur avec l'email ${email}`);
 
-    const { data: au, error: auErr } = await admin.auth.admin.getUserById(prof.id);
+    const { data: au, error: auErr } = await supabaseAdmin.auth.admin.getUserById(prof.id);
     if (auErr) throw new Error(auErr.message);
     if (!au.user) throw new Error(`Compte auth introuvable pour ${email}`);
 
@@ -42,7 +43,7 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
     if (!emailConfirmedAt) updates.email_confirm = true;
     if (bannedUntil) updates.ban_duration = "none";
     if (Object.keys(updates).length > 0) {
-      const { error: upErr } = await admin.auth.admin.updateUserById(prof.id, updates);
+      const { error: upErr } = await supabaseAdmin.auth.admin.updateUserById(prof.id, updates);
       if (upErr) throw new Error(upErr.message);
     }
 
@@ -51,7 +52,7 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
       process.env.VITE_PUBLIC_SITE_URL ??
       "https://netodash-v2.vercel.app";
 
-    const { data: linkData, error: linkErr } = await admin.auth.admin.generateLink({
+    const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
       type: "magiclink",
       email,
       options: { redirectTo: `${siteUrl}/dashboard` },
