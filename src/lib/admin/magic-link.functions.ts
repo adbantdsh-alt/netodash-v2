@@ -50,7 +50,7 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
     const siteUrl =
       process.env.PUBLIC_SITE_URL ??
       process.env.VITE_PUBLIC_SITE_URL ??
-      "https://netodash-v2.vercel.app";
+      "https://app.netodash.com";
 
     const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
       type: "magiclink",
