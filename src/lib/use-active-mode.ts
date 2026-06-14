@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -15,7 +16,7 @@ export type ActiveModeState = {
   /** Devise COD (figée à XOF pour le MVP Sénégal). */
   codCurrency: string;
   isLoading: boolean;
-  setMode: (mode: BusinessMode) => Promise<void>;
+  setMode: (mode: BusinessMode, options?: { silent?: boolean }) => Promise<void>;
 };
 
 /**
@@ -66,16 +67,23 @@ export function useActiveMode(): ActiveModeState {
     onError: (e: any) => toast.error(e?.message ?? "Échec du changement de mode"),
   });
 
+  const setMode = useCallback(
+    async (next: BusinessMode, options?: { silent?: boolean }) => {
+      if (next === mode) return;
+      await mutation.mutateAsync(next);
+      if (!options?.silent) {
+        toast.success(next === "cod" ? "Mode COD activé" : "Mode Dropshipping activé");
+      }
+    },
+    [mode, mutation],
+  );
+
   return {
     mode,
     currency,
     codCurrency,
     dropshippingCurrency,
     isLoading: profileQ.isLoading,
-    setMode: async (next) => {
-      if (next === mode) return;
-      await mutation.mutateAsync(next);
-      toast.success(next === "cod" ? "Mode COD activé" : "Mode Dropshipping activé");
-    },
+    setMode,
   };
 }

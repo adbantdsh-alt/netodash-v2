@@ -9,6 +9,7 @@ import { OnboardingTour } from "@/components/OnboardingTour";
 import { ProfileCompletionBanner } from "@/components/ProfileCompletionBanner";
 import { ModeSwitch } from "@/components/ModeSwitch";
 import { useActiveMode } from "@/lib/use-active-mode";
+import { useSubscription } from "@/lib/use-subscription";
 import { ImpersonationBanner } from "@/components/ImpersonationBanner";
 import { AnnouncementsBanner } from "@/components/AnnouncementsBanner";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -139,7 +140,16 @@ function AppLayout() {
   }, [accountOpen]);
 
   // Applique l'accent visuel (orange COD / bleu Dropshipping) sur tout le document
-  const { mode: activeMode } = useActiveMode();
+  const { mode: activeMode, setMode, isLoading: modeLoading } = useActiveMode();
+  const sub = useSubscription(user?.id);
+
+  useEffect(() => {
+    if (modeLoading || sub.loading || !user?.id) return;
+    if (sub.plan === "cod" && activeMode !== "cod") {
+      void setMode("cod", { silent: true });
+    }
+  }, [modeLoading, sub.loading, sub.plan, activeMode, setMode, user?.id]);
+
   useEffect(() => {
     document.documentElement.setAttribute("data-mode", activeMode);
   }, [activeMode]);

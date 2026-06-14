@@ -47,10 +47,11 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
       if (upErr) throw new Error(upErr.message);
     }
 
-    const siteUrl =
+    const siteUrl = (
       process.env.PUBLIC_SITE_URL ??
       process.env.VITE_PUBLIC_SITE_URL ??
-      "https://app.netodash.com";
+      "https://app.netodash.com"
+    ).replace(/\/$/, "");
 
     const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
       type: "magiclink",

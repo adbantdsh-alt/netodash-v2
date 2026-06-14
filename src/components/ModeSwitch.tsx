@@ -39,12 +39,6 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
   const dualAllowed = canUseDualMode(sub.plan, legacy);
   const lockedToCod = sub.plan === "cod";
 
-  useEffect(() => {
-    if (lockedToCod && mode !== "cod") {
-      void setMode("cod");
-    }
-  }, [lockedToCod, mode, setMode]);
-
   const handleChange = (m: BusinessMode) => {
     if (m === "dropshipping" && !dropAllowed) {
       toast.error(
