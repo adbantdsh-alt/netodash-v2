@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
 const PRICES: Record<string, number> = { basic: 5000, starter: 15000, pro: 30000 };
 

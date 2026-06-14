@@ -1,5 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireAdmin } from "./admin-auth.middleware";
+import { requireAdmin } from "./admin-auth.middleware.server";
+import {
+  computeMrrBreakdown,
+  getMrrHistory12Months,
+  loadPlanPricesUsd,
+  computeMrrAt,
+  mrrGrowthPct,
+  PLAN_DISPLAY,
+  type PaidPlan,
+} from "./admin-metrics";
 
 export const getAdminOverview = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
@@ -7,83 +16,34 @@ export const getAdminOverview = createServerFn({ method: "GET" })
     const { admin } = context;
 
     const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-    const oneWeekAgo = new Date(Date.now() - 7 * 86400000).toISOString();
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endPrevMonth = new Date(startOfMonth.getTime() - 1);
 
-    // Subscriptions par plan
+    const prices = await loadPlanPricesUsd(admin);
+
     const { data: subs } = await admin
       .from("subscriptions")
-      .select("plan, status, current_period_end, trial_ends_at, created_at, user_id");
+      .select(
+        "plan, status, current_period_end, trial_ends_at, created_at, updated_at, user_id, stripe_subscription_id",
+      );
     const subscriptions = subs ?? [];
 
-    const PRICES: Record<string, number> = {
-      cod: 10000,
-      basic: 12000,
-      starter: 29000,
-      pro: 79000,
-    };
-    let mrr = 0;
-    const planCounts: Record<string, number> = {
-      free: 0,
-      trial: 0,
-      cod: 0,
-      basic: 0,
-      starter: 0,
-      pro: 0,
-    };
-    for (const s of subscriptions) {
-      const plan = String(s.plan ?? "free");
-      const status = String(s.status ?? "");
-      const trialActive = s.trial_ends_at && new Date(s.trial_ends_at as string) > now;
-      if (plan === "trial" && trialActive) planCounts.trial += 1;
-      else if (["cod", "basic", "starter", "pro"].includes(plan) && ["active", "incomplete"].includes(status)) {
-        planCounts[plan] += 1;
-        mrr += PRICES[plan] ?? 0;
-      } else {
-        planCounts.free += 1;
-      }
-    }
-
-    // Users
     const { count: totalUsers } = await admin
       .from("profiles")
       .select("id", { count: "exact", head: true });
 
-    const { count: newThisWeek } = await admin
-      .from("profiles")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", oneWeekAgo);
+    const breakdown = computeMrrBreakdown(subscriptions, prices, totalUsers ?? 0, now);
+    const mrrPrevMonth = computeMrrAt(subscriptions, prices, endPrevMonth);
+    const mrrGrowthPctValue = mrrGrowthPct(breakdown.mrr, mrrPrevMonth);
+    const mrrSeries12mo = getMrrHistory12Months(subscriptions, prices, now);
 
-    // Churn = cancellations ce mois / abonnés payants début de mois
-    const { count: cancellations } = await admin
-      .from("subscriptions")
-      .select("user_id", { count: "exact", head: true })
-      .eq("status", "canceled")
-      .gte("updated_at", startOfMonth);
-
-    const payingNow = planCounts.cod + planCounts.basic + planCounts.starter + planCounts.pro;
-    const churn = payingNow > 0 ? ((cancellations ?? 0) / Math.max(payingNow, 1)) * 100 : 0;
-
-    // Paiements des 30 derniers jours pour le graphique MRR
-    const { data: pays } = await admin
-      .from("payments")
-      .select("amount, status, created_at")
-      .gte("created_at", thirtyDaysAgo.toISOString())
-      .order("created_at", { ascending: true });
-
-    const days: Record<string, number> = {};
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000);
-      const key = d.toISOString().slice(0, 10);
-      days[key] = 0;
-    }
-    for (const p of pays ?? []) {
-      if (String(p.status) !== "succeeded" && String(p.status) !== "paid") continue;
-      const key = String(p.created_at).slice(0, 10);
-      if (key in days) days[key] += Number(p.amount ?? 0);
-    }
-    const mrrSeries = Object.entries(days).map(([date, value]) => ({ date, value }));
+    const mrrByPlanLabeled = (Object.keys(PLAN_DISPLAY) as PaidPlan[]).map((plan) => ({
+      plan,
+      label: PLAN_DISPLAY[plan],
+      priceUsd: prices[plan],
+      mrr: breakdown.mrrByPlan[plan],
+      count: breakdown.planCounts[plan] ?? 0,
+    }));
 
     // Activité récente : derniers paiements + dernières inscriptions
     const { data: recentPayments } = await admin
@@ -128,19 +88,24 @@ export const getAdminOverview = createServerFn({ method: "GET" })
         type: "payment",
         at: String(p.created_at),
         email: userMap.get(p.user_id as string) ?? "—",
-        detail: `${(p.amount as number).toLocaleString("fr-FR")} FCFA · ${p.status}`,
+        detail: `$${Number(p.amount ?? 0).toLocaleString("en-US")} · ${p.status}`,
       });
     }
     activity.sort((a, b) => (a.at < b.at ? 1 : -1));
 
     return {
-      mrr,
-      arr: mrr * 12,
-      totalUsers: totalUsers ?? 0,
-      newThisWeek: newThisWeek ?? 0,
-      churn: Math.round(churn * 10) / 10,
-      planCounts,
-      mrrSeries,
+      mrr: breakdown.mrr,
+      arr: breakdown.mrr * 12,
+      mrrPrevMonth,
+      mrrGrowthPct: mrrGrowthPctValue,
+      mrrByPlan: mrrByPlanLabeled,
+      newSubsThisMonth: breakdown.newSubsThisMonth,
+      churnedThisMonth: breakdown.churnedThisMonth,
+      churnRatePct: breakdown.churnRatePct,
+      ltvEstimated: breakdown.ltvEstimated,
+      userCounts: breakdown.userCounts,
+      planCounts: breakdown.planCounts,
+      mrrSeries12mo,
       activity: activity.slice(0, 10),
     };
   });

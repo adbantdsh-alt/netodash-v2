@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
 export const getAffiliatesOverview = createServerFn({ method: "GET" })
   .middleware([requireAdmin])

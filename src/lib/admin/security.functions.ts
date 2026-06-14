@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction, type AdminRole } from "./admin-auth.middleware";
+import type { AdminRole } from "./admin-auth.types";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
 export const listAuditLogs = createServerFn({ method: "GET" })
   .middleware([requireAdmin])

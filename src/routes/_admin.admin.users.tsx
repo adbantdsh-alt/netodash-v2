@@ -5,11 +5,12 @@ import {
   adminListUsers,
   adminImpersonateUser,
   adminGrantFreeAccess,
+  adminExportUsersCsv,
 } from "@/lib/admin/users.functions";
 import { adminGenerateForcedMagicLink } from "@/lib/admin/magic-link.functions";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { Search, ChevronLeft, ChevronRight, ExternalLink, KeyRound, Copy, Check, MessageCircle, Phone, Gift } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, ExternalLink, KeyRound, Copy, Check, MessageCircle, Phone, Gift, Download } from "lucide-react";
 
 export const Route = createFileRoute("/_admin/admin/users")({
   component: AdminUsersPage,
@@ -29,12 +30,17 @@ function AdminUsersPage() {
   const impersonateUser = useServerFn(adminImpersonateUser);
   const generateForcedMagicLink = useServerFn(adminGenerateForcedMagicLink);
   const grantFreeAccess = useServerFn(adminGrantFreeAccess);
+  const exportUsersCsv = useServerFn(adminExportUsersCsv);
   const [rows, setRows] = useState<Row[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [plan, setPlan] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [country, setCountry] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [exportBusy, setExportBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [forcedLoginUser, setForcedLoginUser] = useState<Row | null>(null);
@@ -63,6 +69,9 @@ function AdminUsersPage() {
           search: search || undefined,
           plan: (plan || undefined) as never,
           status: (status || undefined) as never,
+          country: country || undefined,
+          dateFrom: dateFrom ? new Date(dateFrom).toISOString() : undefined,
+          dateTo: dateTo ? new Date(dateTo + "T23:59:59").toISOString() : undefined,
         },
       });
       setRows(res.users);
@@ -77,7 +86,34 @@ function AdminUsersPage() {
   useEffect(() => {
     void load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, plan, status]);
+  }, [page, plan, status, country, dateFrom, dateTo]);
+
+  const onExportCsv = async () => {
+    setExportBusy(true);
+    try {
+      const res = await exportUsersCsv({
+        data: {
+          search: search || undefined,
+          plan: (plan || undefined) as never,
+          status: (status || undefined) as never,
+          country: country || undefined,
+          dateFrom: dateFrom ? new Date(dateFrom).toISOString() : undefined,
+          dateTo: dateTo ? new Date(dateTo + "T23:59:59").toISOString() : undefined,
+        },
+      });
+      const blob = new Blob([res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `netodash-users-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Erreur export");
+    } finally {
+      setExportBusy(false);
+    }
+  };
 
   const onImpersonate = async (id: string, email: string) => {
     if (!confirm(`Impersonner ${email} ? Cette action est tracée.`)) return;
@@ -164,6 +200,15 @@ function AdminUsersPage() {
             {total} compte{total > 1 ? "s" : ""} au total
           </div>
         </div>
+        <button
+          type="button"
+          onClick={() => void onExportCsv()}
+          disabled={exportBusy}
+          className="admin-btn-ghost inline-flex items-center gap-2 shrink-0"
+        >
+          <Download size={14} />
+          {exportBusy ? "Export…" : "Export CSV"}
+        </button>
       </div>
 
       <div className="admin-card mb-4 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
@@ -216,6 +261,35 @@ function AdminUsersPage() {
             <option value="suspended">Suspendu</option>
             <option value="banned">Banni</option>
           </select>
+          <input
+            value={country}
+            onChange={(e) => {
+              setCountry(e.target.value);
+              setPage(1);
+            }}
+            placeholder="Pays"
+            className="admin-select min-w-0"
+          />
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => {
+              setDateFrom(e.target.value);
+              setPage(1);
+            }}
+            className="admin-select min-w-0"
+            title="Inscription depuis"
+          />
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => {
+              setDateTo(e.target.value);
+              setPage(1);
+            }}
+            className="admin-select min-w-0"
+            title="Inscription jusqu'à"
+          />
         </div>
       </div>
 
@@ -266,6 +340,18 @@ function AdminUsersPage() {
                     ) : (
                       <div className="text-muted-foreground text-xs">—</div>
                     )}
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest opacity-60">MRR</div>
+                    <div className="font-bold">{u.mrr > 0 ? `$${u.mrr}` : "—"}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest opacity-60">Dernière connexion</div>
+                    <div className="text-xs">
+                      {u.lastLoginAt
+                        ? new Date(u.lastLoginAt).toLocaleDateString("fr-FR")
+                        : "—"}
+                    </div>
                   </div>
                   <div className="col-span-2">
                     <div className="text-[10px] uppercase tracking-widest opacity-60">Créé le</div>
@@ -333,21 +419,23 @@ function AdminUsersPage() {
               <th className="admin-th">WhatsApp / Tél</th>
               <th className="admin-th">Pays</th>
               <th className="admin-th">Plan</th>
+              <th className="admin-th">MRR</th>
               <th className="admin-th">Statut</th>
-              <th className="admin-th">Créé le</th>
+              <th className="admin-th">Inscription</th>
+              <th className="admin-th">Dernière connexion</th>
               <th className="admin-th text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} className="p-6 text-center text-xs uppercase tracking-widest">
+                <td colSpan={10} className="p-6 text-center text-xs uppercase tracking-widest">
                   Chargement…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={8} className="p-6 text-center text-muted-foreground">
+                <td colSpan={10} className="p-6 text-center text-muted-foreground">
                   Aucun utilisateur.
                 </td>
               </tr>
@@ -383,11 +471,19 @@ function AdminUsersPage() {
                     </td>
                     <td className="admin-td">{u.country}</td>
                     <td className="admin-td uppercase text-xs font-bold">{u.plan}</td>
+                    <td className="admin-td text-xs font-mono">
+                      {u.mrr > 0 ? `$${u.mrr}` : "—"}
+                    </td>
                     <td className="admin-td">
                       <StatusBadge status={u.status as never} />
                     </td>
                     <td className="admin-td text-xs">
                       {new Date(u.createdAt).toLocaleDateString("fr-FR")}
+                    </td>
+                    <td className="admin-td text-xs">
+                      {u.lastLoginAt
+                        ? new Date(u.lastLoginAt).toLocaleString("fr-FR")
+                        : "—"}
                     </td>
                     <td className="admin-td text-right whitespace-nowrap">
                       <Link

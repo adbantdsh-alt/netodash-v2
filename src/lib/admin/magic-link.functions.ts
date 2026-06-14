@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { ensureRole, logAdminAction, requireAdmin } from "@/lib/admin/admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "@/lib/admin/admin-auth.middleware.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const MAGIC_LINK_TTL_SECONDS = 3600;

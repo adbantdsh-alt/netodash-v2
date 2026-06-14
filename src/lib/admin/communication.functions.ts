@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
 const audienceEnum = z.enum(["all", "free", "trial", "paying", "cod", "basic", "starter", "pro"]);
 const severityEnum = z.enum(["info", "success", "warning", "critical"]);

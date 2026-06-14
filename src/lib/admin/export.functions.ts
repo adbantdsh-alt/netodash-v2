@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireAdmin, ensureRole } from "./admin-auth.middleware";
+import { ensureRole, requireAdmin } from "./admin-auth.middleware.server";
 
 /**
  * Export complet de auth.users (UUID, email, métadonnées, providers, dates).

@@ -1,113 +1,212 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+import {
+  effectivePlan,
+  isActivePaidSubscription,
+  loadPlanPricesUsd,
+  mrrForPlan,
+} from "./admin-metrics";
 
-// Le statut (active/suspended/banned) est stocké dans auth.users.user_metadata.admin_status
-// pour éviter une nouvelle colonne sur profiles. "active" par défaut.
+type AdminClient = SupabaseClient<Database>;
+
 function getStatusFromMeta(meta: Record<string, unknown> | null | undefined): string {
   const s = meta?.admin_status;
   return typeof s === "string" ? s : "active";
 }
 
-const listInput = z
-  .object({
-    search: z.string().trim().max(200).optional(),
-    plan: z.enum(["free", "trial", "cod", "basic", "starter", "pro"]).optional(),
-    status: z.enum(["active", "suspended", "banned"]).optional(),
-    country: z.string().max(64).optional(),
+const listFiltersSchema = z.object({
+  search: z.string().trim().max(200).optional(),
+  plan: z.enum(["free", "trial", "cod", "basic", "starter", "pro"]).optional(),
+  status: z.enum(["active", "suspended", "banned"]).optional(),
+  country: z.string().max(64).optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+});
+
+const listInput = listFiltersSchema
+  .extend({
     page: z.number().int().min(1).max(10_000).default(1),
     pageSize: z.number().int().min(1).max(100).default(25),
   })
   .default({ page: 1, pageSize: 25 });
+
+type ProfileRow = {
+  id: string;
+  email: string | null;
+  display_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  country: string | null;
+  phone: string | null;
+  phone_country_code: string | null;
+  created_at: string;
+};
+
+type SubRow = {
+  user_id: string;
+  plan: string | null;
+  status: string | null;
+  trial_ends_at: string | null;
+  stripe_subscription_id: string | null;
+};
+
+async function fetchAllProfiles(
+  admin: AdminClient,
+  filters: z.infer<typeof listFiltersSchema>,
+): Promise<ProfileRow[]> {
+  const pageSize = 1000;
+  const all: ProfileRow[] = [];
+  for (let page = 0; page < 20; page++) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    let q = admin
+      .from("profiles")
+      .select(
+        "id, email, display_name, first_name, last_name, country, phone, phone_country_code, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    if (filters.search && filters.search.length > 0) {
+      const s = filters.search.replace(/[%_]/g, "");
+      q = q.or(`email.ilike.%${s}%,display_name.ilike.%${s}%,phone.ilike.%${s}%`);
+    }
+    if (filters.country) q = q.eq("country", filters.country);
+    if (filters.dateFrom) q = q.gte("created_at", filters.dateFrom);
+    if (filters.dateTo) q = q.lte("created_at", filters.dateTo);
+
+    const { data, error } = await q;
+    if (error) throw new Error(error.message);
+    const rows = (data ?? []) as ProfileRow[];
+    all.push(...rows);
+    if (rows.length < pageSize) break;
+  }
+  return all;
+}
+
+async function buildUserRows(
+  admin: AdminClient,
+  profilesRows: ProfileRow[],
+  filters: z.infer<typeof listFiltersSchema>,
+) {
+  const ids = profilesRows.map((r) => r.id);
+  const prices = await loadPlanPricesUsd(admin);
+  const now = new Date();
+
+  const plansMap = new Map<string, SubRow>();
+  if (ids.length > 0) {
+    const { data: subs } = await admin
+      .from("subscriptions")
+      .select("user_id, plan, status, trial_ends_at, stripe_subscription_id")
+      .in("user_id", ids);
+    for (const s of subs ?? []) {
+      plansMap.set(s.user_id as string, s as SubRow);
+    }
+  }
+
+  const statusMap = new Map<string, string>();
+  const lastLoginMap = new Map<string, string | null>();
+  if (ids.length > 0) {
+    const results = await Promise.all(ids.map((id) => admin.auth.admin.getUserById(id)));
+    results.forEach((res, i) => {
+      statusMap.set(ids[i], getStatusFromMeta(res.data.user?.user_metadata as never));
+      lastLoginMap.set(ids[i], res.data.user?.last_sign_in_at ?? null);
+    });
+  }
+
+  let users = profilesRows.map((r) => {
+    const sub = plansMap.get(r.id);
+    const plan = effectivePlan(sub, now);
+    const code = (r.phone_country_code ?? "").trim();
+    const num = (r.phone ?? "").trim();
+    const fullPhone = num ? `${code} ${num}`.trim() : "";
+    const mrr = sub && isActivePaidSubscription(sub, now) ? mrrForPlan(String(sub.plan), prices) : 0;
+    return {
+      id: r.id,
+      email: r.email ?? "",
+      name:
+        r.display_name || [r.first_name, r.last_name].filter(Boolean).join(" ") || "—",
+      country: r.country || "—",
+      phone: fullPhone,
+      phoneDigits: (code + num).replace(/[^\d]/g, ""),
+      createdAt: r.created_at,
+      lastLoginAt: lastLoginMap.get(r.id) ?? null,
+      status: statusMap.get(r.id) ?? "active",
+      plan,
+      subscriptionStatus: sub?.status ?? "—",
+      mrr,
+    };
+  });
+
+  if (filters.plan) users = users.filter((u) => u.plan === filters.plan);
+  if (filters.status) users = users.filter((u) => u.status === filters.status);
+
+  return users;
+}
 
 export const adminListUsers = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
   .inputValidator((input: unknown) => listInput.parse(input ?? {}))
   .handler(async ({ context, data }) => {
     const { admin } = context;
+    const profilesRows = await fetchAllProfiles(admin, data);
+    const filtered = await buildUserRows(admin, profilesRows, data);
+    const total = filtered.length;
     const from = (data.page - 1) * data.pageSize;
-    const to = from + data.pageSize - 1;
+    const users = filtered.slice(from, from + data.pageSize);
 
-    let q = admin
-      .from("profiles")
-      .select(
-        "id, email, display_name, first_name, last_name, country, phone, phone_country_code, created_at",
-        { count: "exact" },
-      )
-      .order("created_at", { ascending: false })
-      .range(from, to);
+    return { users, total, page: data.page, pageSize: data.pageSize };
+  });
 
-    if (data.search && data.search.length > 0) {
-      const s = data.search.replace(/[%_]/g, "");
-      q = q.or(`email.ilike.%${s}%,display_name.ilike.%${s}%,phone.ilike.%${s}%`);
-    }
-    if (data.country) q = q.eq("country", data.country);
+export const adminExportUsersCsv = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input: unknown) => listFiltersSchema.parse(input ?? {}))
+  .handler(async ({ context, data }) => {
+    ensureRole(context.adminRole, ["super_admin", "support", "finance"]);
+    const { admin, adminId, adminEmail } = context;
+    const profilesRows = await fetchAllProfiles(admin, data);
+    const users = await buildUserRows(admin, profilesRows, data);
 
-    const { data: rows, error, count } = await q;
-    if (error) throw new Error(error.message);
-    const profilesRows = (rows ?? []) as Array<{
-      id: string;
-      email: string | null;
-      display_name: string | null;
-      first_name: string | null;
-      last_name: string | null;
-      country: string | null;
-      phone: string | null;
-      phone_country_code: string | null;
-      created_at: string;
-    }>;
+    const header = [
+      "email",
+      "plan",
+      "statut",
+      "date_inscription",
+      "derniere_connexion",
+      "pays",
+      "mrr_usd",
+      "nom",
+    ];
+    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const lines = [
+      header.join(","),
+      ...users.map((u) =>
+        [
+          escape(u.email),
+          escape(u.plan),
+          escape(u.status),
+          escape(new Date(u.createdAt).toISOString()),
+          escape(u.lastLoginAt ? new Date(u.lastLoginAt).toISOString() : ""),
+          escape(u.country),
+          String(u.mrr),
+          escape(u.name),
+        ].join(","),
+      ),
+    ];
 
-    const ids = profilesRows.map((r) => r.id);
-    const plansMap = new Map<string, { plan: string; status: string }>();
-    if (ids.length > 0) {
-      const { data: subs } = await admin
-        .from("subscriptions")
-        .select("user_id, plan, status, trial_ends_at")
-        .in("user_id", ids);
-      for (const s of subs ?? []) {
-        const trialActive = s.trial_ends_at && new Date(s.trial_ends_at as string) > new Date();
-        let plan = String(s.plan);
-        if (plan === "trial" && !trialActive) plan = "free";
-        plansMap.set(s.user_id as string, { plan, status: String(s.status) });
-      }
-    }
-
-    // Récup statut admin via auth metadata — parallélisé (1 round-trip groupé au lieu de N séquentiels)
-    const statusMap = new Map<string, string>();
-    if (ids.length > 0) {
-      const results = await Promise.all(
-        ids.map((id) => admin.auth.admin.getUserById(id)),
-      );
-      results.forEach((res, i) => {
-        statusMap.set(ids[i], getStatusFromMeta(res.data.user?.user_metadata as never));
-      });
-    }
-
-    let users = profilesRows.map((r) => {
-      const p = plansMap.get(r.id);
-      const code = (r.phone_country_code ?? "").trim();
-      const num = (r.phone ?? "").trim();
-      const fullPhone = num ? `${code} ${num}`.trim() : "";
-      return {
-        id: r.id,
-        email: r.email ?? "",
-        name:
-          r.display_name ||
-          [r.first_name, r.last_name].filter(Boolean).join(" ") ||
-          "—",
-        country: r.country || "—",
-        phone: fullPhone,
-        phoneDigits: (code + num).replace(/[^\d]/g, ""),
-        createdAt: r.created_at,
-        status: statusMap.get(r.id) ?? "active",
-        plan: p?.plan ?? "free",
-      };
+    await logAdminAction({
+      admin,
+      adminId,
+      adminEmail,
+      action: "users.export_csv",
+      category: "users",
+      details: { count: users.length, filters: data },
     });
 
-    if (data.plan) users = users.filter((u) => u.plan === data.plan);
-    if (data.status) users = users.filter((u) => u.status === data.status);
-
-    return { users, total: count ?? users.length, page: data.page, pageSize: data.pageSize };
+    return { csv: lines.join("\n"), count: users.length };
   });
 
 export const adminGetUserProfile = createServerFn({ method: "POST" })
@@ -157,6 +256,7 @@ export const adminGetUserProfile = createServerFn({ method: "POST" })
       lastEntry,
       entries30d: entries30d ?? 0,
       status,
+      lastLoginAt: au.user?.last_sign_in_at ?? null,
     };
   });
 
@@ -240,7 +340,6 @@ function addDuration(base: Date, amount: number, unit: "days" | "months" | "year
   return next;
 }
 
-/** Prolonge l'accès gratuit (trial_ends_at + période) avec le plan choisi. */
 export const adminGrantFreeAccess = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
   .inputValidator((input: unknown) =>
@@ -437,10 +536,7 @@ export const adminDeleteUserData = createServerFn({ method: "POST" })
       "user_roles",
       "shopify_connections",
     ] as const;
-    // Suppressions parallèles : les tables sont indépendantes (10 round-trips → 1 vague parallèle).
-    await Promise.all(
-      tables.map((t) => admin.from(t).delete().eq("user_id", data.userId)),
-    );
+    await Promise.all(tables.map((t) => admin.from(t).delete().eq("user_id", data.userId)));
     await admin.from("profiles").delete().eq("id", data.userId);
     await admin.auth.admin.deleteUser(data.userId);
 
@@ -468,7 +564,6 @@ export const adminImpersonateUser = createServerFn({ method: "POST" })
       .eq("id", data.userId)
       .maybeSingle();
     if (!prof?.email) throw new Error("Utilisateur introuvable");
-    // Marque l'utilisateur comme impersonné pour afficher la bannière dans l'app utilisateur.
     const { data: u } = await admin.auth.admin.getUserById(data.userId);
     const existingMeta = (u.user?.user_metadata ?? {}) as Record<string, unknown>;
     await admin.auth.admin.updateUserById(data.userId, {

@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireAdmin, ensureRole, logAdminAction } from "./admin-auth.middleware";
+import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
 const SETTING_KEYS = [
   "branding.app_name",
@@ -9,6 +9,15 @@ const SETTING_KEYS = [
   "pricing.basic_xof",
   "pricing.starter_xof",
   "pricing.pro_xof",
+  "pricing.cod_usd",
+  "pricing.basic_usd",
+  "pricing.starter_usd",
+  "pricing.pro_usd",
+  "plan_limits.cod_products",
+  "plan_limits.basic_products",
+  "plan_limits.starter_products",
+  "plan_limits.pro_products",
+  "beta.max_spots",
   "trial.default_days",
   "flags.signup_enabled",
   "flags.affiliate_enabled",
@@ -23,6 +32,15 @@ const DEFAULTS: Record<(typeof SETTING_KEYS)[number], string> = {
   "pricing.basic_xof": "5000",
   "pricing.starter_xof": "15000",
   "pricing.pro_xof": "30000",
+  "pricing.cod_usd": "10",
+  "pricing.basic_usd": "12",
+  "pricing.starter_usd": "29",
+  "pricing.pro_usd": "79",
+  "plan_limits.cod_products": "-1",
+  "plan_limits.basic_products": "3",
+  "plan_limits.starter_products": "10",
+  "plan_limits.pro_products": "-1",
+  "beta.max_spots": "10",
   "trial.default_days": "7",
   "flags.signup_enabled": "true",
   "flags.affiliate_enabled": "true",

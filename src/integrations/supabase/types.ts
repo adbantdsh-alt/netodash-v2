@@ -151,6 +151,60 @@ export type Database = {
         }
         Relationships: []
       }
+      beta_testers: {
+        Row: {
+          created_at: string
+          email: string
+          free_until: string | null
+          full_name: string
+          id: string
+          lifetime_discount_percent: number | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          free_until?: string | null
+          full_name: string
+          id?: string
+          lifetime_discount_percent?: number | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          free_until?: string | null
+          full_name?: string
+          id?: string
+          lifetime_discount_percent?: number | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      beta_waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       coach_usage: {
         Row: {
           created_at: string
@@ -774,6 +828,20 @@ export type Database = {
           _target_user_id?: string
         }
         Returns: undefined
+      }
+      service_log_admin_action: {
+        Args: {
+          _action: string
+          _admin_email: string
+          _admin_id: string
+          _category?: string
+          _details?: Json
+          _ip?: string
+          _target_email?: string
+          _target_user_id?: string
+          _user_agent?: string
+        }
+        Returns: number
       }
       admin_update_account: {
         Args: { _id: string; _role: string; _status: string }
