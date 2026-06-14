@@ -7,7 +7,6 @@ import {
   adminGrantFreeAccess,
 } from "@/lib/admin/users.functions";
 import { adminGenerateForcedMagicLink } from "@/lib/admin/magic-link.functions";
-import { getSupabaseAuthHeaders } from "@/lib/admin/auth-headers";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { Search, ChevronLeft, ChevronRight, ExternalLink, KeyRound, Copy, Check, MessageCircle, Phone, Gift } from "lucide-react";
@@ -116,10 +115,8 @@ function AdminUsersPage() {
     setForcedBusy(true);
     setForcedErr(null);
     try {
-      const headers = await getSupabaseAuthHeaders();
       const r = await generateForcedMagicLink({
         data: { email: forcedLoginUser.email },
-        headers,
       });
       setForcedLink(r.link);
       setForcedMeta({
