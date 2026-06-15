@@ -801,3 +801,17 @@ export function profitVerdictBadgeClass(kind: ProfitVerdictKind): string {
       return "bg-muted text-muted-foreground";
   }
 }
+
+/** Couleur du montant (marge nette, profit) — vert / jaune / rouge. */
+export function profitVerdictTextClass(kind: ProfitVerdictKind): string {
+  switch (kind) {
+    case "profit":
+      return "text-[#16a34a]";
+    case "break_even":
+      return "text-[#eab308]";
+    case "loss":
+      return "text-[#dc2626]";
+    default:
+      return "text-muted-foreground";
+  }
+}

@@ -37,6 +37,7 @@ import {
   profitVerdictKind,
   profitVerdictLabel,
   profitVerdictBadgeClass,
+  profitVerdictTextClass,
 } from "@/lib/calc";
 import { KpiCard } from "@/components/KpiCard";
 import { PeriodPicker, type Preset, type CustomRange } from "@/components/PeriodPicker";
@@ -462,9 +463,7 @@ function DashboardPage() {
               MARGE NETTE RÉELLE
             </div>
             <div
-              className={`text-5xl font-black tabular tracking-tighter break-words leading-none ${
-                kpis.netProfit < 0 ? "text-accent" : ""
-              }`}
+              className={`text-5xl font-black tabular tracking-tighter break-words leading-none ${profitVerdictTextClass(verdictKind)}`}
             >
               {formatCurrency(kpis.netProfit, currency)}
             </div>
@@ -625,7 +624,7 @@ function DashboardPage() {
               </div>
               <div>
                 <div className="opacity-70 uppercase tracking-widest">Marge nette</div>
-                <div className="font-bold tabular text-base">
+                <div className={`font-bold tabular text-base ${profitVerdictTextClass(verdictKind)}`}>
                   {formatCurrency(kpis.netProfit, currency)}
                 </div>
               </div>
@@ -688,7 +687,11 @@ function DashboardPage() {
                 {profitVerdictLabel(verdictKind)}
               </span>
               <div className="mt-3 font-mono text-sm text-muted-foreground">
-                Marge nette {formatCurrency(kpis.netProfit, currency)} ·{" "}
+                Marge nette{" "}
+                <span className={`font-bold tabular ${profitVerdictTextClass(verdictKind)}`}>
+                  {formatCurrency(kpis.netProfit, currency)}
+                </span>
+                {" · "}
                 ROAS {kpis.adSpend > 0 ? kpis.roas.toFixed(2) + "x" : "—"}
               </div>
             </div>
@@ -709,9 +712,7 @@ function DashboardPage() {
           </div>
           <div>
             <div
-              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tabular tracking-tighter break-words ${
-                kpis.netProfit < 0 ? "text-accent" : ""
-              }`}
+              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tabular tracking-tighter break-words ${profitVerdictTextClass(verdictKind)}`}
             >
               {formatCurrency(kpis.netProfit, currency)}
             </div>
@@ -884,9 +885,7 @@ function DashboardPage() {
                         {formatCurrency(r.kpis.adSpend, currency)}
                       </td>
                       <td
-                        className={`p-3 text-right tabular font-black ${
-                          r.kpis.netProfit < 0 ? "text-accent" : ""
-                        }`}
+                        className={`p-3 text-right tabular font-black ${profitVerdictTextClass(rowVerdict)}`}
                       >
                         {formatCurrency(r.kpis.netProfit, currency)}
                       </td>
@@ -997,7 +996,7 @@ function DashboardPage() {
             )}
             <div className="flex justify-between border-b-2 border-foreground py-2">
               <span className="font-bold uppercase">= Marge Nette Réelle</span>
-              <span className={`font-black tabular text-lg ${kpis.netProfit < 0 ? "text-accent" : ""}`}>
+              <span className={`font-black tabular text-lg ${profitVerdictTextClass(verdictKind)}`}>
                 {formatCurrency(kpis.netProfit, currency)}
               </span>
             </div>
@@ -1050,9 +1049,7 @@ function DashboardPage() {
                         {formatCurrency(s.revenue, currency)}
                       </td>
                       <td
-                        className={`p-3 text-right tabular font-bold ${
-                          s.netProfit < 0 ? "text-accent" : ""
-                        }`}
+                        className={`p-3 text-right tabular font-bold ${profitVerdictTextClass(profitVerdictKind(s.netProfit, s.revenue, s.adSpend > 0 || s.revenue > 0))}`}
                       >
                         {formatCurrency(s.netProfit, currency)} {profitArrow}
                       </td>
@@ -1079,7 +1076,7 @@ function DashboardPage() {
               {chartData.length > 1 && (
                 <>
                   {" · "}
-                  <span className={kpis.netProfit >= 0 ? "" : "text-accent"}>
+                  <span className={`font-bold tabular ${profitVerdictTextClass(verdictKind)}`}>
                     TOTAL {formatCurrency(kpis.netProfit, currency)}
                   </span>
                 </>
@@ -1181,7 +1178,7 @@ function DashboardPage() {
             <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-1">
               Marge nette
             </div>
-            <div className="text-2xl md:text-3xl font-black tabular tracking-tight">
+            <div className={`text-2xl md:text-3xl font-black tabular tracking-tight ${profitVerdictTextClass(verdictKind)}`}>
               {formatCurrency(kpis.netProfit, currency)}
             </div>
           </div>

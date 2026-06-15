@@ -133,7 +133,8 @@
   --chart-2: oklch(0.65 0.22 255);
 }
 .dark ::-webkit-scrollbar-track { background: oklch(0.13 0 0); }
-.dark ::-webkit-scrollbar-thumb { background: oklch(0.97 0 0); }
+.dark[data-mode="cod"] ::-webkit-scrollbar-thumb { background: #ff4500; }
+.dark[data-mode="dropshipping"] ::-webkit-scrollbar-thumb { background: #1d5cff; }
 
 /* DROPSHIPPING mode → accent bleu électrique au lieu de l'orange */
 :root[data-mode="dropshipping"] {
@@ -145,8 +146,18 @@
   --chart-2: oklch(0.58 0.22 255);
   --sidebar-primary: oklch(0.58 0.22 255);
   --sidebar-ring: oklch(0.58 0.22 255);
+  scrollbar-color: #1d5cff #fff;
 }
 :root[data-mode="dropshipping"] ::selection { background: #1d5cff; color: #fff; }
+:root[data-mode="dropshipping"] ::-webkit-scrollbar-thumb { background: #1d5cff; }
+
+/* Scrollbar thumb — orange COD */
+:root[data-mode="cod"] {
+  scrollbar-color: #ff4500 #fff;
+}
+:root[data-mode="cod"] ::-webkit-scrollbar-thumb {
+  background: #ff4500;
+}
 
 @layer base {
   * {
@@ -172,10 +183,10 @@
   /* Numeric tabular figures everywhere by default for KPIs */
   .tabular { font-variant-numeric: tabular-nums; }
 
-  /* Scrollbar minimal */
+  /* Scrollbar minimal — couleur par défaut COD (orange), surchargée via data-mode */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: #fff; }
-  ::-webkit-scrollbar-thumb { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #ff4500; }
   ::selection { background: #FF4500; color: #fff; }
 }
 
