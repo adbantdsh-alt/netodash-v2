@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { computeKPIs, formatCurrency, formatNumber } from "@/lib/calc";
 import { previousRange, deltaPct } from "@/lib/analytics-insights";
 import { MetricsView } from "@/components/MetricsView";
@@ -20,17 +21,17 @@ export function OverviewTab({ preset, customRange }: Props) {
   const prevEntriesQ = useEntries(user?.id, prev);
 
   const { currency, mode: activeMode } = useActiveMode();
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
 
   const cur = useMemo(
-    () => computeKPIs(curEntriesQ.data ?? [], products, currency, usdRate, metaTaxPct),
-    [curEntriesQ.data, products, currency, usdRate, metaTaxPct],
+    () => computeKPIs(curEntriesQ.data ?? [], products, currency, dropshippingFx, metaTaxPct),
+    [curEntriesQ.data, products, currency, dropshippingFx, metaTaxPct],
   );
   const prevK = useMemo(
-    () => computeKPIs(prevEntriesQ.data ?? [], products, currency, usdRate, metaTaxPct),
-    [prevEntriesQ.data, products, currency, usdRate, metaTaxPct],
+    () => computeKPIs(prevEntriesQ.data ?? [], products, currency, dropshippingFx, metaTaxPct),
+    [prevEntriesQ.data, products, currency, dropshippingFx, metaTaxPct],
   );
 
   const deltas = [

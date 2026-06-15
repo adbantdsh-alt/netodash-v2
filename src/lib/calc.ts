@@ -1,5 +1,16 @@
 // Core profitability calculations — full dropshipping.
 
+import {
+  convertDropshippingCurrency,
+  normalizeDropshippingCurrency,
+  type DropshippingCurrency,
+  type DropshippingFxOptions,
+  DROPSHIPPING_CURRENCIES,
+} from "./dropshipping-fx";
+
+export type { DropshippingCurrency, DropshippingFxOptions };
+export { DROPSHIPPING_CURRENCIES, normalizeDropshippingCurrency };
+
 export type Product = {
   id: string;
   name: string;
@@ -53,13 +64,17 @@ export function upsellTotalsForEntry(
   entry: DailyEntry,
   productMap: Map<string, Product>,
   targetCurrency: string,
-  usdToTargetRate = 0,
+  fx?: DropshippingFxOptions,
 ): { revenue: number; cogs: number; shipping: number; units: number } {
   const list = Array.isArray(entry.upsells) ? entry.upsells : [];
   let revenue = 0;
   let cogs = 0;
   let shipping = 0;
   let units = 0;
+  const fxOpts: DropshippingFxOptions = {
+    ...fx,
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+  };
   for (const u of list) {
     if (!u || !u.product_id) continue;
     const p = productMap.get(u.product_id);
@@ -69,36 +84,31 @@ export function upsellTotalsForEntry(
     const price = Number(u.unit_price) || 0;
     const cur = u.currency ?? p.currency ?? targetCurrency;
     const productCurrency = p.currency ?? targetCurrency;
-    revenue += convertCurrency(qty * price, cur, targetCurrency, usdToTargetRate);
-    cogs += convertCurrency(
+    revenue += convertDropshippingCurrency(qty * price, cur, targetCurrency, fxOpts);
+    cogs += convertDropshippingCurrency(
       qty * unitLandedCost(p),
       productCurrency,
       targetCurrency,
-      usdToTargetRate,
+      fxOpts,
     );
-    shipping += convertCurrency(
+    shipping += convertDropshippingCurrency(
       qty * unitShippingCost(p),
       productCurrency,
       targetCurrency,
-      usdToTargetRate,
+      fxOpts,
     );
     units += qty;
   }
   return { revenue, cogs, shipping, units };
 }
 
+/** @deprecated Mode COD uniquement — ne pas utiliser en dropshipping. */
 export type AppCurrency = "EUR" | "USD" | "GBP" | "XOF";
-export type DropshippingCurrency = "EUR" | "USD" | "GBP";
-
-export const DROPSHIPPING_CURRENCIES: DropshippingCurrency[] = ["EUR", "USD", "GBP"];
 const SUPPORTED_CURRENCIES: AppCurrency[] = ["EUR", "USD", "GBP", "XOF"];
 const DEFAULT_USD_VALUE: Record<AppCurrency, number> = {
   EUR: 1.08,
   USD: 1,
   GBP: 1.27,
-  // XOF reste isolé : on ne convertit jamais XOF ↔ autres devises.
-  // Valeur indicative seulement (1 USD ≈ 600 XOF) au cas où un appel forcerait
-  // une conversion, mais en mode COD tout doit déjà être en XOF natif.
   XOF: 1 / 600,
 };
 
@@ -107,25 +117,11 @@ export function normalizeCurrency(currency?: string | null): AppCurrency {
   return SUPPORTED_CURRENCIES.includes(cur as AppCurrency) ? (cur as AppCurrency) : "EUR";
 }
 
-export function normalizeDropshippingCurrency(
-  currency?: string | null,
-  fallback: DropshippingCurrency = "EUR",
-): DropshippingCurrency {
-  const cur = String(currency ?? fallback).toUpperCase();
-  return DROPSHIPPING_CURRENCIES.includes(cur as DropshippingCurrency)
-    ? (cur as DropshippingCurrency)
-    : fallback;
-}
-
+/** Conversion XOF / COD uniquement (DashboardCod). */
 export function convertCurrency(
   value: number,
   fromCurrency?: string | null,
   toCurrency: string = "EUR",
-  /**
-   * Taux manuel USD→XOF saisi par l'utilisateur (ex : 600).
-   * UNIQUEMENT appliqué pour les conversions impliquant XOF — il ne doit
-   * jamais polluer une conversion USD↔EUR/GBP (sinon profit explosif).
-   */
   usdToXofRate?: number,
 ): number {
   const raw = Number(value) || 0;
@@ -133,8 +129,6 @@ export function convertCurrency(
   const to = normalizeCurrency(toCurrency);
   if (from === to) return raw;
 
-  // Construit une table de valeurs USD par devise, surchargeant XOF si
-  // l'utilisateur a fourni un taux manuel (1 USD = N XOF).
   const manualXofPerUsd = Number(usdToXofRate);
   const haveManual = Number.isFinite(manualXofPerUsd) && manualXofPerUsd > 0;
   const usdValues: Record<AppCurrency, number> = { ...DEFAULT_USD_VALUE };
@@ -147,13 +141,17 @@ export function convertCurrency(
 export function adSpendInCurrency(
   entry: DailyEntry,
   targetCurrency: string = "EUR",
-  usdToTargetRate?: number,
+  fx?: DropshippingFxOptions,
 ): number {
-  return convertCurrency(
+  const fxOpts: DropshippingFxOptions = {
+    ...fx,
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+  };
+  return convertDropshippingCurrency(
     Number(entry.ad_budget),
     entry.ad_budget_currency ?? targetCurrency,
     targetCurrency,
-    usdToTargetRate,
+    fxOpts,
   );
 }
 
@@ -206,10 +204,14 @@ export function computeKPIs(
   entries: DailyEntry[],
   products: Product[],
   targetCurrency: string = "EUR",
-  usdToTargetRate = 0,
+  fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): KPIs {
   const productMap = new Map(products.map((p) => [p.id, p]));
+  const fxOpts: DropshippingFxOptions = {
+    ...fx,
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+  };
   let revenue = 0;
   let cogs = 0;
   let shippingCost = 0;
@@ -234,25 +236,23 @@ export function computeKPIs(
     const revRaw = e.total_revenue != null
       ? Number(e.total_revenue)
       : orders * Number(p.sale_price);
-    const rev = convertCurrency(revRaw, revenueCurrency, targetCurrency, usdToTargetRate);
+    const rev = convertDropshippingCurrency(revRaw, revenueCurrency, targetCurrency, fxOpts);
     revenue += rev;
-    cogs += convertCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, usdToTargetRate);
-    shippingCost += convertCurrency(orders * unitShippingCost(p), p.currency ?? targetCurrency, targetCurrency, usdToTargetRate);
-    const ad = adSpendInCurrency(e, targetCurrency, usdToTargetRate);
+    cogs += convertDropshippingCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
+    shippingCost += convertDropshippingCurrency(orders * unitShippingCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
+    const ad = adSpendInCurrency(e, targetCurrency, fxOpts);
     adSpend += ad;
     if (e.include_meta_tax !== false) {
       metaTax += ad * (Number(metaTaxPct) / 100);
     }
     if (e.include_shopify_fees) {
       shopifyFees += rev * (SHOPIFY_FEES_PCT / 100);
-      // Frais fixe Stripe : $0.30 par commande, converti dans la devise cible.
-      shopifyFees += convertCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, usdToTargetRate);
+      shopifyFees += convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts);
     }
     if (e.include_wave_fees) {
       waveFees += rev * (WAVE_FEES_PCT / 100);
     }
-    // Upsells / cadeaux — ajoute CA + coût livré (achat + expédition)
-    const ups = upsellTotalsForEntry(e, productMap, targetCurrency, usdToTargetRate);
+    const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     revenue += ups.revenue;
     cogs += ups.cogs;
     shippingCost += ups.shipping;
@@ -261,7 +261,7 @@ export function computeKPIs(
     upsellUnits += ups.units;
     shopify += orders;
     refundedOrders += Number(e.refunded_orders ?? 0);
-    refundedAmount += convertCurrency(Number(e.refunded_amount ?? 0), revenueCurrency, targetCurrency, usdToTargetRate);
+    refundedAmount += convertDropshippingCurrency(Number(e.refunded_amount ?? 0), revenueCurrency, targetCurrency, fxOpts);
   }
 
   const netProfit = revenue - adSpend - cogs - metaTax - shopifyFees - waveFees;
@@ -430,10 +430,14 @@ export function computeDailySeries(
   products: Product[],
   productId?: string | null,
   targetCurrency: string = "EUR",
-  usdToTargetRate = 0,
+  fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): DailyKPI[] {
   const productMap = new Map(products.map((p) => [p.id, p]));
+  const fxOpts: DropshippingFxOptions = {
+    ...fx,
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+  };
   const filtered = productId ? entries.filter((e) => e.product_id === productId) : entries;
   const byDay = new Map<string, DailyKPI>();
 
@@ -447,16 +451,16 @@ export function computeDailySeries(
     const revRaw = e.total_revenue != null
       ? Number(e.total_revenue)
       : orders * Number(p.sale_price);
-    const rev = convertCurrency(revRaw, revenueCurrency, targetCurrency, usdToTargetRate);
-    const cogs = convertCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, usdToTargetRate);
-    const ad = adSpendInCurrency(e, targetCurrency, usdToTargetRate);
+    const rev = convertDropshippingCurrency(revRaw, revenueCurrency, targetCurrency, fxOpts);
+    const cogs = convertDropshippingCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
+    const ad = adSpendInCurrency(e, targetCurrency, fxOpts);
     const tax = e.include_meta_tax !== false ? ad * (Number(metaTaxPct) / 100) : 0;
     const shopifyFees = e.include_shopify_fees
       ? rev * (SHOPIFY_FEES_PCT / 100)
-        + convertCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, usdToTargetRate)
+        + convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts)
       : 0;
     const waveFees = e.include_wave_fees ? rev * (WAVE_FEES_PCT / 100) : 0;
-    const ups = upsellTotalsForEntry(e, productMap, targetCurrency, usdToTargetRate);
+    const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     const revWithUps = rev + ups.revenue;
     const cogsWithUps = cogs + ups.cogs;
     const profit = revWithUps - ad - cogsWithUps - tax - shopifyFees - waveFees;
@@ -726,13 +730,13 @@ export function computeProductRanking(
   entries: DailyEntry[],
   products: Product[],
   targetCurrency: string = "EUR",
-  usdToTargetRate = 0,
+  fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): ProductRankingRow[] {
   return products
     .map((p) => {
       const pEntries = entries.filter((e) => e.product_id === p.id);
-      const kpis = computeKPIs(pEntries, products, targetCurrency, usdToTargetRate, metaTaxPct);
+      const kpis = computeKPIs(pEntries, products, targetCurrency, fx, metaTaxPct);
       const marginPct = kpis.revenue > 0 ? (kpis.netProfit / kpis.revenue) * 100 : 0;
       const decision = computeProductDecision(marginPct, kpis.roas, kpis.adSpend > 0);
       return { product: p, kpis, marginPct, decision };

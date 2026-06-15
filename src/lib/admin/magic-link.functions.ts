@@ -1,17 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { ensureRole, logAdminAction, requireAdmin } from "@/lib/admin/admin-auth.middleware.server";
+import {
+  auditMeta,
+  ensureRole,
+  logAdminAction,
+  requireAdmin,
+} from "@/lib/admin/admin-auth.middleware.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const MAGIC_LINK_TTL_SECONDS = 3600;
-
-function getRequestIp(): string | null {
-  const request = getRequest();
-  const forwarded = request?.headers?.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]?.trim() ?? null;
-  return request?.headers?.get("x-real-ip") ?? null;
-}
 
 export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
@@ -71,12 +68,11 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
       category: "security",
       targetUserId: prof.id,
       targetEmail: email,
+      ...auditMeta(context),
       details: {
         expires_in_seconds: MAGIC_LINK_TTL_SECONDS,
         email_confirmed_now: !emailConfirmedAt,
         ban_lifted: !!bannedUntil,
-        ip: getRequestIp(),
-        user_agent: getRequest()?.headers?.get("user-agent") ?? null,
       },
     });
 

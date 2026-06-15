@@ -3,6 +3,7 @@ import { useActiveMode } from "@/lib/use-active-mode";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { computeDailySeries, computeKPIs, dateRangeForPreset } from "@/lib/calc";
 import { generateInsights, previousRange, rankProducts, type Insight } from "@/lib/analytics-insights";
 import type { Preset, CustomRange } from "@/components/PeriodPicker";
@@ -19,19 +20,19 @@ export function InsightsTab({ preset, customRange }: Props) {
   const prevQ = useEntries(user?.id, prev);
 
   const { currency, mode: activeMode } = useActiveMode();
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
   const entries = curQ.data ?? [];
   const prevEntries = prevQ.data ?? [];
 
   const insights = useMemo(() => {
-    const globalKpis = computeKPIs(entries, products, currency, usdRate, metaTaxPct);
-    const prevKpis = computeKPIs(prevEntries, products, currency, usdRate, metaTaxPct);
-    const rankings = rankProducts(products, entries, currency, usdRate, metaTaxPct);
-    const dailyGlobal = computeDailySeries(entries, products, null, currency, usdRate, metaTaxPct);
+    const globalKpis = computeKPIs(entries, products, currency, dropshippingFx, metaTaxPct);
+    const prevKpis = computeKPIs(prevEntries, products, currency, dropshippingFx, metaTaxPct);
+    const rankings = rankProducts(products, entries, currency, dropshippingFx, metaTaxPct);
+    const dailyGlobal = computeDailySeries(entries, products, null, currency, dropshippingFx, metaTaxPct);
     return generateInsights({ rankings, entries, products, globalKpis, prevKpis, dailyGlobal, currency });
-  }, [entries, prevEntries, products, currency, usdRate, metaTaxPct]);
+  }, [entries, prevEntries, products, currency, dropshippingFx, metaTaxPct]);
 
   const grouped = {
     danger: insights.filter((i) => i.severity === "danger"),

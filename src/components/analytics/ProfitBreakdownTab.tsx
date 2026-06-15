@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { computeKPIs, dateRangeForPreset, formatCurrency } from "@/lib/calc";
 import { computeBreakdown } from "@/lib/analytics-insights";
 import type { Preset, CustomRange } from "@/components/PeriodPicker";
@@ -16,7 +17,7 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
   const entriesQ = useEntries(user?.id, range);
 
   const { currency, mode: activeMode } = useActiveMode();
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
   const entries = entriesQ.data ?? [];
@@ -27,8 +28,8 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
   const filteredProducts = productId === "all" ? products : products.filter((p) => p.id === productId);
 
   const kpis = useMemo(
-    () => computeKPIs(filteredEntries, filteredProducts, currency, usdRate, metaTaxPct),
-    [filteredEntries, filteredProducts, currency, usdRate, metaTaxPct],
+    () => computeKPIs(filteredEntries, filteredProducts, currency, dropshippingFx, metaTaxPct),
+    [filteredEntries, filteredProducts, currency, dropshippingFx, metaTaxPct],
   );
 
   const steps = useMemo(() => computeBreakdown(kpis), [kpis]);

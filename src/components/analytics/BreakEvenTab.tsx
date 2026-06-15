@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
-import { computeKPIs, convertCurrency, dateRangeForPreset, formatCurrency } from "@/lib/calc";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
+import { computeKPIs, dateRangeForPreset, formatCurrency } from "@/lib/calc";
+import { convertDropshippingCurrency } from "@/lib/dropshipping-fx";
 import type { Preset, CustomRange } from "@/components/PeriodPicker";
 
 type Props = { preset: Preset; customRange: CustomRange };
@@ -15,22 +17,22 @@ export function BreakEvenTab({ preset, customRange }: Props) {
   const entriesQ = useEntries(user?.id, range);
 
   const { currency, mode: activeMode } = useActiveMode();
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
   const entries = entriesQ.data ?? [];
 
   const rows = products.map((p) => {
-    const sale = convertCurrency(Number(p.sale_price ?? 0), p.currency ?? currency, currency, usdRate);
-    const cost = convertCurrency(Number(p.cost_price ?? 0), p.currency ?? currency, currency, usdRate);
-    const ship = convertCurrency(Number(p.shipping_cost ?? 0), p.currency ?? currency, currency, usdRate);
+    const sale = convertDropshippingCurrency(Number(p.sale_price ?? 0), p.currency ?? currency, currency, dropshippingFx);
+    const cost = convertDropshippingCurrency(Number(p.cost_price ?? 0), p.currency ?? currency, currency, dropshippingFx);
+    const ship = convertDropshippingCurrency(Number(p.shipping_cost ?? 0), p.currency ?? currency, currency, dropshippingFx);
     const unitMargin = sale - cost - ship;
     const grossPct = sale > 0 ? unitMargin / sale : 0;
     const breakEvenRoas = grossPct > 0 ? 1 / grossPct : 0;
     const breakEvenCpa = unitMargin; // CPA max pour ne pas perdre
 
     const pEntries = entries.filter((e) => e.product_id === p.id);
-    const k = computeKPIs(pEntries, [p], currency, usdRate, metaTaxPct);
+    const k = computeKPIs(pEntries, [p], currency, dropshippingFx, metaTaxPct);
     const margin = breakEvenRoas > 0 ? (k.roas - breakEvenRoas) / breakEvenRoas : 0;
 
     return { product: p, sale, cost, ship, unitMargin, grossPct, breakEvenRoas, breakEvenCpa, actualRoas: k.roas, margin };

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { computeDailySeries, dateRangeForPreset, fillDailySeries, formatCurrency } from "@/lib/calc";
 import { previousRange, longestProfitableStreak, currentStreak } from "@/lib/analytics-insights";
 import {
@@ -23,25 +24,25 @@ export function TrendsTab({ preset, customRange }: Props) {
   const prevQ = useEntries(user?.id, prev);
 
   const { currency, mode: activeMode } = useActiveMode();
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
 
   const curSeries = useMemo(
     () => fillDailySeries(
-      computeDailySeries(curQ.data ?? [], products, null, currency, usdRate, metaTaxPct),
+      computeDailySeries(curQ.data ?? [], products, null, currency, dropshippingFx, metaTaxPct),
       range.from, range.to,
       (date) => ({ date, revenue: 0, adSpend: 0, metaTax: 0, netProfit: 0, roas: 0, shopifyOrders: 0, notes: null }),
     ),
-    [curQ.data, products, currency, usdRate, metaTaxPct, range.from, range.to],
+    [curQ.data, products, currency, dropshippingFx, metaTaxPct, range.from, range.to],
   );
   const prevSeries = useMemo(
     () => fillDailySeries(
-      computeDailySeries(prevQ.data ?? [], products, null, currency, usdRate, metaTaxPct),
+      computeDailySeries(prevQ.data ?? [], products, null, currency, dropshippingFx, metaTaxPct),
       prev.from, prev.to,
       (date) => ({ date, revenue: 0, adSpend: 0, metaTax: 0, netProfit: 0, roas: 0, shopifyOrders: 0, notes: null }),
     ),
-    [prevQ.data, products, currency, usdRate, metaTaxPct, prev.from, prev.to],
+    [prevQ.data, products, currency, dropshippingFx, metaTaxPct, prev.from, prev.to],
   );
 
   // Overlay : on aligne par index (jour 1, jour 2…)

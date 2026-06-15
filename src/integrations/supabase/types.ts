@@ -580,6 +580,7 @@ export type Database = {
           selected_mode: string | null
           updated_at: string
           usd_to_xof_rate: number
+          dropshipping_usd_fx: number | null
         }
         Insert: {
           active_mode?: string
@@ -604,6 +605,7 @@ export type Database = {
           selected_mode?: string | null
           updated_at?: string
           usd_to_xof_rate?: number
+          dropshipping_usd_fx?: number | null
         }
         Update: {
           active_mode?: string
@@ -628,6 +630,7 @@ export type Database = {
           selected_mode?: string | null
           updated_at?: string
           usd_to_xof_rate?: number
+          dropshipping_usd_fx?: number | null
         }
         Relationships: []
       }

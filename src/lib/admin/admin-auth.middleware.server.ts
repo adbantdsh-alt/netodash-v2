@@ -16,6 +16,24 @@ const SUPER_ADMIN_EMAILS = new Set(
     .filter(Boolean),
 );
 
+function readBearerToken(request?: Request, headers?: Record<string, string | undefined>): string | null {
+  const fromRequest = request?.headers?.get("authorization");
+  if (fromRequest?.startsWith("Bearer ")) return fromRequest.slice("Bearer ".length);
+  if (!headers) return null;
+  const auth = headers.authorization ?? headers.Authorization;
+  if (typeof auth === "string" && auth.startsWith("Bearer ")) return auth.slice("Bearer ".length);
+  return null;
+}
+
+function readClientMeta(request?: Request) {
+  const ip =
+    request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request?.headers?.get("x-real-ip") ??
+    null;
+  const userAgent = request?.headers?.get("user-agent") ?? null;
+  return { ip, userAgent };
+}
+
 async function resolveAdminAccount(userId: string, email: string) {
   const admin = supabaseAdmin;
 
@@ -73,7 +91,7 @@ async function resolveAdminAccount(userId: string, email: string) {
 }
 
 export const requireAdmin = createMiddleware({ type: "function" }).server(
-  async ({ next }) => {
+  async ({ next, request, headers }) => {
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
     const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -82,13 +100,12 @@ export const requireAdmin = createMiddleware({ type: "function" }).server(
       throw new Response("Server misconfigured", { status: 500 });
     }
 
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const request = getRequest();
-    const authHeader = request?.headers?.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    const req = request as Request | undefined;
+    const hdrs = headers as Record<string, string | undefined> | undefined;
+    const token = readBearerToken(req, hdrs);
+    if (!token) {
       throw new Response("Unauthorized", { status: 401 });
     }
-    const token = authHeader.replace("Bearer ", "");
 
     const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
       global: { headers: { Authorization: `Bearer ${token}` } },
@@ -103,6 +120,7 @@ export const requireAdmin = createMiddleware({ type: "function" }).server(
     const email = (data.claims.email as string) ?? "";
 
     const { admin, role } = await resolveAdminAccount(userId, email);
+    const { ip, userAgent } = readClientMeta(req);
 
     return next({
       context: {
@@ -111,6 +129,8 @@ export const requireAdmin = createMiddleware({ type: "function" }).server(
         adminRole: role,
         supabase,
         admin,
+        clientIp: ip,
+        clientUserAgent: userAgent,
       },
     });
   },
@@ -125,16 +145,10 @@ export async function logAdminAction(args: {
   targetUserId?: string | null;
   targetEmail?: string | null;
   details?: Record<string, unknown>;
+  ip?: string | null;
+  userAgent?: string | null;
 }) {
   try {
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const request = getRequest();
-    const ip =
-      request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      request?.headers?.get("x-real-ip") ??
-      null;
-    const userAgent = request?.headers?.get("user-agent") ?? null;
-
     await args.admin.rpc("service_log_admin_action", {
       _admin_id: args.adminId,
       _admin_email: args.adminEmail,
@@ -143,10 +157,21 @@ export async function logAdminAction(args: {
       _target_user_id: args.targetUserId ?? null,
       _target_email: args.targetEmail ?? null,
       _details: (args.details ?? {}) as never,
-      _ip: ip,
-      _user_agent: userAgent,
+      _ip: args.ip ?? null,
+      _user_agent: args.userAgent ?? null,
     });
   } catch (e) {
     console.error("[admin] service_log_admin_action failed", e);
   }
+}
+
+/** Passe IP / user-agent depuis le context requireAdmin vers logAdminAction. */
+export function auditMeta(context: {
+  clientIp?: string | null;
+  clientUserAgent?: string | null;
+}) {
+  return {
+    ip: context.clientIp ?? null,
+    userAgent: context.clientUserAgent ?? null,
+  };
 }

@@ -21,6 +21,7 @@ import {
   useProducts,
   useProfile,
 } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { useActiveMode } from "@/lib/use-active-mode";
 import {
   computeDailySeries,
@@ -136,7 +137,7 @@ function DashboardPage() {
 
   const { mode: activeMode, currency: modeCurrency } = useActiveMode();
   const profileCurrency = modeCurrency;
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx, codUsdToXofRate } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
   const entries = entriesQ.data ?? [];
@@ -146,14 +147,13 @@ function DashboardPage() {
 
 
   const kpis = useMemo(
-    () => computeKPIs(entries, products, currency, usdRate, metaTaxPct),
-    [entries, products, currency, usdRate, metaTaxPct],
+    () => computeKPIs(entries, products, currency, dropshippingFx, metaTaxPct),
+    [entries, products, currency, dropshippingFx, metaTaxPct],
   );
 
-  // Daily series for the selected product (or all)
   const dailySeries = useMemo(
-    () => computeDailySeries(entries, products, productId || null, currency, usdRate, metaTaxPct),
-    [entries, products, productId, currency, usdRate, metaTaxPct],
+    () => computeDailySeries(entries, products, productId || null, currency, dropshippingFx, metaTaxPct),
+    [entries, products, productId, currency, dropshippingFx, metaTaxPct],
   );
 
   const selectedProduct = productId ? products.find((p) => p.id === productId) : null;
@@ -163,8 +163,8 @@ function DashboardPage() {
 
   // === DECISION ENGINE ===
   const productRanking = useMemo(
-    () => computeProductRanking(entries, products, currency, usdRate, metaTaxPct),
-    [entries, products, currency, usdRate, metaTaxPct],
+    () => computeProductRanking(entries, products, currency, dropshippingFx, metaTaxPct),
+    [entries, products, currency, dropshippingFx, metaTaxPct],
   );
   const winners = productRanking.filter((r) => r.kpis.netProfit > 0 && Math.abs(r.marginPct) >= 2).length;
   const toWatch = productRanking.filter((r) => Math.abs(r.marginPct) < 2 && r.kpis.adSpend > 0).length;
@@ -268,7 +268,7 @@ function DashboardPage() {
           range={range}
           productId={productId}
           setProductId={setProductId}
-          usdToXofRate={usdRate}
+          usdToXofRate={codUsdToXofRate}
           metaTaxPct={metaTaxPct}
         />
       </div>

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
 import { useActiveMode } from "@/lib/use-active-mode";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { useSubscription } from "@/lib/use-subscription";
 import {
   canAddProduct,
@@ -86,6 +87,8 @@ function ProductsPage() {
   const dropBlocked = !isCod && !canAccessDropshipping(sub.plan, legacyDual);
   const range = useMemo(() => dateRangeForPreset("30d"), []);
   const entriesQ = useEntries(user?.id, range);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
+  const metaTaxPct = Number((profileQ.data as { meta_tax_pct?: number } | undefined)?.meta_tax_pct ?? 0);
 
   const COUNTRIES = isCod ? COD_COUNTRIES : DROPSHIP_COUNTRIES;
   const defaultCountry = isCod ? "SN" : "FR";
@@ -854,7 +857,9 @@ function ProductsPage() {
             Number(p.cost_price) -
             Number((p as any).shipping_cost ?? 0);
           const productEntries = (entriesQ.data ?? []).filter((e) => e.product_id === p.id);
-          const pKpis = computeKPIs(productEntries, [p as any], pCur, 0, 0);
+          const pKpis = isCod
+            ? computeKPIs(productEntries, [p as any], "XOF", undefined, metaTaxPct)
+            : computeKPIs(productEntries, [p as any], pCur, dropshippingFx, metaTaxPct);
           const hasData = pKpis.adSpend > 0 || pKpis.revenue > 0;
           const marginPct = pKpis.revenue > 0 ? (pKpis.netProfit / pKpis.revenue) * 100 : 0;
           const isProfit = pKpis.netProfit > 0;

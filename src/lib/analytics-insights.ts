@@ -1,14 +1,14 @@
 // Helpers analytics avancés : ranking produits, waterfall, break-even,
 // deltas période, insights auto. Tout est pur (pas d'I/O).
 
-import type { DailyEntry, Product, KPIs, DailyKPI } from "./calc";
+import type { DailyEntry, Product, KPIs, DailyKPI, DropshippingFxOptions } from "./calc";
 import {
   computeDailySeries,
   computeKPIs,
-  convertCurrency,
   dateRangeForPreset,
   type PresetKey,
 } from "./calc";
+import { convertDropshippingCurrency } from "./dropshipping-fx";
 
 // ──────────────────────────────────────────────────────────────────
 // 1) Ranking produits
@@ -31,17 +31,17 @@ export function rankProducts(
   products: Product[],
   entries: DailyEntry[],
   currency: string,
-  usdRate: number,
-  metaTaxPct: number,
+  fx?: DropshippingFxOptions,
+  metaTaxPct: number = 0,
 ): ProductRanking[] {
   return products
     .map((p) => {
       const pEntries = entries.filter((e) => e.product_id === p.id);
-      const kpis = computeKPIs(pEntries, products, currency, usdRate, metaTaxPct);
+      const kpis = computeKPIs(pEntries, products, currency, fx, metaTaxPct);
 
-      const sale = convertCurrency(Number(p.sale_price ?? 0), p.currency ?? currency, currency, usdRate);
-      const cost = convertCurrency(Number(p.cost_price ?? 0), p.currency ?? currency, currency, usdRate);
-      const ship = convertCurrency(Number(p.shipping_cost ?? 0), p.currency ?? currency, currency, usdRate);
+      const sale = convertDropshippingCurrency(Number(p.sale_price ?? 0), p.currency ?? currency, currency, fx);
+      const cost = convertDropshippingCurrency(Number(p.cost_price ?? 0), p.currency ?? currency, currency, fx);
+      const ship = convertDropshippingCurrency(Number(p.shipping_cost ?? 0), p.currency ?? currency, currency, fx);
       const landedCost = cost + ship;
       const unitMargin = sale - landedCost;
 

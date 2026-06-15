@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useProfile } from "@/lib/queries";
 import { normalizeDropshippingCurrency } from "@/lib/calc";
+import { readDropshippingUsdRate } from "@/lib/dropshipping-fx";
 import { deleteAccount } from "@/lib/account.functions";
 import { useOnboarding } from "@/lib/use-onboarding";
 import { useNavigate as useNav } from "@tanstack/react-router";
@@ -55,7 +56,8 @@ function SettingsPage() {
     if (profileQ.data) {
       setDisplayName(profileQ.data.display_name ?? "");
       setCurrency(normalizeDropshippingCurrency((profileQ.data as any).dropshipping_currency ?? profileQ.data.currency));
-      setUsdRate(String((profileQ.data as any).usd_to_xof_rate ?? 1));
+      const fxRate = readDropshippingUsdRate(profileQ.data as any);
+      setUsdRate(String(fxRate ?? (normalizeDropshippingCurrency((profileQ.data as any).dropshipping_currency ?? profileQ.data.currency) === "USD" ? 1 : 0.92)));
       setMetaTax(String((profileQ.data as any).meta_tax_pct ?? 18));
       setAutoSync(!!(profileQ.data as any).auto_sync_enabled);
     }
@@ -82,7 +84,7 @@ function SettingsPage() {
           currency,
           dropshipping_currency: currency,
           cod_currency: "XOF",
-          usd_to_xof_rate: rate,
+          dropshipping_usd_fx: rate,
           meta_tax_pct: tax,
           auto_sync_enabled: autoSync,
         } as any,

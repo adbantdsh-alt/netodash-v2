@@ -12,6 +12,7 @@ import {
 import { useAuth } from "@/lib/auth-context";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
 import { useActiveMode } from "@/lib/use-active-mode";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import {
   computeDailySeries,
   computeKPIs,
@@ -52,8 +53,8 @@ export function MetricsView() {
   const productsQ = useProducts(user?.id);
   const entriesQ = useEntries(user?.id, range);
   const { currency } = useActiveMode();
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
 
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
   const products = productsQ.data ?? [];
   const entries = entriesQ.data ?? [];
@@ -81,8 +82,8 @@ export function MetricsView() {
     const filteredEntries = entries.filter((e) =>
       filteredProducts.some((p) => p.id === e.product_id),
     );
-    return computeKPIs(filteredEntries, filteredProducts, currency, usdRate, metaTaxPct);
-  }, [products, selectedSet, entries, currency, usdRate, metaTaxPct]);
+    return computeKPIs(filteredEntries, filteredProducts, currency, dropshippingFx, metaTaxPct);
+  }, [products, selectedSet, entries, currency, dropshippingFx, metaTaxPct]);
 
   // Série quotidienne par produit sélectionné
   const chartData = useMemo(() => {
@@ -91,7 +92,7 @@ export function MetricsView() {
 
     for (const p of products) {
       if (!selectedSet.has(p.id)) continue;
-      const series = computeDailySeries(entries, products, p.id, currency, usdRate, metaTaxPct);
+      const series = computeDailySeries(entries, products, p.id, currency, dropshippingFx, metaTaxPct);
       const filled = fillDailySeries(series, range.from, range.to, (date) => ({
         date,
         revenue: 0,
@@ -111,7 +112,7 @@ export function MetricsView() {
     return Array.from(dayMap.values()).sort((a, b) =>
       String(a.date).localeCompare(String(b.date)),
     );
-  }, [products, selectedSet, entries, currency, usdRate, metaTaxPct, range.from, range.to, metric]);
+  }, [products, selectedSet, entries, currency, dropshippingFx, metaTaxPct, range.from, range.to, metric]);
 
   // Tableau récap par produit
   const productRows = useMemo(() => {
@@ -119,13 +120,13 @@ export function MetricsView() {
       .filter((p) => selectedSet.has(p.id))
       .map((p) => {
         const pEntries = entries.filter((e) => e.product_id === p.id);
-        const k = computeKPIs(pEntries, products, currency, usdRate, metaTaxPct);
-        const series = computeDailySeries(pEntries, products, p.id, currency, usdRate, metaTaxPct);
+        const k = computeKPIs(pEntries, products, currency, dropshippingFx, metaTaxPct);
+        const series = computeDailySeries(pEntries, products, p.id, currency, dropshippingFx, metaTaxPct);
         const profitableDays = series.filter((s) => s.netProfit > 0).length;
         const lossDays = series.filter((s) => s.netProfit < 0).length;
         return { product: p, kpis: k, profitableDays, lossDays, totalDays: series.length };
       });
-  }, [products, selectedSet, entries, currency, usdRate, metaTaxPct]);
+  }, [products, selectedSet, entries, currency, dropshippingFx, metaTaxPct]);
 
   // Jours détaillés
   const dailyAgg = useMemo(() => {
@@ -133,10 +134,10 @@ export function MetricsView() {
     const filteredEntries = entries.filter((e) =>
       filteredProducts.some((p) => p.id === e.product_id),
     );
-    return computeDailySeries(filteredEntries, filteredProducts, null, currency, usdRate, metaTaxPct)
+    return computeDailySeries(filteredEntries, filteredProducts, null, currency, dropshippingFx, metaTaxPct)
       .slice()
       .reverse();
-  }, [products, selectedSet, entries, currency, usdRate, metaTaxPct]);
+  }, [products, selectedSet, entries, currency, dropshippingFx, metaTaxPct]);
 
   const fmt = (v: number) =>
     METRICS.find((m) => m.key === metric)?.isCurrency

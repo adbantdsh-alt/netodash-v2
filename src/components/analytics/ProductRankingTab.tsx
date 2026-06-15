@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
 import { canExportCsv } from "@/lib/plan-limits";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
+import { useDropshippingFx } from "@/lib/use-dropshipping-fx";
 import { formatCurrency, formatNumber, dateRangeForPreset } from "@/lib/calc";
 import { rankProducts, downloadCSV, type ProductRanking } from "@/lib/analytics-insights";
 import type { Preset, CustomRange } from "@/components/PeriodPicker";
@@ -22,15 +23,15 @@ export function ProductRankingTab({ preset, customRange }: Props) {
 
   const { currency, mode: activeMode } = useActiveMode();
   const csvAllowed = canExportCsv(sub.plan, activeMode);
-  const usdRate = Number((profileQ.data as any)?.usd_to_xof_rate ?? 0);
+  const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as any)?.meta_tax_pct ?? 0);
 
   const [sort, setSort] = useState<SortKey>("score");
   const [dir, setDir] = useState<"asc" | "desc">("desc");
 
   const rankings = useMemo(
-    () => rankProducts(productsQ.data ?? [], entriesQ.data ?? [], currency, usdRate, metaTaxPct),
-    [productsQ.data, entriesQ.data, currency, usdRate, metaTaxPct],
+    () => rankProducts(productsQ.data ?? [], entriesQ.data ?? [], currency, dropshippingFx, metaTaxPct),
+    [productsQ.data, entriesQ.data, currency, dropshippingFx, metaTaxPct],
   );
 
   const sorted = useMemo(() => {
