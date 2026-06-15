@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/Logo";
+import { SignupWhatsAppHelp } from "@/components/SignupWhatsAppHelp";
 import { REFERRAL_SOURCES } from "@/lib/countries";
 import { ALL_COUNTRIES, searchCountries, findCountry } from "@/lib/countries-all";
 
@@ -282,6 +283,7 @@ function AuthPage() {
               >
                 Renvoyer l'email
               </button>
+              <SignupWhatsAppHelp className="mt-6" compact />
             </div>
           ) : (
           <>
@@ -332,13 +334,15 @@ function AuthPage() {
               </p>
             </div>
           )}
-          <p className="text-muted-foreground text-sm mb-8">
+          <p className="text-muted-foreground text-sm mb-4">
             {isSignup
               ? beta === "1"
                 ? "Finalise ton inscription bêta en 30 secondes."
                 : "Démarre en 30 secondes."
               : "Accède à ton dashboard."}
           </p>
+
+          {isSignup && <SignupWhatsAppHelp className="mb-6" />}
 
           <form onSubmit={handleSubmit} method="post" action="/auth" className="space-y-5" autoComplete="on">
             <div>
