@@ -41,8 +41,24 @@ export const adminGetBetaProgram = createServerFn({ method: "GET" })
         admin.rpc("get_beta_program_status"),
       ]);
 
-    if (tErr) throw new Error(tErr.message);
-    if (wErr) throw new Error(wErr.message);
+    if (tErr) {
+      const msg = tErr.message ?? "";
+      if (/beta_testers|schema cache|PGRST205/i.test(msg)) {
+        throw new Error(
+          "La table beta_testers est absente en base. Applique les migrations Supabase (supabase db push) puis recharge la page.",
+        );
+      }
+      throw new Error(msg);
+    }
+    if (wErr) {
+      const msg = wErr.message ?? "";
+      if (/beta_waitlist|schema cache|PGRST205/i.test(msg)) {
+        throw new Error(
+          "La table beta_waitlist est absente en base. Applique les migrations Supabase (supabase db push) puis recharge la page.",
+        );
+      }
+      throw new Error(msg);
+    }
 
     const userIds = (testers ?? [])
       .map((t) => t.user_id as string | null)
