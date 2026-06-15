@@ -34,6 +34,9 @@ import {
   formatCurrency,
   formatNumber,
   trendArrow,
+  profitVerdictKind,
+  profitVerdictLabel,
+  profitVerdictBadgeClass,
 } from "@/lib/calc";
 import { KpiCard } from "@/components/KpiCard";
 import { PeriodPicker, type Preset, type CustomRange } from "@/components/PeriodPicker";
@@ -209,6 +212,10 @@ function DashboardPage() {
   }, [dailySeries, range.from, range.to, preset]);
 
   const hasData = entries.length > 0;
+  const verdictKind = useMemo(
+    () => profitVerdictKind(kpis.netProfit, kpis.revenue, hasData),
+    [kpis.netProfit, kpis.revenue, hasData],
+  );
 
   // Alertes contextuelles dropshipping (calculées localement, pas de fetch)
   const dropAlerts = useMemo<InsightAlert[]>(() => {
@@ -438,23 +445,13 @@ function DashboardPage() {
           </div>
 
           {/* Verdict pill */}
-          <div
-            className={`px-4 py-2.5 flex items-center justify-between border-b border-foreground text-white ${
-              kpis.netProfit > 0
-                ? "bg-[#16a34a]"
-                : kpis.netProfit === 0
-                  ? "bg-[#eab308] text-foreground"
-                  : "bg-accent"
-            }`}
-          >
-            <span className="text-[11px] font-black uppercase tracking-[0.2em]">
-              {kpis.netProfit > 0
-                ? "✓ RENTABLE"
-                : kpis.netProfit === 0
-                  ? "≈ BREAK EVEN"
-                  : "✗ PERTE"}
+          <div className="px-4 py-2.5 flex items-center justify-between border-b border-foreground bg-background">
+            <span
+              className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.15em] brutal-border-thin ${profitVerdictBadgeClass(verdictKind)}`}
+            >
+              {profitVerdictLabel(verdictKind)}
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-widest opacity-90">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
               ROAS {kpis.adSpend > 0 ? kpis.roas.toFixed(2) + "x" : "—"}
             </span>
           </div>
@@ -588,10 +585,17 @@ function DashboardPage() {
 
       {/* Bannière "Dernière saisie" — affichée après une saisie depuis /entries */}
       {showLastEntry && hasData && (
-        <div className="brutal-border bg-accent text-accent-foreground border-accent p-5 md:p-6 mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div className="brutal-border bg-background p-5 md:p-6 mb-6 flex flex-wrap items-start justify-between gap-4">
           <div className="flex-1 min-w-[260px]">
-            <div className="text-[10px] uppercase tracking-widest font-bold opacity-80 mb-1">
-              ✓ DERNIÈRE SAISIE — RÉSUMÉ
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+                ✓ DERNIÈRE SAISIE — RÉSUMÉ
+              </div>
+              <span
+                className={`inline-flex items-center px-2 py-0.5 text-[10px] font-black uppercase tracking-widest brutal-border-thin ${profitVerdictBadgeClass(verdictKind)}`}
+              >
+                {profitVerdictLabel(verdictKind)}
+              </span>
             </div>
             <div className="text-lg md:text-xl font-black uppercase tracking-tight mb-3">
               {selectedProduct ? selectedProduct.name : "Tous produits"}
@@ -630,7 +634,15 @@ function DashboardPage() {
           <button
             onClick={() => {
               setShowLastEntry(false);
-              navigate({ search: { highlight: undefined } as any, replace: true });
+              navigate({
+                search: {
+                  highlight: undefined,
+                  product: search.product,
+                  from: search.from,
+                  to: search.to,
+                } as any,
+                replace: true,
+              });
             }}
             className="text-[10px] uppercase tracking-widest font-bold px-3 py-2 brutal-border-thin border-current hover:bg-current/10"
           >
@@ -662,24 +674,20 @@ function DashboardPage() {
         </div>
       )}
 
-      {/* Verdict simple : Rentable / Non Rentable — en TÊTE du dashboard */}
+      {/* Verdict — badge coloré uniquement */}
       {hasData && (
-        <div
-          className={`p-5 md:p-7 mb-0 brutal-border ${
-            kpis.netProfit >= 0
-              ? "bg-[#16a34a] text-white border-[#16a34a]"
-              : "bg-accent text-accent-foreground border-accent"
-          }`}
-        >
+        <div className="p-5 md:p-7 mb-0 brutal-border bg-background">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="text-xs uppercase tracking-widest font-bold opacity-80 mb-1">
+              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-2">
                 VERDICT {selectedProduct ? `· ${selectedProduct.name}` : "· TOUS PRODUITS"}
               </div>
-              <div className="text-3xl md:text-5xl font-black tracking-tight">
-                {kpis.netProfit >= 0 ? "✓ RENTABLE" : "✗ NON RENTABLE"}
-              </div>
-              <div className="mt-2 font-mono text-sm opacity-90">
+              <span
+                className={`inline-flex items-center px-3 py-1.5 text-sm md:text-base font-black uppercase tracking-widest brutal-border-thin ${profitVerdictBadgeClass(verdictKind)}`}
+              >
+                {profitVerdictLabel(verdictKind)}
+              </span>
+              <div className="mt-3 font-mono text-sm text-muted-foreground">
                 Marge nette {formatCurrency(kpis.netProfit, currency)} ·{" "}
                 ROAS {kpis.adSpend > 0 ? kpis.roas.toFixed(2) + "x" : "—"}
               </div>
@@ -853,21 +861,14 @@ function DashboardPage() {
               </thead>
               <tbody>
                 {productRanking.map((r, i) => {
-                  const isProfit = r.kpis.netProfit > 0;
-                  const isLoss = r.kpis.netProfit < 0;
-                  const marginAbs = Math.abs(r.marginPct);
-                  const isBreakEven = !isLoss && !isProfit || (isProfit && marginAbs < 2);
-                  const statusLabel = isBreakEven
-                    ? "BREAK EVEN"
-                    : isProfit
-                      ? "RENTABLE"
-                      : "PERTE";
-                  const statusIcon = isBreakEven ? "≈" : isProfit ? "✓" : "✕";
-                  const badgeColor = isBreakEven
-                    ? "bg-[#eab308] text-foreground"
-                    : isProfit
-                      ? "bg-[#16a34a] text-white"
-                      : "bg-accent text-accent-foreground";
+                  const rowVerdict = profitVerdictKind(
+                    r.kpis.netProfit,
+                    r.kpis.revenue,
+                    r.kpis.adSpend > 0 || r.kpis.revenue > 0,
+                  );
+                  const statusLabel = profitVerdictLabel(rowVerdict);
+                  const statusIcon =
+                    rowVerdict === "break_even" ? "≈" : rowVerdict === "profit" ? "✓" : rowVerdict === "loss" ? "✕" : "—";
                   return (
                     <tr
                       key={r.product.id}
@@ -897,7 +898,7 @@ function DashboardPage() {
                       </td>
                       <td className="p-3 text-center">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-black uppercase tracking-widest brutal-border-thin ${badgeColor}`}
+                          className={`inline-flex items-center gap-1 px-2 py-1 text-[10px] font-black uppercase tracking-widest brutal-border-thin ${profitVerdictBadgeClass(rowVerdict)}`}
                         >
                           <span>{statusIcon}</span>
                           <span>{statusLabel}</span>
@@ -1164,25 +1165,20 @@ function DashboardPage() {
         </div>
       )}
 
-      {/* Verdict simple : Rentable / Non rentable */}
       {hasData && (
-        <div
-          className={`mt-8 brutal-border p-6 md:p-8 flex flex-wrap items-center justify-between gap-4 ${
-            kpis.netProfit >= 0
-              ? "bg-[#16a34a] text-white border-[#16a34a]"
-              : "bg-accent text-accent-foreground border-accent"
-          }`}
-        >
+        <div className="mt-8 brutal-border p-6 md:p-8 flex flex-wrap items-center justify-between gap-4 bg-background">
           <div>
-            <div className="text-xs uppercase tracking-widest font-bold opacity-80 mb-1">
+            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-2">
               VERDICT
             </div>
-            <div className="text-3xl md:text-5xl font-black tracking-tight">
-              {kpis.netProfit >= 0 ? "✓ RENTABLE" : "✗ NON RENTABLE"}
-            </div>
+            <span
+              className={`inline-flex items-center px-3 py-1.5 text-2xl md:text-3xl font-black uppercase tracking-tight brutal-border-thin ${profitVerdictBadgeClass(verdictKind)}`}
+            >
+              {profitVerdictLabel(verdictKind)}
+            </span>
           </div>
           <div className="text-right">
-            <div className="text-xs uppercase tracking-widest font-bold opacity-80 mb-1">
+            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-1">
               Marge nette
             </div>
             <div className="text-2xl md:text-3xl font-black tabular tracking-tight">

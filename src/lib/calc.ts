@@ -760,3 +760,44 @@ export function breakEvenRoas(products: Product[]): number {
   const margin = totalSale > 0 ? totalGross / totalSale : 0;
   return margin > 0 ? 1 / margin : 0;
 }
+
+/** Verdict rentabilité pour badges UI (vert / jaune / rouge). */
+export type ProfitVerdictKind = "profit" | "break_even" | "loss" | "pending";
+
+export function profitVerdictKind(
+  netProfit: number,
+  revenue: number,
+  hasData = true,
+): ProfitVerdictKind {
+  if (!hasData || (revenue === 0 && netProfit === 0)) return "pending";
+  const marginPct = revenue > 0 ? (netProfit / revenue) * 100 : 0;
+  if (netProfit < 0) return "loss";
+  if (Math.abs(netProfit) < 0.01 || Math.abs(marginPct) < 2) return "break_even";
+  return "profit";
+}
+
+export function profitVerdictLabel(kind: ProfitVerdictKind): string {
+  switch (kind) {
+    case "profit":
+      return "✓ RENTABLE";
+    case "break_even":
+      return "≈ BREAK EVEN";
+    case "loss":
+      return "✗ PERTE";
+    default:
+      return "EN ATTENTE";
+  }
+}
+
+export function profitVerdictBadgeClass(kind: ProfitVerdictKind): string {
+  switch (kind) {
+    case "profit":
+      return "bg-[#16a34a] text-white";
+    case "break_even":
+      return "bg-[#eab308] text-foreground";
+    case "loss":
+      return "bg-[#dc2626] text-white";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}

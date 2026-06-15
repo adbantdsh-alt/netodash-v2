@@ -21,6 +21,9 @@ import {
   dateRangeForPreset,
   formatCurrency,
   normalizeDropshippingCurrency,
+  profitVerdictKind,
+  profitVerdictLabel,
+  profitVerdictBadgeClass,
   type DropshippingCurrency,
 } from "@/lib/calc";
 import { regionsFor } from "@/lib/regions";
@@ -861,25 +864,11 @@ function ProductsPage() {
             ? computeKPIs(productEntries, [p as any], "XOF", undefined, metaTaxPct)
             : computeKPIs(productEntries, [p as any], pCur, dropshippingFx, metaTaxPct);
           const hasData = pKpis.adSpend > 0 || pKpis.revenue > 0;
-          const marginPct = pKpis.revenue > 0 ? (pKpis.netProfit / pKpis.revenue) * 100 : 0;
-          const isProfit = pKpis.netProfit > 0;
-          const isLoss = pKpis.netProfit < 0;
-          const isBreakEven = hasData && (!isLoss && !isProfit || Math.abs(marginPct) < 2);
-          const verdictLabel = !hasData
-            ? "EN ATTENTE"
-            : isBreakEven
-              ? "BREAK EVEN"
-              : isProfit
-                ? "RENTABLE"
-                : "PERTE";
-          const verdictIcon = !hasData ? "—" : isBreakEven ? "≈" : isProfit ? "✓" : "✕";
-          const verdictClass = !hasData
-            ? "bg-muted text-muted-foreground"
-            : isBreakEven
-              ? "bg-[#eab308] text-foreground"
-              : isProfit
-                ? "bg-[#16a34a] text-white"
-                : "bg-accent text-accent-foreground";
+          const rowVerdict = profitVerdictKind(pKpis.netProfit, pKpis.revenue, hasData);
+          const verdictLabel = profitVerdictLabel(rowVerdict);
+          const verdictIcon =
+            rowVerdict === "break_even" ? "≈" : rowVerdict === "profit" ? "✓" : rowVerdict === "loss" ? "✕" : "—";
+          const verdictClass = profitVerdictBadgeClass(rowVerdict);
           const isSelected = selected.has(p.id);
           return (
             <div

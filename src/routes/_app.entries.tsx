@@ -50,6 +50,26 @@ function isoToDate(iso: string): Date {
   return new Date(y, (m || 1) - 1, d || 1);
 }
 
+type ManualEntryMode = "single" | "daily";
+
+function dashboardSearchFromEntries(entries: PendingEntry[]) {
+  if (entries.length === 0) return { highlight: 1 as const };
+  const dates = entries
+    .flatMap((e) => {
+      if (e.period_to && e.period_to !== e.entry_date) {
+        return enumerateDays(e.entry_date, e.period_to);
+      }
+      return [e.entry_date];
+    })
+    .sort();
+  return {
+    highlight: 1 as const,
+    product: entries[0].product_id,
+    from: dates[0],
+    to: dates[dates.length - 1],
+  };
+}
+
 function enumerateDays(fromISO: string, toISO: string): string[] {
   const start = isoToDate(fromISO);
   const end = isoToDate(toISO);
@@ -157,6 +177,8 @@ function EntriesPage() {
   });
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [pendingFrom, setPendingFrom] = useState<Date | null>(null);
+  /** Plage multi-jours : une saisie cumulée ou une saisie par jour. */
+  const [manualEntryMode, setManualEntryMode] = useState<ManualEntryMode>("single");
   const manualFromISO = dateToISO(manualRange.from);
   const manualToISO = dateToISO(manualRange.to ?? manualRange.from);
   const manualDaysCount = enumerateDays(manualFromISO, manualToISO).length;
@@ -252,21 +274,14 @@ function EntriesPage() {
     }
   }
 
-  function addBlankEntry() {
-    if (products.length === 0) {
-      toast.error("Crée d'abord un produit.");
-      return;
-    }
-    const p = products[0] as any;
+  function buildBlankEntry(p: any, entryDate: string, periodTo?: string): PendingEntry {
     const revenueCur = cleanCurrency(p.currency || profileCurrency);
-    const isRange = manualFromISO !== manualToISO;
-    const baseTs = Date.now();
-    const newEntry: PendingEntry = {
-      key: `manual-${baseTs}-${Math.random()}`,
+    return {
+      key: `manual-${entryDate}-${Date.now()}-${Math.random()}`,
       product_id: p.id,
       productName: p.name,
-      entry_date: manualFromISO,
-      period_to: isRange ? manualToISO : undefined,
+      entry_date: entryDate,
+      period_to: periodTo,
       shopify_orders: "",
       visits: "",
       refunded_orders: "",
@@ -287,10 +302,29 @@ function EntriesPage() {
       upsells_enabled: false,
       upsells: [],
     };
-    setPendingEntries((prev) => [...prev, newEntry]);
-    if (isRange) {
-      const nbDays = enumerateDays(manualFromISO, manualToISO).length;
-      toast.success(`Saisie cumulée créée sur ${nbDays} jours (${manualFromISO} → ${manualToISO}). Saisis les totaux de la période.`);
+  }
+
+  function addBlankEntry() {
+    if (products.length === 0) {
+      toast.error("Crée d'abord un produit.");
+      return;
+    }
+    const p = products[0] as any;
+    const isRange = manualFromISO !== manualToISO;
+    const days = isRange ? enumerateDays(manualFromISO, manualToISO) : [manualFromISO];
+
+    if (isRange && manualEntryMode === "daily") {
+      const batch = days.map((day) => buildBlankEntry(p, day));
+      setPendingEntries((prev) => [...prev, ...batch]);
+      toast.success(`${batch.length} saisies créées (1 par jour). Renseigne chaque journée.`);
+    } else {
+      const newEntry = buildBlankEntry(p, manualFromISO, isRange ? manualToISO : undefined);
+      setPendingEntries((prev) => [...prev, newEntry]);
+      if (isRange) {
+        toast.success(
+          `Saisie cumulée sur ${days.length} jours (${manualFromISO} → ${manualToISO}). Saisis les totaux de la période.`,
+        );
+      }
     }
 
     setTimeout(() => {
@@ -389,7 +423,7 @@ function EntriesPage() {
       qc.invalidateQueries({ queryKey: ["entries"] });
       qc.invalidateQueries({ queryKey: ["products"] });
       toast.success(`Saisie enregistrée pour ${entry.productName}.`);
-      navigate({ to: "/dashboard", search: { highlight: 1 } as any });
+      navigate({ to: "/dashboard", search: dashboardSearchFromEntries([entry]) as any });
     } catch (err: any) {
       toast.error(err?.message ?? "Échec de l'enregistrement");
     }
@@ -400,10 +434,12 @@ function EntriesPage() {
     setBulkSaving(true);
     let ok = 0;
     let fail = 0;
+    const saved: PendingEntry[] = [];
     try {
       for (const entry of pendingEntries) {
         try {
           await savePending(entry);
+          saved.push(entry);
           ok++;
         } catch {
           fail++;
@@ -414,7 +450,7 @@ function EntriesPage() {
       if (fail === 0) {
         setPendingEntries([]);
         toast.success(`${ok} saisie(s) enregistrée(s).`);
-        navigate({ to: "/dashboard", search: { highlight: 1 } as any });
+        navigate({ to: "/dashboard", search: dashboardSearchFromEntries(saved) as any });
       } else {
         toast.error(`${ok} OK · ${fail} en échec.`);
       }
@@ -606,12 +642,46 @@ function EntriesPage() {
                 </PopoverContent>
               </Popover>
 
+              {manualDaysCount > 1 && (
+                <div className="flex items-center gap-1 brutal-border-thin p-0.5 bg-background">
+                  <button
+                    type="button"
+                    onClick={() => setManualEntryMode("single")}
+                    className={cn(
+                      "px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors",
+                      manualEntryMode === "single"
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    1 saisie cumulée
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setManualEntryMode("daily")}
+                    className={cn(
+                      "px-2.5 py-1.5 text-[10px] font-black uppercase tracking-widest transition-colors",
+                      manualEntryMode === "daily"
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {manualDaysCount} saisies (1/j)
+                  </button>
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={addBlankEntry}
                 className="brutal-border-thin px-3 py-2 text-xs font-black uppercase tracking-widest hover:bg-foreground hover:text-background"
               >
-                + Ajouter {manualDaysCount > 1 ? `${manualDaysCount} saisies` : "une saisie"}
+                +{" "}
+                {manualDaysCount > 1
+                  ? manualEntryMode === "daily"
+                    ? `Ajouter ${manualDaysCount} saisies`
+                    : "Ajouter 1 saisie cumulée"
+                  : "Ajouter une saisie"}
               </button>
               {/* Synchro Shopify désactivée temporairement (en attente publication App Store) */}
               {false && (
