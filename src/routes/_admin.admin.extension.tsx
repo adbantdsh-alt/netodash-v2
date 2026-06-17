@@ -9,6 +9,7 @@ import {
 import { ExternalLink, Puzzle, RefreshCw, Save } from "lucide-react";
 
 export const Route = createFileRoute("/_admin/admin/extension")({
+  ssr: false,
   component: AdminExtensionPage,
 });
 

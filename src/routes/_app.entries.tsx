@@ -435,7 +435,18 @@ function EntriesPage() {
     const { error } = await (supabase
       .from("daily_entries") as any)
       .upsert([row], { onConflict: "user_id,product_id,entry_date" });
-    if (error) throw error;
+    if (error) {
+      // Si les colonnes de la migration ne sont pas encore en prod, on réessaie sans elles.
+      const isColumnMissing = /column .*(include_eu_import_duty|entry_cogs|entry_shipping)/i.test(error.message ?? "");
+      if (isColumnMissing) {
+        const { include_eu_import_duty, entry_cogs_per_unit, entry_shipping_per_unit, entry_cogs_currency, ...rowLegacy } = row;
+        const { error: e2 } = await (supabase.from("daily_entries") as any)
+          .upsert([rowLegacy], { onConflict: "user_id,product_id,entry_date" });
+        if (e2) throw e2;
+      } else {
+        throw error;
+      }
+    }
   }
 
 
