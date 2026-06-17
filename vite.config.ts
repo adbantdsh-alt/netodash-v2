@@ -25,12 +25,18 @@ export default defineConfig({
     },
   },
   vite: {
+    ssr: {
+      // Forcer tslib à être bundlé inline dans les chunks SSR
+      // au lieu d'être gardé comme import bare non résolvable sur Vercel Lambda
+      noExternal: ["tslib"],
+    },
     optimizeDeps: {
       include: [
         "@tanstack/react-router",
         "@tanstack/router-core",
         "@tanstack/react-query",
         "@supabase/supabase-js",
+        "tslib",
       ],
     },
   },
