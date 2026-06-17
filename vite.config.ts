@@ -10,6 +10,9 @@ export default defineConfig({
   // Requis pour Vercel : le preset Lovable (cloudflare-module) est ignoré hors sandbox.
   nitro: {
     preset: "vercel",
+    externals: {
+      inline: ["tslib"],
+    },
     routeRules: {
       "/api/public/**": {
         cors: true,
