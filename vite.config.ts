@@ -41,9 +41,14 @@ export default defineConfig({
   // Requis pour Vercel : le preset Lovable (cloudflare-module) est ignoré hors sandbox.
   nitro: {
     preset: "vercel",
-    // Appliquer le plugin au build Rollup de Nitro (qui génère _ssr/*.mjs)
-    rollupConfig: {
-      plugins: [tslibResolvePlugin],
+    // Le hook rollup:before s'exécute APRÈS que la config par défaut de Nitro est prête
+    // (avec ses plugins inject+alias déjà en place). On peut donc ajouter notre plugin
+    // sans être écrasé par le defu qui ignore rollupConfig.plugins si le default existe déjà.
+    hooks: {
+      "rollup:before": (_nitro: unknown, rollupConfig: Record<string, unknown>) => {
+        const plugins: unknown[] = (rollupConfig.plugins as unknown[]) || [];
+        rollupConfig.plugins = [tslibResolvePlugin, ...plugins];
+      },
     },
     routeRules: {
       "/api/public/**": {
