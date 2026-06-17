@@ -108,7 +108,12 @@ type PendingEntry = {
   ad_budget_currency: AppCurrency;
   include_meta_tax: boolean;
   include_shopify_fees: boolean;
+  include_eu_import_duty: boolean;
   include_wave_fees: boolean;
+  // COGs réels de l'agent (optionnel — prioritaires sur le produit si renseignés)
+  entry_cogs_per_unit: string;
+  entry_shipping_per_unit: string;
+  entry_cogs_currency: AppCurrency;
   // COD only
   received_orders: string;
   confirmed_orders: string;
@@ -246,7 +251,11 @@ function EntriesPage() {
         ad_budget_currency: profileCurrency,
         include_meta_tax: true,
         include_shopify_fees: true,
+        include_eu_import_duty: activeMode !== "cod",
         include_wave_fees: activeMode === "cod",
+        entry_cogs_per_unit: "",
+        entry_shipping_per_unit: "",
+        entry_cogs_currency: profileCurrency,
         received_orders: "",
         confirmed_orders: "",
         delivered_orders: "",
@@ -292,7 +301,11 @@ function EntriesPage() {
       ad_budget_currency: profileCurrency,
       include_meta_tax: true,
       include_shopify_fees: true,
+      include_eu_import_duty: activeMode !== "cod",
       include_wave_fees: activeMode === "cod",
+      entry_cogs_per_unit: "",
+      entry_shipping_per_unit: "",
+      entry_cogs_currency: profileCurrency,
       received_orders: "",
       confirmed_orders: "",
       delivered_orders: "",
@@ -374,7 +387,17 @@ function EntriesPage() {
       ad_budget_currency: entry.ad_budget_currency as string,
       include_meta_tax: entry.include_meta_tax,
       include_shopify_fees: isCod ? false : entry.include_shopify_fees,
+      include_eu_import_duty: isCod ? false : entry.include_eu_import_duty,
       include_wave_fees: isCod ? entry.include_wave_fees : false,
+      entry_cogs_per_unit: !isCod && entry.entry_cogs_per_unit !== ""
+        ? Number(entry.entry_cogs_per_unit)
+        : null,
+      entry_shipping_per_unit: !isCod && entry.entry_shipping_per_unit !== ""
+        ? Number(entry.entry_shipping_per_unit)
+        : null,
+      entry_cogs_currency: !isCod && (entry.entry_cogs_per_unit !== "" || entry.entry_shipping_per_unit !== "")
+        ? (entry.entry_cogs_currency as string)
+        : null,
       total_revenue: isCod
         ? (entry.cash_collected !== "" ? Number(entry.cash_collected) : null)
         : (entry.total_revenue !== "" ? Number(entry.total_revenue) : null),
@@ -490,7 +513,11 @@ function EntriesPage() {
       ad_budget_currency: cleanCurrency(e.ad_budget_currency ?? profileCurrency),
       include_meta_tax: e.include_meta_tax ?? true,
       include_shopify_fees: e.include_shopify_fees ?? false,
+      include_eu_import_duty: e.include_eu_import_duty ?? true,
       include_wave_fees: e.include_wave_fees ?? false,
+      entry_cogs_per_unit: (e as any).entry_cogs_per_unit != null ? String((e as any).entry_cogs_per_unit) : "",
+      entry_shipping_per_unit: (e as any).entry_shipping_per_unit != null ? String((e as any).entry_shipping_per_unit) : "",
+      entry_cogs_currency: cleanCurrency((e as any).entry_cogs_currency ?? p.currency ?? profileCurrency),
       received_orders: isCod ? String(e.received_orders ?? e.shopify_orders ?? "") : "",
       confirmed_orders: isCod ? String(e.confirmed_orders ?? "") : "",
       delivered_orders: isCod ? String(e.delivered_orders ?? "") : "",
@@ -1200,6 +1227,77 @@ function PendingCard({
               onChange={(v) => onChange({ visits: v })}
             />
           </div>
+
+          {/* COGs réels de l'agent — optionnel */}
+          <div className="border border-dashed border-foreground/30 p-3 mt-2">
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest">
+                Vous avez les COGs exacts de votre fournisseur ?
+              </span>
+              <span className="text-[9px] text-muted-foreground font-mono shrink-0">Optionnel</span>
+            </div>
+            <p className="text-[9px] text-muted-foreground font-mono mb-3 leading-snug">
+              Saisissez-les pour un calcul précis — ils remplacent les coûts du produit <strong>uniquement pour cette saisie</strong>.
+              Laissez vide pour utiliser les coûts enregistrés sur le produit.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <Field
+                label="Coût produit / unité"
+                type="number"
+                decimal
+                value={entry.entry_cogs_per_unit}
+                placeholder={`défaut produit`}
+                onChange={(v) => onChange({ entry_cogs_per_unit: v })}
+              />
+              <Field
+                label="Coût livraison / unité"
+                type="number"
+                decimal
+                value={entry.entry_shipping_per_unit}
+                placeholder={`défaut produit`}
+                onChange={(v) => onChange({ entry_shipping_per_unit: v })}
+              />
+              {(entry.entry_cogs_per_unit !== "" || entry.entry_shipping_per_unit !== "") && (
+                <div>
+                  <div className="text-[10px] font-mono font-bold uppercase tracking-widest mb-1">Devise</div>
+                  <div className="flex gap-0">
+                    {(["EUR", "USD", "GBP"] as AppCurrency[]).map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => onChange({ entry_cogs_currency: c })}
+                        className={`border border-foreground px-2 py-1.5 font-mono text-[10px] font-bold first:rounded-l-none last:rounded-r-none ${
+                          entry.entry_cogs_currency === c
+                            ? "bg-foreground text-background"
+                            : "bg-background text-foreground hover:bg-foreground/10"
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            {(entry.entry_cogs_per_unit !== "" || entry.entry_shipping_per_unit !== "") && (
+              <div className="mt-2 text-[9px] font-mono text-muted-foreground">
+                ✓ Coûts agent actifs pour cette saisie —{" "}
+                coût produit{" "}
+                <strong>{entry.entry_cogs_per_unit !== "" ? entry.entry_cogs_per_unit : "—"} {entry.entry_cogs_currency}</strong>{" "}
+                · livraison{" "}
+                <strong>{entry.entry_shipping_per_unit !== "" ? entry.entry_shipping_per_unit : "—"} {entry.entry_cogs_currency}</strong>
+                {" · "}
+                <button
+                  type="button"
+                  className="underline"
+                  onClick={() => onChange({ entry_cogs_per_unit: "", entry_shipping_per_unit: "" })}
+                >
+                  effacer
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1">
             <label className="flex items-start gap-2 cursor-pointer select-none brutal-border-thin px-3 py-2">
               <input
@@ -1226,6 +1324,20 @@ function PendingCard({
                 <span className="font-bold uppercase tracking-widest">Inclure frais Shopify Payments</span>
                 <span className="block text-muted-foreground mt-0.5 text-[10px]">
                   Pour suivre tes frais de transaction Shopify.
+                </span>
+              </span>
+            </label>
+            <label className="flex items-start gap-2 cursor-pointer select-none brutal-border-thin px-3 py-2">
+              <input
+                type="checkbox"
+                checked={entry.include_eu_import_duty}
+                onChange={(e) => onChange({ include_eu_import_duty: e.target.checked })}
+                className="mt-0.5 w-4 h-4 accent-foreground cursor-pointer"
+              />
+              <span className="text-[11px] font-mono leading-snug">
+                <span className="font-bold uppercase tracking-widest">Droits de douane UE (3 € / cmd)</span>
+                <span className="block text-muted-foreground mt-0.5 text-[10px]">
+                  Frais fixe par commande EU (juillet 2026). Décoche si non concerné.
                 </span>
               </span>
             </label>

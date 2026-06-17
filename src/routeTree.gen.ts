@@ -43,10 +43,12 @@ import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
 import { Route as AdminAdminRouteImport } from './routes/_admin.admin'
 import { Route as ApiPublicUnitechWebhookRouteImport } from './routes/api/public.unitech-webhook'
+import { Route as ApiPublicExtensionTrackRouteImport } from './routes/api/public/extension-track'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin.admin.users'
 import { Route as AdminAdminSettingsRouteImport } from './routes/_admin.admin.settings'
 import { Route as AdminAdminSecurityRouteImport } from './routes/_admin.admin.security'
 import { Route as AdminAdminRevenueRouteImport } from './routes/_admin.admin.revenue'
+import { Route as AdminAdminExtensionRouteImport } from './routes/_admin.admin.extension'
 import { Route as AdminAdminExportRouteImport } from './routes/_admin.admin.export'
 import { Route as AdminAdminCommunicationRouteImport } from './routes/_admin.admin.communication'
 import { Route as AdminAdminBetaTestersRouteImport } from './routes/_admin.admin.beta-testers'
@@ -225,6 +227,11 @@ const ApiPublicUnitechWebhookRoute = ApiPublicUnitechWebhookRouteImport.update({
   path: '/api/public/unitech-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicExtensionTrackRoute = ApiPublicExtensionTrackRouteImport.update({
+  id: '/api/public/extension-track',
+  path: '/api/public/extension-track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -243,6 +250,11 @@ const AdminAdminSecurityRoute = AdminAdminSecurityRouteImport.update({
 const AdminAdminRevenueRoute = AdminAdminRevenueRouteImport.update({
   id: '/revenue',
   path: '/revenue',
+  getParentRoute: () => AdminAdminRoute,
+} as any)
+const AdminAdminExtensionRoute = AdminAdminExtensionRouteImport.update({
+  id: '/extension',
+  path: '/extension',
   getParentRoute: () => AdminAdminRoute,
 } as any)
 const AdminAdminExportRoute = AdminAdminExportRouteImport.update({
@@ -330,10 +342,12 @@ export interface FileRoutesByFullPath {
   '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
+  '/admin/extension': typeof AdminAdminExtensionRoute
   '/admin/revenue': typeof AdminAdminRevenueRoute
   '/admin/security': typeof AdminAdminSecurityRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/admin/users': typeof AdminAdminUsersRouteWithChildren
+  '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
@@ -375,10 +389,12 @@ export interface FileRoutesByTo {
   '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
+  '/admin/extension': typeof AdminAdminExtensionRoute
   '/admin/revenue': typeof AdminAdminRevenueRoute
   '/admin/security': typeof AdminAdminSecurityRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/admin/users': typeof AdminAdminUsersRouteWithChildren
+  '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
@@ -425,10 +441,12 @@ export interface FileRoutesById {
   '/_admin/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/_admin/admin/communication': typeof AdminAdminCommunicationRoute
   '/_admin/admin/export': typeof AdminAdminExportRoute
+  '/_admin/admin/extension': typeof AdminAdminExtensionRoute
   '/_admin/admin/revenue': typeof AdminAdminRevenueRoute
   '/_admin/admin/security': typeof AdminAdminSecurityRoute
   '/_admin/admin/settings': typeof AdminAdminSettingsRoute
   '/_admin/admin/users': typeof AdminAdminUsersRouteWithChildren
+  '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/_admin/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
@@ -474,10 +492,12 @@ export interface FileRouteTypes {
     | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
+    | '/admin/extension'
     | '/admin/revenue'
     | '/admin/security'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
     | '/api/public/hooks/shopify-sync'
@@ -519,10 +539,12 @@ export interface FileRouteTypes {
     | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
+    | '/admin/extension'
     | '/admin/revenue'
     | '/admin/security'
     | '/admin/settings'
     | '/admin/users'
+    | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
     | '/api/public/hooks/shopify-sync'
@@ -568,10 +590,12 @@ export interface FileRouteTypes {
     | '/_admin/admin/beta-testers'
     | '/_admin/admin/communication'
     | '/_admin/admin/export'
+    | '/_admin/admin/extension'
     | '/_admin/admin/revenue'
     | '/_admin/admin/security'
     | '/_admin/admin/settings'
     | '/_admin/admin/users'
+    | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/_admin/admin/users/$id'
     | '/api/public/hooks/shopify-sync'
@@ -601,6 +625,7 @@ export interface RootRouteChildren {
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalMentionsRoute: typeof LegalMentionsRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
+  ApiPublicExtensionTrackRoute: typeof ApiPublicExtensionTrackRoute
   ApiPublicUnitechWebhookRoute: typeof ApiPublicUnitechWebhookRoute
   ApiPublicHooksShopifySyncRoute: typeof ApiPublicHooksShopifySyncRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -848,6 +873,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicUnitechWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/extension-track': {
+      id: '/api/public/extension-track'
+      path: '/api/public/extension-track'
+      fullPath: '/api/public/extension-track'
+      preLoaderRoute: typeof ApiPublicExtensionTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_admin/admin/users': {
       id: '/_admin/admin/users'
       path: '/users'
@@ -874,6 +906,13 @@ declare module '@tanstack/react-router' {
       path: '/revenue'
       fullPath: '/admin/revenue'
       preLoaderRoute: typeof AdminAdminRevenueRouteImport
+      parentRoute: typeof AdminAdminRoute
+    }
+    '/_admin/admin/extension': {
+      id: '/_admin/admin/extension'
+      path: '/extension'
+      fullPath: '/admin/extension'
+      preLoaderRoute: typeof AdminAdminExtensionRouteImport
       parentRoute: typeof AdminAdminRoute
     }
     '/_admin/admin/export': {
@@ -959,6 +998,7 @@ interface AdminAdminRouteChildren {
   AdminAdminBetaTestersRoute: typeof AdminAdminBetaTestersRoute
   AdminAdminCommunicationRoute: typeof AdminAdminCommunicationRoute
   AdminAdminExportRoute: typeof AdminAdminExportRoute
+  AdminAdminExtensionRoute: typeof AdminAdminExtensionRoute
   AdminAdminRevenueRoute: typeof AdminAdminRevenueRoute
   AdminAdminSecurityRoute: typeof AdminAdminSecurityRoute
   AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
@@ -970,6 +1010,7 @@ const AdminAdminRouteChildren: AdminAdminRouteChildren = {
   AdminAdminBetaTestersRoute: AdminAdminBetaTestersRoute,
   AdminAdminCommunicationRoute: AdminAdminCommunicationRoute,
   AdminAdminExportRoute: AdminAdminExportRoute,
+  AdminAdminExtensionRoute: AdminAdminExtensionRoute,
   AdminAdminRevenueRoute: AdminAdminRevenueRoute,
   AdminAdminSecurityRoute: AdminAdminSecurityRoute,
   AdminAdminSettingsRoute: AdminAdminSettingsRoute,
@@ -1059,6 +1100,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalCookiesRoute: LegalCookiesRoute,
   LegalMentionsRoute: LegalMentionsRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
+  ApiPublicExtensionTrackRoute: ApiPublicExtensionTrackRoute,
   ApiPublicUnitechWebhookRoute: ApiPublicUnitechWebhookRoute,
   ApiPublicHooksShopifySyncRoute: ApiPublicHooksShopifySyncRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

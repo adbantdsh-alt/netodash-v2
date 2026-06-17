@@ -10,6 +10,7 @@ import {
   LogOut,
   X,
   FlaskConical,
+  Puzzle,
 } from "lucide-react";
 import { AdminLogo } from "./AdminLogo";
 
@@ -24,6 +25,7 @@ const items: Item[] = [
   { to: "/admin", label: "Vue d'ensemble", icon: LayoutDashboard, exact: true },
   { to: "/admin/users", label: "Utilisateurs", icon: Users },
   { to: "/admin/beta-testers", label: "Bêta-testeurs", icon: FlaskConical },
+  { to: "/admin/extension", label: "Extension Chrome", icon: Puzzle },
   { to: "/admin/revenue", label: "Revenus", icon: DollarSign },
   { to: "/admin/affiliates", label: "Affiliation", icon: Share2 },
   { to: "/admin/communication", label: "Communication", icon: MessageSquare },

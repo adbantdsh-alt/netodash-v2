@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Netodash — ROAS Net & Profit Calculator",
+  "version": "1.5.2",
+  "description": "Calculateur de rentabilité pour dropshippers : ROAS net, profit réel, marge nette après ads, COGS, Shopify & refunds.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Netodash — Profit Calculator",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://app.netodash.com/*"]
+}

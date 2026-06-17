@@ -1,0 +1,1 @@
+import{s as o}from"./index-Q_aSE3Fk.js";async function a(){const{data:s,error:e}=await o.auth.getSession();if(e)throw new Error(e.message);const r=s.session?.access_token;if(!r)throw new Error("Session expirée. Reconnecte-toi.");return{Authorization:`Bearer ${r}`}}export{a as g};

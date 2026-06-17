@@ -360,6 +360,7 @@ export type Database = {
           include_meta_tax: boolean
           include_shopify_fees: boolean
           include_wave_fees: boolean
+          include_eu_import_duty: boolean
           notes: string | null
           product_id: string
           received_orders: number | null
@@ -389,6 +390,7 @@ export type Database = {
           include_meta_tax?: boolean
           include_shopify_fees?: boolean
           include_wave_fees?: boolean
+          include_eu_import_duty?: boolean
           notes?: string | null
           product_id: string
           received_orders?: number | null
@@ -418,6 +420,7 @@ export type Database = {
           include_meta_tax?: boolean
           include_shopify_fees?: boolean
           include_wave_fees?: boolean
+          include_eu_import_duty?: boolean
           notes?: string | null
           product_id?: string
           received_orders?: number | null
@@ -839,10 +842,10 @@ export type Database = {
           _admin_id: string
           _category?: string
           _details?: Json
-          _ip?: string
-          _target_email?: string
-          _target_user_id?: string
-          _user_agent?: string
+          _ip?: string | null
+          _target_email?: string | null
+          _target_user_id?: string | null
+          _user_agent?: string | null
         }
         Returns: number
       }
@@ -874,6 +877,39 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _uid: string }; Returns: boolean }
+      get_beta_program_status: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      register_beta_tester: {
+        Args: { p_email: string; p_full_name?: string | null; p_user_id?: string | null }
+        Returns: Json
+      }
+      register_beta_waitlist: {
+        Args: { p_email: string; p_full_name?: string | null }
+        Returns: Json
+      }
+      claim_my_beta_tester: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      try_claim_beta_tester: {
+        Args: { p_user_id: string; p_email: string; p_full_name: string }
+        Returns: Json
+      }
+      get_extension_admin_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      track_extension_event: {
+        Args: {
+          p_client_id: string
+          p_event_type: string
+          p_extension_version?: string | null
+          p_meta?: Json
+        }
+        Returns: Json
+      }
       validate_affiliate_code: {
         Args: { _code: string }
         Returns: {

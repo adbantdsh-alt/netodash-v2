@@ -49,6 +49,20 @@ export type DailyEntry = {
   include_shopify_fees?: boolean | null;
   /** Si true, on applique les frais Wave (1%) sur le cash encaissé (COD). */
   include_wave_fees?: boolean | null;
+  /** Si true, on applique 3 € de droits de douane UE par commande (dropshipping EU). */
+  include_eu_import_duty?: boolean | null;
+  /**
+   * COGs réels fournis par l'agent pour CETTE saisie.
+   * Si renseigné, remplace products.cost_price pour le calcul de cette entrée.
+   */
+  entry_cogs_per_unit?: number | null;
+  /**
+   * Frais de livraison réels fournis par l'agent pour CETTE saisie.
+   * Si renseigné, remplace products.shipping_cost pour le calcul de cette entrée.
+   */
+  entry_shipping_per_unit?: number | null;
+  /** Devise des COGs saisis (si différente de la devise produit). */
+  entry_cogs_currency?: string | null;
   /** Devise du CA encaissé (EUR / USD / GBP), distincte de la devise pub. */
   total_revenue_currency?: string | null;
   /** Nb de commandes remboursées. */
@@ -167,9 +181,51 @@ function unitLandedCost(product: Product): number {
   return unitProductCost(product) + unitShippingCost(product);
 }
 
+/**
+ * Coût produit + livraison par unité pour UNE saisie.
+ * Si l'entrée contient des COGs réels (de l'agent), ils priment sur le produit.
+ * Retourne { costPerUnit, shippingPerUnit, currency } dans la devise effective.
+ */
+function resolveEntryCogs(
+  entry: DailyEntry,
+  product: Product,
+): { costPerUnit: number; shippingPerUnit: number; currency: string } {
+  const productCurrency = product.currency ?? "EUR";
+  const hasCogs = entry.entry_cogs_per_unit != null && Number(entry.entry_cogs_per_unit) >= 0;
+  const hasShip = entry.entry_shipping_per_unit != null && Number(entry.entry_shipping_per_unit) >= 0;
+  const entryCurrency = (entry.entry_cogs_currency ?? productCurrency) || productCurrency;
+
+  return {
+    costPerUnit: hasCogs ? Number(entry.entry_cogs_per_unit) : unitProductCost(product),
+    shippingPerUnit: hasShip ? Number(entry.entry_shipping_per_unit) : unitShippingCost(product),
+    currency: (hasCogs || hasShip) ? entryCurrency : productCurrency,
+  };
+}
+
+function euImportDutyForEntry(
+  entry: DailyEntry,
+  orders: number,
+  targetCurrency: string,
+  fx?: DropshippingFxOptions,
+): number {
+  if (entry.include_eu_import_duty === false || orders <= 0) return 0;
+  const fxOpts: DropshippingFxOptions = {
+    ...fx,
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+  };
+  return convertDropshippingCurrency(
+    orders * EU_IMPORT_DUTY_EUR,
+    "EUR",
+    targetCurrency,
+    fxOpts,
+  );
+}
+
 export const SHOPIFY_FEES_PCT = 2.9;
 /** Frais fixe Stripe/Shopify Payments par transaction (commande). */
 export const SHOPIFY_FIXED_FEE_USD = 0.30;
+/** Droits de douane UE fixes par commande (depuis juillet 2026). */
+export const EU_IMPORT_DUTY_EUR = 3;
 export const WAVE_FEES_PCT = 1;
 
 export type KPIs = {
@@ -185,6 +241,8 @@ export type KPIs = {
   shopifyFees: number;
   /** Frais Wave (1%) sur le cash encaissé (COD). */
   waveFees: number;
+  /** Droits de douane UE (3 € / commande si activé). */
+  euImportDuty: number;
   netProfit: number;
   roas: number;
   shopifyOrders: number;
@@ -219,6 +277,7 @@ export function computeKPIs(
   let metaTax = 0;
   let shopifyFees = 0;
   let waveFees = 0;
+  let euImportDuty = 0;
   let shopify = 0;
   let refundedOrders = 0;
   let refundedAmount = 0;
@@ -238,8 +297,10 @@ export function computeKPIs(
       : orders * Number(p.sale_price);
     const rev = convertDropshippingCurrency(revRaw, revenueCurrency, targetCurrency, fxOpts);
     revenue += rev;
-    cogs += convertDropshippingCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
-    shippingCost += convertDropshippingCurrency(orders * unitShippingCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
+    const ec = resolveEntryCogs(e, p);
+    const landedPerUnit = ec.costPerUnit + ec.shippingPerUnit;
+    cogs += convertDropshippingCurrency(orders * landedPerUnit, ec.currency, targetCurrency, fxOpts);
+    shippingCost += convertDropshippingCurrency(orders * ec.shippingPerUnit, ec.currency, targetCurrency, fxOpts);
     const ad = adSpendInCurrency(e, targetCurrency, fxOpts);
     adSpend += ad;
     if (e.include_meta_tax !== false) {
@@ -252,6 +313,7 @@ export function computeKPIs(
     if (e.include_wave_fees) {
       waveFees += rev * (WAVE_FEES_PCT / 100);
     }
+    euImportDuty += euImportDutyForEntry(e, orders, targetCurrency, fxOpts);
     const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     revenue += ups.revenue;
     cogs += ups.cogs;
@@ -264,7 +326,7 @@ export function computeKPIs(
     refundedAmount += convertDropshippingCurrency(Number(e.refunded_amount ?? 0), revenueCurrency, targetCurrency, fxOpts);
   }
 
-  const netProfit = revenue - adSpend - cogs - metaTax - shopifyFees - waveFees;
+  const netProfit = revenue - adSpend - cogs - metaTax - shopifyFees - waveFees - euImportDuty;
   const totalAdCost = adSpend + metaTax;
   const roas = totalAdCost > 0 ? revenue / totalAdCost : 0;
 
@@ -276,6 +338,7 @@ export function computeKPIs(
     metaTax,
     shopifyFees,
     waveFees,
+    euImportDuty,
     netProfit,
     roas,
     shopifyOrders: shopify,
@@ -452,7 +515,8 @@ export function computeDailySeries(
       ? Number(e.total_revenue)
       : orders * Number(p.sale_price);
     const rev = convertDropshippingCurrency(revRaw, revenueCurrency, targetCurrency, fxOpts);
-    const cogs = convertDropshippingCurrency(orders * unitLandedCost(p), p.currency ?? targetCurrency, targetCurrency, fxOpts);
+    const ec2 = resolveEntryCogs(e, p);
+    const cogs = convertDropshippingCurrency(orders * (ec2.costPerUnit + ec2.shippingPerUnit), ec2.currency, targetCurrency, fxOpts);
     const ad = adSpendInCurrency(e, targetCurrency, fxOpts);
     const tax = e.include_meta_tax !== false ? ad * (Number(metaTaxPct) / 100) : 0;
     const shopifyFees = e.include_shopify_fees
@@ -460,10 +524,11 @@ export function computeDailySeries(
         + convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts)
       : 0;
     const waveFees = e.include_wave_fees ? rev * (WAVE_FEES_PCT / 100) : 0;
+    const duty = euImportDutyForEntry(e, orders, targetCurrency, fxOpts);
     const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     const revWithUps = rev + ups.revenue;
     const cogsWithUps = cogs + ups.cogs;
-    const profit = revWithUps - ad - cogsWithUps - tax - shopifyFees - waveFees;
+    const profit = revWithUps - ad - cogsWithUps - tax - shopifyFees - waveFees - duty;
 
     const cur = byDay.get(e.entry_date);
     const noteRaw = (e as any).notes;

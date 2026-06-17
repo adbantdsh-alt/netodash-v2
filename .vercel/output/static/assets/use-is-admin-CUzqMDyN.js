@@ -1,0 +1,1 @@
+import{u as s}from"./useQuery-BZ0rOeQF.js";import{s as o}from"./index-Q_aSE3Fk.js";function t(e){return s({queryKey:["is-admin",e],enabled:!!e,queryFn:async()=>{const{data:a,error:r}=await o.from("user_roles").select("role").eq("user_id",e).eq("role","admin").maybeSingle();if(r)throw r;return!!a}})}export{t as u};

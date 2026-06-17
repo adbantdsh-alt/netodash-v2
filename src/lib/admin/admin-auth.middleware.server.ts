@@ -91,7 +91,10 @@ async function resolveAdminAccount(userId: string, email: string) {
 }
 
 export const requireAdmin = createMiddleware({ type: "function" }).server(
-  async ({ next, request, headers }) => {
+  async (ctx) => {
+    const { next } = ctx;
+    const request: Request | undefined = (ctx as any).request;
+    const headers: Record<string, string | undefined> | undefined = (ctx as any).headers;
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
     const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;

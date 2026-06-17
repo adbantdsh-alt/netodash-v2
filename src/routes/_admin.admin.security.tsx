@@ -220,14 +220,14 @@ function SecurityPage() {
                   <tr key={a.id} className="border-t border-black/10">
                     <td className="p-3 font-bold">{a.email}</td>
                     <td className="p-3">
-                      <select className="admin-input" value={a.role} onChange={(e) => doChangeRole(a.id, e.target.value)}>
+                      <select className="admin-input" value={a.role} onChange={(e) => doChangeRole(a.id, e.target.value as "super_admin" | "support" | "finance")}>
                         <option value="super_admin">Super Admin</option>
                         <option value="support">Support</option>
                         <option value="finance">Finance</option>
                       </select>
                     </td>
                     <td className="p-3">
-                      <select className="admin-input" value={a.status} onChange={(e) => doChangeStatus(a.id, e.target.value)}>
+                      <select className="admin-input" value={a.status} onChange={(e) => doChangeStatus(a.id, e.target.value as "active" | "suspended" | "revoked")}>
                         <option value="active">Actif</option>
                         <option value="suspended">Suspendu</option>
                         <option value="revoked">Révoqué</option>

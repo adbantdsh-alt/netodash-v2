@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Netodash — Profit Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#ffffff;--fg:#000000;--muted:#666;--accent:#0066FF;--line:#000;
+    --soft:#f5f5f5;
+  }
+  html,body{width:380px;background:var(--bg);color:var(--fg);
+    font-family:'Inter',system-ui,sans-serif;font-size:13px;line-height:1.35;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+  .tabular{font-variant-numeric:tabular-nums}
+
+  header{display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;border-bottom:2px solid var(--line);background:#000;color:#fff}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:900;letter-spacing:-.02em;font-size:18px}
+  .brand .dot{width:14px;height:14px;background:var(--accent)}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.7}
+
+  main{padding:14px 16px 16px}
+  h2{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;
+    margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  label{display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    font-weight:700;margin-bottom:4px}
+  input{width:100%;border:2px solid var(--line);background:var(--bg);color:var(--fg);
+    padding:8px 9px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+    outline:none;border-radius:0;}
+  input:focus{border-color:var(--accent);border-width:2px}
+  .field{margin-bottom:8px}
+  .row{display:flex;align-items:center;gap:6px;margin-top:6px}
+  .row input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent)}
+  .row label{margin:0;font-size:10px;letter-spacing:.1em}
+
+  .lbl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:6px}
+  .mini-ccy{display:inline-flex;border:1.5px solid var(--line)}
+  .mini-ccy button{background:#fff;border:0;padding:2px 6px;font-family:'JetBrains Mono',monospace;
+    font-size:9px;font-weight:700;cursor:pointer;line-height:1.2}
+  .mini-ccy button.on{background:var(--accent);color:#fff}
+  .hint{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-top:3px;letter-spacing:.05em}
+
+  .verdict{margin-top:14px;padding:12px;border:3px solid var(--line);text-align:center;transition:transform .12s}
+  .verdict.pulse{transform:scale(1.02)}
+  .verdict.win{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .verdict.even{background:#000;color:#fff}
+  .verdict.loss{background:#fff;color:#000;border-color:#000}
+  .verdict .label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;opacity:.85}
+  .verdict .big{font-size:22px;font-weight:900;letter-spacing:-.02em;margin-top:2px}
+
+  .kpis{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .kpi{border:2px solid var(--line);padding:8px}
+  .kpi .k{font-size:8px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+  .kpi .v{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:900;margin-top:2px}
+  .kpi.accent .v{color:var(--accent)}
+
+  .break{margin-top:10px;border:2px solid var(--line);padding:10px;background:var(--soft)}
+  .break .line{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;
+    font-size:11px;padding:2px 0}
+  .break .line.total{border-top:1px dashed var(--line);margin-top:6px;padding-top:6px;font-weight:900}
+
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+  .btn{border:2px solid var(--line);background:#fff;color:#000;padding:10px;font-weight:900;
+    text-transform:uppercase;letter-spacing:.1em;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
+  .btn:hover{background:#000;color:#fff}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{background:#000;border-color:#000}
+
+  .cta{display:block;margin-top:10px;background:#000;color:#fff;text-align:center;
+    padding:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:11px;
+    text-decoration:none;border:2px solid #000}
+  .cta:hover{background:var(--accent);border-color:var(--accent)}
+  .sub{margin-top:6px;font-size:10px;text-align:center;color:var(--muted)}
+  .sub a{color:var(--fg);text-decoration:underline;font-weight:700}
+
+  footer{padding:10px 16px;border-top:2px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted);text-align:center}
+  .ccy{display:inline-flex;border:2px solid var(--line);margin-left:auto}
+  .ccy button{background:#fff;border:0;padding:4px 8px;font-family:'JetBrains Mono',monospace;
+    font-size:10px;font-weight:700;cursor:pointer}
+  .ccy button.on{background:#000;color:#fff}
+
+  /* Branding visible uniquement dans la capture partagée */
+  #shareBrand{display:none;padding:10px 16px;background:#000;color:#fff;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;
+    text-transform:uppercase;text-align:center}
+  #shareBrand b{color:var(--accent)}
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="dot"></span>NETODASH</div>
+    <div class="tag">DROPSHIPPING · LIVE</div>
+  </header>
+
+  <main>
+    <h2 style="display:flex;align-items:center;gap:8px">
+      <span>Tes chiffres</span>
+      <span class="ccy" id="ccy">
+        <button data-c="EUR" class="on">€</button>
+        <button data-c="USD">$</button>
+        <button data-c="GBP">£</button>
+        <button data-c="XOF">F</button>
+      </span>
+    </h2>
+
+    <div class="grid">
+      <div class="field">
+        <label>CA Shopify</label>
+        <input id="revenue" type="number" min="0" step="any" value="12000"/>
+      </div>
+
+      <div class="field">
+        <div class="lbl-row">
+          <label style="margin:0">Budget pub</label>
+          <span class="mini-ccy" id="adCcy">
+            <button data-c="EUR" class="on">€</button>
+            <button data-c="USD">$</button>
+            <button data-c="GBP">£</button>
+            <button data-c="XOF">F</button>
+          </span>
+        </div>
+        <input id="adSpend" type="number" min="0" step="any" value="5000"/>
+        <div class="hint" id="adHint">≈ —</div>
+      </div>
+
+      <div class="field"><label>Taxe pub %</label><input id="adTax" type="number" min="0" step="any" value="18"/></div>
+      <div class="field"><label>Nb commandes</label><input id="orders" type="number" min="0" step="1" value="240"/></div>
+
+      <div class="field">
+        <label>Prix de vente / unité</label>
+        <input id="sellUnit" type="number" min="0" step="any" value="49.90"/>
+        <div class="hint" id="sellHint">— marge/produit</div>
+      </div>
+      <div class="field">
+        <div class="lbl-row">
+          <label style="margin:0">Coût produit / unité</label>
+          <span class="mini-ccy" id="cogsCcy">
+            <button data-c="EUR" class="on">€</button>
+            <button data-c="USD">$</button>
+            <button data-c="GBP">£</button>
+            <button data-c="XOF">F</button>
+          </span>
+        </div>
+        <input id="cogsUnit" type="number" min="0" step="any" value="16"/>
+        <div class="hint" id="cogsHint">= — total (—% du CA)</div>
+      </div>
+
+      <div class="field"><label>Cmd remboursées</label><input id="refOrders" type="number" min="0" step="1" value="10"/></div>
+      <div class="field"><label>Total remboursé</label><input id="refAmount" type="number" min="0" step="any" value="480"/></div>
+    </div>
+
+    <h2 style="margin-top:14px">Produit offert (optionnel)</h2>
+    <div class="grid">
+      <div class="field"><label>Coût / produit offert</label><input id="giftCost" type="number" min="0" step="any" value="0"/></div>
+      <div class="field"><label>Nb cmd avec cadeau</label><input id="giftOrders" type="number" min="0" step="1" value="0"/></div>
+    </div>
+    <div class="hint" id="giftHint">Laisse à 0 si tu n'offres pas de produit bonus.</div>
+
+    <div class="row">
+      <input type="checkbox" id="autoFees" checked/>
+      <label for="autoFees">Calculer auto frais Shopify Payments (2,9% + 0,30 / cmd)</label>
+    </div>
+    <div class="grid" id="feesBlock" style="margin-top:6px">
+      <div class="field"><label>% transaction</label><input id="feePct" type="number" min="0" step="any" value="2.9" disabled/></div>
+      <div class="field"><label>Fixe / cmd</label><input id="feeFixed" type="number" min="0" step="any" value="0.30" disabled/></div>
+    </div>
+  </main>
+
+  <div id="capture">
+    <main style="padding-top:0">
+      <div id="verdict" class="verdict win">
+        <div class="label">Verdict</div>
+        <div class="big" id="verdictText">RENTABLE</div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi accent"><div class="k">Profit net</div><div class="v tabular" id="kProfit">—</div></div>
+        <div class="kpi accent"><div class="k">Bénéfice / cmd</div><div class="v tabular" id="kProfitPerOrder">—</div></div>
+        <div class="kpi"><div class="k">ROAS net</div><div class="v tabular" id="kRoas">—</div></div>
+        <div class="kpi"><div class="k">Marge nette</div><div class="v tabular" id="kMargin">—</div></div>
+        <div class="kpi"><div class="k">CPA</div><div class="v tabular" id="kCpa">—</div></div>
+        <div class="kpi"><div class="k">AOV</div><div class="v tabular" id="kAov">—</div></div>
+        <div class="kpi"><div class="k">Break-even ROAS</div><div class="v tabular" id="kBe">—</div></div>
+        <div class="kpi"><div class="k">Taux refund</div><div class="v tabular" id="kRef">—</div></div>
+      </div>
+
+      <div class="break">
+        <div class="line"><span>CA brut</span><span id="bRev">—</span></div>
+        <div class="line"><span>− Remboursements</span><span id="bRefund">—</span></div>
+        <div class="line"><span>− COGS (<span id="bCogsPct">—</span>)</span><span id="bCogs">—</span></div>
+        <div class="line"><span>− Budget pub (incl. taxe)</span><span id="bAd">—</span></div>
+        <div class="line"><span>   dont taxe pub</span><span id="bAdTax">—</span></div>
+        <div class="line"><span>− Frais Shopify</span><span id="bFees">—</span></div>
+        <div class="line" id="bGiftLine" style="display:none"><span>− Produits offerts (<span id="bGiftQty">0</span>)</span><span id="bGift">—</span></div>
+        <div class="line total"><span>= Profit net</span><span id="bProfit">—</span></div>
+      </div>
+    </main>
+    <div id="shareBrand">netodash.com/dropshipping · <b>LE TABLEAU DE BORD PROFIT DES DROPSHIPPERS</b></div>
+  </div>
+
+  <main style="padding-top:0">
+    <div class="actions">
+      <button class="btn primary" id="recalc">🔄 Recalculer</button>
+      <button class="btn" id="snap">📸 Capturer</button>
+    </div>
+
+    <a class="cta" id="cta" href="https://netodash.com/dropshipping?utm_source=chrome-extension&utm_medium=popup&utm_campaign=newsletter" target="_blank" rel="noopener">
+      📩 Newsletter Netodash Dropshipping
+    </a>
+    <div class="sub">Calcul auto à chaque modif · <a href="https://netodash.com/dropshipping" target="_blank" rel="noopener">netodash.com/dropshipping</a></div>
+  </main>
+
+  <footer>v1.5.2 · BUILT FOR DROPSHIPPERS</footer>
+
+  <script src="html2canvas.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

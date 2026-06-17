@@ -72,9 +72,9 @@ function AnalyticsPage() {
     );
   }
 
-  const modeLabel = mode === "cod" ? "MODE COD · FCFA" : "MODE DROPSHIPPING · " + currency;
+  const modeLabel = (mode as string) === "cod" ? "MODE COD · FCFA" : "MODE DROPSHIPPING · " + currency;
   const modeHint =
-    mode === "cod"
+    (mode as string) === "cod"
       ? "Analyses calibrées pour ton activité COD : taux de livraison, coût/commande livrée, marge nette après retours et frais courrier."
       : "Analyses calibrées pour ton activité dropshipping : € profit / € pub, ROAS vs break-even, taux de remboursement et scaling.";
 

@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /analytics
+Disallow: /products
+Disallow: /entries
+Disallow: /settings
+Disallow: /plan
+Disallow: /netodsh
+Disallow: /admin
+Disallow: /auth
+Disallow: /reset-password
+Disallow: /api/
+
+Sitemap: https://netodash.com/sitemap.xml

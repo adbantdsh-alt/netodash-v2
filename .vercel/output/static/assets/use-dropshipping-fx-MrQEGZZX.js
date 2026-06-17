@@ -1,0 +1,1 @@
+import{r as a}from"./index-Q_aSE3Fk.js";import{d as i}from"./dropshipping-fx-B__0wG90.js";import{c as p,u as c}from"./queries-tnc4TUkq.js";function f(s){const o=p(s),{currency:r}=c(),t=a.useMemo(()=>({...i(o.data),displayCurrency:r}),[o.data,r]),e=Number(o.data?.usd_to_xof_rate??600);return{fx:t,codUsdToXofRate:e}}export{f as u};
