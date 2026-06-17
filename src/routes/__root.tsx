@@ -38,7 +38,28 @@ function NotFoundComponent() {
   );
 }
 
+function RootErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: "#000", color: "#fff", fontFamily: "monospace", padding: "2rem" }}>
+      <div style={{ border: "2px solid #fff", padding: "2rem", maxWidth: "480px", width: "100%" }}>
+        <div style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "0.5rem", color: "#888" }}>NETODASH · ERREUR</div>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 900, margin: "0 0 1rem" }}>Service temporairement indisponible</h1>
+        <p style={{ fontSize: "0.8rem", color: "#888", margin: "0 0 1.5rem" }}>
+          Une mise à jour est en cours. Réessaie dans 2 minutes.
+        </p>
+        <a href="/" style={{ display: "inline-block", border: "2px solid #fff", padding: "0.5rem 1rem", color: "#fff", textDecoration: "none", fontWeight: 700, textTransform: "uppercase", fontSize: "0.75rem" }}>
+          ↺ Recharger
+        </a>
+        {import.meta.env.DEV && error?.message && (
+          <pre style={{ marginTop: "1rem", fontSize: "0.65rem", color: "#f00", maxHeight: "120px", overflow: "auto" }}>{error.message}</pre>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export const Route = createRootRouteWithContext<RouterContext>()({
+  errorComponent: RootErrorBoundary,
   head: () => ({
     meta: [
       { charSet: "utf-8" },
