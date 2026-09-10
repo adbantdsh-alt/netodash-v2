@@ -111,7 +111,11 @@ export default defineConfig({
       // Si cette directive devient inutile, c'est que le type a été complété :
       // la retirer.
       wrangler: {
-        name: "netodash",
+        // Doit correspondre au NOM DU PROJET Cloudflare (« netodash-v2 »,
+        // visible dans Workers & Pages). En Workers Builds, c'est le nom du
+        // projet qui gagne — mais un `wrangler deploy` manuel utiliserait
+        // celui-ci et créerait un SECOND Worker si les deux diffèrent.
+        name: "netodash-v2",
         // Logs/analytics d'exécution dans le dashboard Cloudflare.
         observability: { enabled: true },
         // On garde l'URL *.workers.dev le temps de valider le déploiement ;
