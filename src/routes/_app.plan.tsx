@@ -5,9 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useSubscription, PLAN_LABELS } from "@/lib/use-subscription";
 import { useBetaBenefits } from "@/lib/use-beta-benefits";
 import {
-  CodPlanCard,
   DropshippingPlanCards,
-  COD_PLAN,
   type DropshipPlanKey,
 } from "@/components/PlanCards";
 import { StripeEmbeddedCheckoutForm } from "@/components/StripeEmbeddedCheckout";
@@ -65,19 +63,27 @@ const DROPSHIP_META: Record<DropshipPlanKey, PlanMeta> = {
     priceMonthly: 79,
     priceIdMonthly: "scale_monthly_v4",
     bullets: [
-      "Produits Dropshipping illimités",
-      "Analytics Pro & Decision Engine (Drop)",
-      "COD inclus · Tout Pro",
+      "Produits illimités",
+      "Analytics Pro & Decision Engine",
+      "Tout Pro inclus",
       "Support WhatsApp prioritaire",
     ],
   },
 };
 
+/**
+ * Repli pour les abonnés COD EXISTANTS uniquement.
+ *
+ * Le plan COD ($10) n'est plus vendu — plus aucune carte ne le propose — mais
+ * des abonnements en cours existent. `metaFor("cod")` doit continuer à
+ * renvoyer un objet, sinon la page « Mon plan » de ces utilisateurs plante.
+ * Valeurs figées volontairement : elles ne doivent plus suivre le catalogue.
+ */
 const COD_META: PlanMeta = {
   label: "COD",
-  priceMonthly: COD_PLAN.price,
-  priceIdMonthly: COD_PLAN.priceId,
-  bullets: COD_PLAN.features,
+  priceMonthly: 10,
+  priceIdMonthly: "cod_monthly_v1",
+  bullets: ["Produits illimités", "Dashboard 7j / 30j"],
 };
 
 function metaFor(plan: CheckoutPlan): PlanMeta {
@@ -277,25 +283,12 @@ function PlanPage() {
         </section>
       )}
 
-      <section className="mb-10">
-        <h2 className="text-2xl md:text-3xl font-black tracking-tighter">
-          JE FAIS DU COD UNIQUEMENT
-        </h2>
-        <p className="font-mono text-xs text-muted-foreground mt-2 mb-6 max-w-2xl">
-          $10/mois · 14 jours gratuits · Dashboard basique (7j / 30j) · Zéro Dropshipping
-        </p>
-        <CodPlanCard
-          showCurrent={sub.plan === "cod"}
-          onSelectPlan={() => openStripe("cod")}
-        />
-      </section>
-
       <section className="mb-6">
         <h2 className="text-2xl md:text-3xl font-black tracking-tighter">
-          JE FAIS DU DROPSHIPPING
+          LES PLANS
         </h2>
         <p className="font-mono text-xs text-muted-foreground mt-2 mb-6 max-w-2xl">
-          Starter / Pro / Scale · Le mode COD est inclus sur tous ces plans
+          Starter / Pro / Scale · Facturation mensuelle, sans engagement
         </p>
         <DropshippingPlanCards
           highlightPro

@@ -549,43 +549,6 @@ function AuthPage() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs uppercase tracking-widest font-bold mb-2">
-                    Avec quel mode tu démarres ? *
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedMode("dropshipping")}
-                      aria-pressed={selectedMode === "dropshipping"}
-                      className={`brutal-border-thin px-3 py-3 text-left transition-colors ${
-                        selectedMode === "dropshipping"
-                          ? "bg-foreground text-background border-foreground"
-                          : "bg-background hover:bg-muted"
-                      }`}
-                    >
-                      <div className="text-xs font-black uppercase tracking-widest">Dropshipping</div>
-                      <div className="text-[10px] font-mono mt-1 opacity-80">Shopify + Meta/TikTok</div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedMode("cod")}
-                      aria-pressed={selectedMode === "cod"}
-                      className={`brutal-border-thin px-3 py-3 text-left transition-colors ${
-                        selectedMode === "cod"
-                          ? "bg-foreground text-background border-foreground"
-                          : "bg-background hover:bg-muted"
-                      }`}
-                    >
-                      <div className="text-xs font-black uppercase tracking-widest">COD</div>
-                      <div className="text-[10px] font-mono mt-1 opacity-80">Cash on Delivery · FCFA</div>
-                    </button>
-                  </div>
-                  <div className="mt-2 text-[10px] font-mono text-muted-foreground leading-snug">
-                    Tu pourras changer de mode après. Sur le plan Basic ($5), un seul mode est actif à la fois.
-                    Plans Pro/Premium : Drop + COD en parallèle.
-                  </div>
-                </div>
               </>
             )}
             {isSignup && (

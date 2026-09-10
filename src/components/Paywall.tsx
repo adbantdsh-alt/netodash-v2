@@ -1,4 +1,4 @@
-import { CodPlanCard, DropshippingPlanCards } from "./PlanCards";
+import { DropshippingPlanCards } from "./PlanCards";
 
 type Props = {
   variant: "analytics" | "trial-expired";
@@ -24,18 +24,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
             </div>
           </div>
           <div className="space-y-10">
-            <div>
-              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
-                Je fais du COD uniquement
-              </div>
-              <CodPlanCard />
-            </div>
-            <div>
-              <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground mb-3">
-                Je fais du Dropshipping
-              </div>
-              <DropshippingPlanCards highlightPro />
-            </div>
+            <DropshippingPlanCards highlightPro />
           </div>
         </div>
       </div>

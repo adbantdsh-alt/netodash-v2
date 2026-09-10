@@ -548,7 +548,6 @@ const COMP_ROWS: CompRow[] = [
   { label: "Décomposition coûts détaillée", netodash: true, triple: true, beprofit: true, lifetimely: true },
   { label: "Break-even & simulateur de scaling", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "Insights automatiques (alertes)", netodash: true, triple: true, beprofit: false, lifetimely: false },
-  { label: "Mode COD (cash on delivery)", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "Multi-devises (USD, EUR, FCFA…)", netodash: true, triple: "USD only", beprofit: "USD only", lifetimely: "USD only" },
   { label: "Saisie manuelle + import", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "Interface FR native", netodash: true, triple: false, beprofit: false, lifetimely: false },
@@ -584,7 +583,7 @@ export function CompetitorComparison() {
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
             Comparaison honnête face à TripleWhale, BeProfit et Lifetimely.
-            Mêmes métriques essentielles, fraction du prix, pensé pour les dropshippers qui scalent à partir de zéro.
+            Mêmes métriques essentielles, fraction du prix, pensé pour ceux qui scalent à partir de zéro.
           </p>
         </div>
 
@@ -656,8 +655,8 @@ export function CompetitorComparison() {
         {/* Pricing trio rappel */}
         <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {[
-            { name: "Starter", price: "$12", desc: "3 produits · 1 mode · 60j d'historique" },
-            { name: "Pro", price: "$29", desc: "10 produits · Drop + COD · upsells · multi-zones", featured: true },
+            { name: "Starter", price: "$12", desc: "3 produits · 60j d'historique" },
+            { name: "Pro", price: "$29", desc: "10 produits · upsells · export CSV", featured: true },
             { name: "Scale", price: "$79", desc: "Illimité · Analytics Pro · WhatsApp prio" },
           ].map((p) => (
             <div

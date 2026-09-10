@@ -7,28 +7,8 @@ export type BillingCycle = "monthly" | "yearly";
 export const YEARLY_BILLING_ENABLED = false;
 
 export type DropshipPlanKey = "basic" | "starter" | "pro";
-export type CodPlanKey = "cod";
-export type PlanKey = DropshipPlanKey | CodPlanKey;
+export type PlanKey = DropshipPlanKey;
 
-export const COD_PLAN = {
-  name: "COD",
-  planKey: "cod" as const,
-  price: 10,
-  priceId: "cod_monthly_v1",
-  tagline: "Piloter ton call center sans Dropshipping",
-  features: [
-    "Mode COD uniquement",
-    "Produits COD illimités",
-    "Saisie quotidienne & dashboard basique",
-    "Suivi 7 jours / 30 jours",
-    "Zones de livraison (1 zone)",
-  ],
-  notIncluded: [
-    "Dropshipping",
-    "Analytics Pro & Decision Engine",
-    "Upsells · Export CSV · Multi-zones",
-  ],
-};
 
 export const DROPSHIP_PLAN_PRICING: Record<
   DropshipPlanKey,
@@ -47,7 +27,7 @@ type DropshipCardsProps = {
   onSelectPlan?: (plan: DropshipPlanKey) => void;
 };
 
-/** Cartes Starter / Pro / Scale — plans Dropshipping (COD inclus). */
+/** Cartes Starter / Pro / Scale. */
 export function DropshippingPlanCards({
   highlightPro = true,
   showCurrentBadge = null,
@@ -63,14 +43,11 @@ export function DropshippingPlanCards({
         name="Starter"
         planKey="basic"
         cycle={cycle}
-        tagline="Démarrer en Drop avec le COD inclus"
+        tagline="Pour démarrer sereinement"
         features={[
-          "Dropshipping complet",
-          "Mode COD inclus (dashboard basique)",
-          "3 produits Dropshipping max",
-          "Produits COD illimités",
+          "3 produits max",
           "ROAS net · Dashboard rentabilité",
-          "Historique Drop 60 jours",
+          "Historique 60 jours",
         ]}
         notIncluded={[
           "Upsells · Export CSV · Multi-zones",
@@ -84,13 +61,10 @@ export function DropshippingPlanCards({
         name="Pro"
         planKey="starter"
         cycle={cycle}
-        tagline="Valider plusieurs winners Drop + COD avancé"
+        tagline="Valider plusieurs winners"
         features={[
-          "Dropshipping complet",
-          "Mode COD inclus",
-          "10 produits Dropshipping max",
-          "Produits COD illimités",
-          "Upsells · Multi-zones COD · Export CSV",
+          "10 produits max",
+          "Upsells · Export CSV",
           "Capture mobile · Historique illimité",
           "Support email + WhatsApp",
         ]}
@@ -106,10 +80,7 @@ export function DropshippingPlanCards({
         cycle={cycle}
         tagline="Scaler avec Analytics Pro & Decision Engine"
         features={[
-          "Dropshipping complet + Analytics Pro",
-          "Mode COD inclus",
-          "Produits Dropshipping illimités",
-          "Produits COD illimités",
+          "Produits illimités",
           "Decision Engine · Scoring · Waterfall",
           "Break-even · Simulateur · Insights auto",
           "Tout Pro + support WhatsApp prioritaire",
@@ -128,65 +99,6 @@ export function PlanCards(props: DropshipCardsProps) {
   return <DropshippingPlanCards {...props} />;
 };
 
-type CodCardProps = {
-  showCurrent?: boolean;
-  onSelectPlan?: () => void;
-};
-
-export function CodPlanCard({ showCurrent = false, onSelectPlan }: CodCardProps) {
-  const p = COD_PLAN;
-  return (
-    <div className="brutal-border p-7 flex flex-col max-w-xl">
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
-            PLAN
-          </div>
-          <div className="text-3xl font-black tracking-tight mt-1">{p.name}</div>
-        </div>
-        {showCurrent && (
-          <span className="brutal-border-thin text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-foreground text-background">
-            Actuel
-          </span>
-        )}
-      </div>
-      <div className="flex items-baseline gap-2 mb-1">
-        <span className="text-5xl font-black tracking-tighter">${p.price}</span>
-        <span className="font-mono text-sm text-muted-foreground">/mois</span>
-      </div>
-      <p className="font-mono text-xs text-muted-foreground mb-5">{p.tagline}</p>
-      <ul className="space-y-2 mb-5 flex-1">
-        {p.features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm">
-            <span className="text-accent font-black mt-0.5">✓</span>
-            <span>{f}</span>
-          </li>
-        ))}
-        {p.notIncluded.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground line-through">
-            <span className="font-black mt-0.5">✗</span>
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
-      {onSelectPlan ? (
-        <button
-          onClick={onSelectPlan}
-          className="block w-full text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
-        >
-          {showCurrent ? "Renouveler" : "Choisir COD"}
-        </button>
-      ) : (
-        <Link
-          to="/plan"
-          className="block text-center brutal-border px-5 py-3 font-bold uppercase tracking-wider bg-foreground text-background hover:bg-accent hover:border-accent"
-        >
-          Choisir COD
-        </Link>
-      )}
-    </div>
-  );
-}
 
 function DropshipPlanCard({
   name,

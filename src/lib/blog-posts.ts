@@ -3,7 +3,7 @@ export type BlogPost = {
   title: string;
   description: string;
   excerpt: string;
-  category: "Dropshipping" | "COD" | "ROAS" | "Stratégie";
+  category: "Rentabilité" | "COD" | "ROAS" | "Stratégie";
   readMin: number;
   publishedAt: string; // ISO
   tags: string[];
@@ -14,15 +14,15 @@ export type BlogPost = {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "calculer-roas-dropshipping",
-    title: "Comment calculer ton ROAS réel en dropshipping (et arrêter de te mentir)",
+    title: "Comment calculer ton ROAS réel (et arrêter de te mentir)",
     description:
-      "Guide complet pour calculer ton ROAS net en dropshipping : break-even ROAS, ROAS cible, CPA max, formules et exemples chiffrés.",
+      "Guide complet pour calculer ton ROAS net : break-even ROAS, ROAS cible, CPA max, formules et exemples chiffrés.",
     excerpt:
-      "La majorité des dropshippers regardent le ROAS brut Meta. C'est l'erreur n°1 : il ne dit rien sur ta rentabilité. Voici comment calculer ton ROAS RÉEL.",
+      "La majorité des e-commerçants regardent le ROAS brut Meta. C'est l'erreur n°1 : il ne dit rien sur ta rentabilité réelle. Voici comment calculer ton vrai ROAS.",
     category: "ROAS",
     readMin: 8,
     publishedAt: "2026-06-05",
-    tags: ["roas", "dropshipping", "meta ads"],
+    tags: ["roas", "meta ads", "rentabilité"],
     html: `
 <h2>Le ROAS brut Meta est un mensonge</h2>
 <p>Quand Meta t'affiche un ROAS de 3.5, ça veut dire : 1 € dépensé en ads = 3,50 € de chiffre d'affaires <strong>attribué</strong>. Ça ne veut PAS dire que tu gagnes 2,50 €. Voici ce qui manque :</p>
@@ -145,15 +145,15 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "marge-nette-dropshipping",
-    title: "Marge nette en dropshipping : la vraie formule (et pourquoi 90 % se trompent)",
+    title: "Marge nette : la vraie formule (et pourquoi 90 % se trompent)",
     description:
-      "Calcul détaillé de la marge nette en dropshipping : produit, livraison, ads, taxes, remboursements. Exemple chiffré et erreurs courantes.",
+      "Calcul détaillé de la marge nette : produit, livraison, ads, taxes, remboursements. Exemple chiffré et erreurs courantes.",
     excerpt:
       "Tu fais 30 000 € de CA et tu te demandes pourquoi ton compte bancaire ne suit pas ? Tu confonds chiffre d'affaires et marge nette. Voici la vraie formule.",
-    category: "Dropshipping",
+    category: "Rentabilité",
     readMin: 6,
     publishedAt: "2026-06-05",
-    tags: ["dropshipping", "marge", "rentabilité"],
+    tags: ["marge", "rentabilité"],
     html: `
 <h2>La vraie formule de la marge nette</h2>
 <pre><code>Marge nette = CA livré
@@ -258,15 +258,15 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "cpm-meta-2026-dropshipping",
-    title: "CPM Meta en 2026 : comment garder un dropshipping rentable malgré la hausse",
+    title: "CPM Meta en 2026 : comment rester rentable malgré la hausse",
     description:
       "Le CPM Meta a doublé en 3 ans. Stratégies concrètes pour rester rentable : créa UGC, scaling vertical, audience BOFU, ROAS net.",
     excerpt:
-      "CPM Meta à 25 €, audience saturée, concurrence agressive. Le dropshipping de 2020 est mort. Voici ce qui fonctionne en 2026 — et pourquoi le ROAS net est ton seul KPI.",
-    category: "Dropshipping",
+      "CPM Meta à 25 €, audience saturée, concurrence agressive. Les méthodes de 2020 sont mortes. Voici ce qui fonctionne en 2026 — et pourquoi le ROAS net est ton seul KPI.",
+    category: "Rentabilité",
     readMin: 7,
     publishedAt: "2026-06-05",
-    tags: ["meta ads", "dropshipping", "scaling"],
+    tags: ["meta ads", "scaling"],
     html: `
 <h2>Le constat : CPM x2 en 3 ans</h2>
 <p>En 2023, un CPM Meta France tournait à 12 €. En 2026, on est régulièrement à 25 – 35 € sur les audiences premium. Les raisons :</p>

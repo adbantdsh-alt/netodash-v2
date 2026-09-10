@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { COD_PLAN } from "@/components/PlanCards";
 import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 const PRICING_URL = "https://netodash.com/pricing";
-const PRICING_TITLE = "Tarifs — NETODASH | Dashboard rentabilité Dropshipping & COD";
+const PRICING_TITLE = "Tarifs — NETODASH | Dashboard de rentabilité";
 const PRICING_DESC =
-  "14 jours d'essai gratuit, sans carte. Plan COD $10, Starter $12, Pro $29, Scale $79 / mois. Paiement par carte Stripe.";
+  "14 jours d'essai gratuit, sans carte. Starter $12, Pro $29, Scale $79 / mois. Paiement par carte Stripe.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -52,14 +51,11 @@ const DROPSHIP_PLANS: PaidPlan[] = [
   {
     name: "Starter",
     monthly: 12,
-    tagline: "Démarrer en Drop avec le COD inclus",
+    tagline: "Pour démarrer sereinement",
     features: [
-      "3 produits Dropshipping max",
-      "Mode COD inclus (dashboard basique)",
-      "Produits COD illimités",
+      "3 produits max",
       "ROAS net multi-plateformes",
-      "Historique Drop 60 jours",
-      "1 zone de livraison COD",
+      "Historique 60 jours",
     ],
     cta: "Choisir Starter",
     highlight: false,
@@ -67,11 +63,10 @@ const DROPSHIP_PLANS: PaidPlan[] = [
   {
     name: "Pro",
     monthly: 29,
-    tagline: "Valider plusieurs winners Drop + COD avancé",
+    tagline: "Valider plusieurs winners",
     features: [
-      "10 produits Dropshipping max",
-      "Drop ET COD en parallèle",
-      "Upsells · Multi-zones COD · Export CSV",
+      "10 produits max",
+      "Upsells · Export CSV",
       "Capture mobile · Historique illimité",
       "Support email + WhatsApp",
     ],
@@ -83,7 +78,7 @@ const DROPSHIP_PLANS: PaidPlan[] = [
     monthly: 79,
     tagline: "Scaler avec Analytics Pro & Decision Engine",
     features: [
-      "Produits Dropshipping illimités",
+      "Produits illimités",
       "Tout Pro + Analytics Pro EXCLUSIF",
       "Decision Engine · Scoring · Waterfall",
       "Break-even · Simulateur · Insights auto",
@@ -122,7 +117,7 @@ function PricingPage() {
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
           14 jours d'essai gratuit avec accès complet (plan Pro débloqué), sans carte bancaire.
-          Puis COD $10, Starter $12, Pro $29 ou Scale $79 — facturation mensuelle par carte Stripe.
+          Puis Starter $12, Pro $29 ou Scale $79 — facturation mensuelle par carte Stripe.
         </p>
 
         {/* Essai */}
@@ -135,47 +130,18 @@ function PricingPage() {
               <span className="font-mono text-sm text-muted-foreground">/ 14 jours</span>
             </div>
             <p className="font-mono text-xs text-muted-foreground mb-5">
-              Accès complet 14 jours — peu importe le mode choisi au signup
+              Accès complet 14 jours, sans carte bancaire
             </p>
             <SignupCtaButton variant="card" />
           </div>
         </div>
-
-        {/* COD uniquement */}
+        {/* Les plans */}
         <div className="mt-16">
           <h2 className="text-2xl md:text-3xl font-black tracking-tighter mb-2">
-            JE FAIS DU COD UNIQUEMENT
+            LES PLANS
           </h2>
           <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
-            Piloter ton call center sans Dropshipping — produits COD illimités, dashboard 7j / 30j.
-          </p>
-          <div className="brutal-border p-7 flex flex-col max-w-xl">
-            <div className="text-xs uppercase tracking-widest font-bold text-muted-foreground">PLAN</div>
-            <div className="text-3xl font-black tracking-tight mt-1">{COD_PLAN.name}</div>
-            <div className="flex items-baseline gap-1 my-2">
-              <span className="text-5xl font-black tracking-tighter">${COD_PLAN.price}</span>
-              <span className="font-mono text-sm text-muted-foreground">/mois</span>
-            </div>
-            <p className="font-mono text-xs text-muted-foreground mb-5">{COD_PLAN.tagline}</p>
-            <ul className="space-y-2 mb-5 flex-1">
-              {COD_PLAN.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm">
-                  <span className="text-accent font-black mt-0.5">✓</span>
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-            <SignupCtaButton variant="card" />
-          </div>
-        </div>
-
-        {/* Dropshipping */}
-        <div className="mt-16">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tighter mb-2">
-            JE FAIS DU DROPSHIPPING
-          </h2>
-          <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
-            Starter, Pro ou Scale — le mode COD est inclus dans chaque plan Drop.
+            Starter, Pro ou Scale — facturation mensuelle, sans engagement.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {DROPSHIP_PLANS.map((p) => (
@@ -223,15 +189,15 @@ function PricingPage() {
             {[
               {
                 q: "Comment fonctionne l'essai gratuit ?",
-                a: "14 jours complets, sans carte bancaire, avec accès complet (Pro débloqué) — quel que soit le mode choisi au signup. À la fin, tu choisis COD ($10), Starter, Pro ou Scale.",
+                a: "14 jours complets, sans carte bancaire, avec accès complet. À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
               },
               {
-                q: "Quelle différence entre COD, Starter, Pro et Scale ?",
-                a: "COD ($10) = mode COD uniquement, produits illimités, dashboard basique. Starter ($12) = 3 produits Drop + COD inclus. Pro ($29) = 10 produits Drop, upsells, multi-zones, export CSV. Scale ($79) = Drop illimité + Analytics Pro & Decision Engine.",
+                q: "Quelle différence entre Starter, Pro et Scale ?",
+                a: "Starter ($12) = 3 produits, l'essentiel du pilotage. Pro ($29) = 10 produits, upsells, export CSV et support WhatsApp. Scale ($79) = produits illimités + Analytics Pro et Decision Engine.",
               },
               {
                 q: "Puis-je changer de plan ou annuler ?",
-                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu passes de COD à Drop (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu passes de Starter à Pro ou Scale (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
               },
             ].map((item) => (
               <div key={item.q} className="brutal-border-thin p-6">
@@ -246,7 +212,7 @@ function PricingPage() {
       <footer className="border-t border-foreground">
         <div className="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            © {new Date().getFullYear()} NETODASH · BUILT FOR DROPSHIPPERS
+            © {new Date().getFullYear()} NETODASH · BUILT FOR E-COMMERCE
           </div>
           <Link to="/" className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-accent">
             ← Retour
