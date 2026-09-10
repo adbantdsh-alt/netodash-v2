@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as DropshippingRouteImport } from './routes/dropshipping'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CodRouteImport } from './routes/cod'
 import { Route as CalculateurRoasRouteImport } from './routes/calculateur-roas'
@@ -71,11 +70,6 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DropshippingRoute = DropshippingRouteImport.update({
-  id: '/dropshipping',
-  path: '/dropshipping',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -306,7 +300,6 @@ export interface FileRoutesByFullPath {
   '/calculateur-roas': typeof CalculateurRoasRoute
   '/cod': typeof CodRouteWithChildren
   '/contact': typeof ContactRoute
-  '/dropshipping': typeof DropshippingRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -352,7 +345,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/calculateur-roas': typeof CalculateurRoasRoute
   '/contact': typeof ContactRoute
-  '/dropshipping': typeof DropshippingRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -403,7 +395,6 @@ export interface FileRoutesById {
   '/calculateur-roas': typeof CalculateurRoasRoute
   '/cod': typeof CodRouteWithChildren
   '/contact': typeof ContactRoute
-  '/dropshipping': typeof DropshippingRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -453,7 +444,6 @@ export interface FileRouteTypes {
     | '/calculateur-roas'
     | '/cod'
     | '/contact'
-    | '/dropshipping'
     | '/pricing'
     | '/reset-password'
     | '/sitemap.xml'
@@ -499,7 +489,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/calculateur-roas'
     | '/contact'
-    | '/dropshipping'
     | '/pricing'
     | '/reset-password'
     | '/sitemap.xml'
@@ -549,7 +538,6 @@ export interface FileRouteTypes {
     | '/calculateur-roas'
     | '/cod'
     | '/contact'
-    | '/dropshipping'
     | '/pricing'
     | '/reset-password'
     | '/sitemap.xml'
@@ -600,7 +588,6 @@ export interface RootRouteChildren {
   CalculateurRoasRoute: typeof CalculateurRoasRoute
   CodRoute: typeof CodRouteWithChildren
   ContactRoute: typeof ContactRoute
-  DropshippingRoute: typeof DropshippingRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -640,13 +627,6 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dropshipping': {
-      id: '/dropshipping'
-      path: '/dropshipping'
-      fullPath: '/dropshipping'
-      preLoaderRoute: typeof DropshippingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1067,7 +1047,6 @@ const rootRouteChildren: RootRouteChildren = {
   CalculateurRoasRoute: CalculateurRoasRoute,
   CodRoute: CodRouteWithChildren,
   ContactRoute: ContactRoute,
-  DropshippingRoute: DropshippingRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

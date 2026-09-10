@@ -309,7 +309,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
 <h2>Conclusion</h2>
 <p>Le dropshipping reste viable en 2026 — mais il ne pardonne plus l'amateurisme. Pas de pilotage du ROAS net = pas de rentabilité. Netodash te calcule ce ROAS net chaque jour, par produit, sans Excel.</p>
-<p><a href="/dropshipping">→ Voir Netodash Dropshipping</a></p>
+<p><a href="/">→ Voir Netodash</a></p>
 `,
   },
 ];

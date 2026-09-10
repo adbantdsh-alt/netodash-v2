@@ -1,31 +1,68 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+// Page d'accueil = la landing Netodash Dropshipping, servie directement à la
+// racine du domaine.
+//
+// Avant, `/` était un « chooser » proposant deux cartes (Dropshipping / COD) et
+// la vraie landing vivait sur `/dropshipping`. Le COD est retiré du produit :
+// on supprime donc l'étape intermédiaire et `/` sert directement la landing.
+//
+// `/dropshipping` reste accessible en 301 vers `/` (règle Nitro dans
+// vite.config.ts) pour ne pas casser les liens et le référencement existants.
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Logo } from "@/components/Logo";
+import heroDropshipping from "@/assets/hero-dropshipping.jpg";
+
+import { LANDING_COPY } from "@/lib/landing-copy";
+import { SiteHeader } from "@/components/landing/SiteHeader";
+import { SiteFooter } from "@/components/landing/SiteFooter";
+import { RoasCalculator } from "@/components/landing/RoasCalculator";
 import { BetaCtaButton } from "@/components/BetaCtaButton";
+import {
+  TrustStats,
+  Pillars,
+  BeforeAfter,
+  ProductRanking,
+  DecisionEngine,
+  Testimonials,
+  TrustSecurity,
+  Pricing,
+  FinalCta,
+  CompetitorComparison,
+} from "@/components/landing/SharedSections";
 
-
-const SEO_TITLE = "Calculateur ROAS Gratuit — Netodash";
-const SEO_DESC =
-  "Calcule ton Break-Even ROAS, ton ROAS actuel et ton CPA max gratuitement. Outil dropshipping, COD, Shopify, Meta Ads et TikTok Ads.";
+const COPY = LANDING_COPY.dropshipping;
 const URL = "https://netodash.com/";
+const OG =
+  "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d66852f5-8da1-4b8f-9896-dae638808602/id-preview-45aaf504--c8da90f6-5654-47cb-a390-4f9faf5e58ee.lovable.app-1777284800740.png";
 
 const JSONLD = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebApplication",
-      name: "Calculateur ROAS Gratuit — Netodash",
-      url: URL,
+      "@type": "SoftwareApplication",
+      name: "Netodash",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      description: SEO_DESC,
-      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+      url: URL,
+      description: COPY.seoDescription,
+      offers: {
+        "@type": "Offer",
+        price: "5",
+        priceCurrency: "USD",
+        category: "subscription",
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        ratingCount: "127",
+      },
     },
     {
-      "@type": "Organization",
-      name: "Netodash",
-      url: URL,
-      logo: "https://netodash.com/netodash-logo.png",
+      "@type": "FAQPage",
+      mainEntity: COPY.faq.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
     },
   ],
 };
@@ -33,212 +70,129 @@ const JSONLD = {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: SEO_TITLE },
-      { name: "description", content: SEO_DESC },
+      { title: COPY.seoTitle },
+      { name: "description", content: COPY.seoDescription },
       { name: "robots", content: "index, follow, max-image-preview:large" },
       { property: "og:type", content: "website" },
-      { property: "og:title", content: SEO_TITLE },
-      { property: "og:description", content: SEO_DESC },
+      { property: "og:title", content: COPY.seoTitle },
+      { property: "og:description", content: COPY.seoDescription },
       { property: "og:url", content: URL },
-      {
-        name: "keywords",
-        content:
-          "calculateur ROAS, ROAS calculator, break even ROAS, calcul ROAS gratuit, CPA max, ROAS dropshipping, ROAS COD",
-      },
+      { property: "og:image", content: OG },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: SEO_TITLE },
-      { name: "twitter:description", content: SEO_DESC },
+      { name: "twitter:title", content: COPY.seoTitle },
+      { name: "twitter:description", content: COPY.seoDescription },
+      { name: "twitter:image", content: OG },
     ],
     links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      { type: "application/ld+json", children: JSON.stringify(JSONLD) },
-    ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(JSONLD) }],
   }),
-  component: LandingChooser,
+  component: HomeLanding,
 });
 
-function LandingChooser() {
-  // Plus de redirection auto : la home doit s'afficher pour permettre le choix.
+function HomeLanding() {
+  // Accent BLEU (Dropshipping) sur toute la page. Plus de bascule vers le COD :
+  // c'est le mode par défaut du produit désormais.
   useEffect(() => {
-    document.documentElement.setAttribute("data-mode", "cod");
+    document.documentElement.setAttribute("data-mode", "dropshipping");
+    try {
+      localStorage.setItem("netodash:landing-pref", "dropshipping");
+    } catch {}
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Top bar minimal */}
-      <header className="brutal-border-thin border-t-0 border-l-0 border-r-0">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Logo mode="cod" priority className="h-8 md:h-10 w-auto object-contain shrink-0" />
-          </div>
-          <div className="flex items-center gap-2">
-            <Link
-              to="/calculateur-roas"
-              className="hidden sm:inline-block brutal-border-thin px-3 py-2 font-bold uppercase tracking-wider text-xs hover:bg-accent hover:text-accent-foreground hover:border-accent"
-            >
-              Calc. ROAS gratuit
-            </Link>
-            <Link
-              to="/auth"
-              className="hidden sm:inline-block px-3 py-2 font-bold uppercase tracking-wider text-xs hover:text-accent"
-            >
-              Connexion
-            </Link>
-            <Link
-              to="/contact"
-              className="brutal-border-thin px-3 py-2 font-bold uppercase tracking-wider text-xs"
-            >
-              Contact
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background text-foreground">
+      <SiteHeader variant="dropshipping" />
 
-      {/* Chooser */}
-      <main className="flex-1 brutal-grid">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-12 md:py-20">
-          <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
-            <div className="font-mono text-xs md:text-sm uppercase tracking-widest text-muted-foreground font-bold mb-4">
-              ▍ BIENVENUE SUR NETODASH
+      {/* Hero */}
+      <section id="top" className="brutal-grid scroll-mt-24">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-10 md:py-16 lg:py-20">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="brutal-border-thin inline-block px-3 py-1 text-[10px] md:text-xs uppercase tracking-widest font-bold font-mono bg-accent text-accent-foreground border-accent mb-6">
+              {COPY.heroBadge}
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-[0.95]">
-              L'OUTIL DE <span className="text-accent">RENTABILITÉ 360°</span><br />
-              POUR DROPSHIPPING & COD
+            <h1 className="font-black tracking-tighter leading-[0.95] text-balance">
+              <span className="block text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                {COPY.heroH1Line1}
+              </span>
+              <span className="block text-accent text-[1.75rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                {COPY.heroH1Line2}
+              </span>
             </h1>
-            <p className="mt-6 font-mono text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              ROAS net, marge réelle, CPA max, taux de livraison COD — toute ta rentabilité dans un seul dashboard.
-              Choisis ton mode pour commencer.
+            <p className="mt-5 md:mt-6 text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-muted-foreground leading-relaxed">
+              {COPY.heroSubtitle}{" "}
+              <span className="text-foreground font-bold">{COPY.heroSubtitleBold}</span>
+            </p>
+            <div className="mt-6 md:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center">
+              <BetaCtaButton variant="hero" />
+              <a
+                href="#pricing"
+                className="brutal-border px-6 md:px-10 py-3 md:py-4 font-black uppercase tracking-wider text-sm md:text-base text-center hover:bg-foreground hover:text-background"
+              >
+                {COPY.heroCtaSecondary}
+              </a>
+            </div>
+            <p className="mt-4 font-mono text-[11px] md:text-xs text-muted-foreground">
+              {COPY.heroSmallprint}
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
-            <ChoiceCard
-              to="/dropshipping"
-              pref="dropshipping"
-              kicker="INTERNATIONAL · USD · €"
-              title="DROPSHIPPING"
-              tagline="Shopify · Meta · TikTok · Google Ads"
-              points={[
-                "ROAS net après taxes pub Meta",
-                "Marge réelle après Stripe + refunds",
-                "Product Ranking : Rentable / Break Even / Pas rentable",
-                "Analytics Pro avancée (plan Scale)",
-              ]}
-              cta="Voir Netodash Dropshipping →"
-              colorClass="dropshipping"
-            />
-            <ChoiceCard
-              to="/cod"
-              pref="cod"
-              kicker="AFRIQUE DE L'OUEST · FCFA"
-              title="COD"
-              tagline="Cash on Delivery · Call center · Livreurs"
-              points={[
-                "Taux confirmation & livraison par produit",
-                "Coût livraison ventilé par zone",
-                "Profit net en FCFA, par jour, par zone",
-                "Sénégal · CI · Mali · Bénin · Burkina · Togo",
-              ]}
-              cta="Voir Netodash COD →"
-              colorClass="cod"
-            />
-          </div>
-
-          <p className="text-center font-mono text-xs text-muted-foreground mt-12">
-            Tu fais les deux ? <BetaCtaButton variant="inline" /> — dès le plan Starter Drop ($12), COD et Dropshipping inclus. Bêta : Scale 6 mois gratuits + -50 % à vie.
-          </p>
-
-          <section className="mt-12 md:mt-16 max-w-5xl mx-auto grid md:grid-cols-3 gap-4" aria-label="SEO calculateur ROAS">
-            <SeoCard title="Break-Even ROAS" text="Le ROAS minimum à atteindre pour ne pas perdre d'argent sur une vente." />
-            <SeoCard title="ROAS actuel" text="Le ratio entre ton chiffre d'affaires et ta dépense publicitaire réelle." />
-            <SeoCard title="CPA max" text="La dépense publicitaire maximale par commande pour rester rentable." />
-          </section>
         </div>
-      </main>
+      </section>
 
-      <footer className="border-t border-foreground bg-background">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            © {new Date().getFullYear()} NETODASH · BUILT FOR DROPSHIPPING & COD
+      {/* Calculateur ROAS */}
+      <RoasCalculator />
+
+      {/* Aperçu du dashboard */}
+      <section className="brutal-border-thin border-l-0 border-r-0 border-b-0 bg-background brutal-grid relative overflow-hidden">
+        <div className="max-w-[1500px] mx-auto px-4 md:px-6 py-16 md:py-24 grid md:grid-cols-5 gap-10 md:gap-12 items-center">
+          <div className="order-2 md:order-1 md:col-span-3 flex justify-center md:justify-start animate-fade-in">
+            <div className="relative w-full max-w-[820px]">
+              <div className="absolute -inset-3 bg-accent/10 -z-10 brutal-border-thin border-accent" />
+              <img
+                src={heroDropshipping}
+                alt="Aperçu du dashboard Netodash — ROAS net, profit et ranking produits Shopify"
+                width={1408}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto brutal-border bg-background shadow-[12px_12px_0_0_hsl(var(--accent))]"
+              />
+            </div>
           </div>
-          <div className="flex gap-4 font-mono text-xs uppercase tracking-widest">
-            <Link to="/pricing" className="text-muted-foreground hover:text-accent">Tarifs</Link>
-            <Link to="/legal/mentions" className="text-muted-foreground hover:text-accent">Mentions</Link>
-            <Link to="/legal/privacy" className="text-muted-foreground hover:text-accent">Confidentialité</Link>
+          <div className="order-1 md:order-2 md:col-span-2 animate-fade-in">
+            <div className="font-mono text-xs uppercase tracking-widest text-accent mb-3">
+              {COPY.showcaseEyebrow}
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black leading-[0.95] tracking-tight mb-5">
+              {COPY.showcaseTitleHtml.before}
+              <span className="text-accent">{COPY.showcaseTitleHtml.accent}</span>
+              {COPY.showcaseTitleHtml.after}
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground mb-6">
+              {COPY.showcaseLead}
+            </p>
+            <ul className="space-y-2 text-sm md:text-base font-bold">
+              {COPY.showcaseList.map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <span className="text-accent">→</span> {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <TrustStats stats={COPY.trustStats} />
+      <CompetitorComparison />
+      <Pillars pillars={COPY.pillars} />
+
+      <BeforeAfter copy={COPY} />
+      <ProductRanking copy={COPY} mode="dropshipping" />
+      <DecisionEngine copy={COPY} />
+      <Testimonials copy={COPY} />
+      <TrustSecurity />
+      <Pricing copy={COPY} />
+      <FinalCta copy={COPY} />
+      <SiteFooter tagline={COPY.footerTagline} baseline={COPY.footerBaseline} />
     </div>
-  );
-}
-
-function ChoiceCard({
-  to,
-  pref,
-  kicker,
-  title,
-  tagline,
-  points,
-  cta,
-  colorClass,
-}: {
-  to: "/dropshipping" | "/cod";
-  pref: "dropshipping" | "cod";
-  kicker: string;
-  title: string;
-  tagline: string;
-  points: string[];
-  cta: string;
-  colorClass: "dropshipping" | "cod";
-}) {
-  const remember = () => {
-    try {
-      localStorage.setItem("netodash:landing-pref", pref);
-    } catch {}
-  };
-
-  // Bleu pour drop, orange pour cod via une div racine qui force data-mode local
-  // (l'autre carte garde l'accent global = orange par défaut).
-  return (
-    <Link
-      to={to}
-      onClick={remember}
-      data-mode={colorClass}
-      className="group block brutal-border bg-background p-7 md:p-9 transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[12px_12px_0_0_hsl(var(--accent))]"
-    >
-      <div className="font-mono text-[10px] md:text-xs uppercase tracking-widest font-bold text-accent mb-3">
-        {kicker}
-      </div>
-      <div className="text-5xl md:text-6xl font-black tracking-tighter leading-none">
-        {title}
-      </div>
-      <div className="mt-2 font-mono text-xs md:text-sm text-muted-foreground">
-        {tagline}
-      </div>
-
-      <ul className="mt-6 space-y-2.5">
-        {points.map((p) => (
-          <li key={p} className="flex items-start gap-2 text-sm">
-            <span className="text-accent font-black mt-0.5">→</span>
-            <span>{p}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-8 brutal-border bg-accent text-accent-foreground border-accent px-5 py-3 font-black uppercase tracking-wider text-sm text-center group-hover:bg-foreground group-hover:text-background group-hover:border-foreground">
-        {cta}
-      </div>
-    </Link>
-  );
-}
-
-function SeoCard({ title, text }: { title: string; text: string }) {
-  return (
-    <article className="brutal-border-thin bg-background p-5">
-      <h2 className="text-lg font-black tracking-tight">{title}</h2>
-      <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
-        {text}
-      </p>
-    </article>
   );
 }

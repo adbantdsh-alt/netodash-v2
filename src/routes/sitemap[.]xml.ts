@@ -9,18 +9,14 @@ interface SitemapEntry {
   priority?: string;
 }
 
-import { COD_COUNTRIES } from "@/lib/cod-countries";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 
+// Le COD est retiré du produit : plus aucune URL /cod* dans le sitemap.
+// Elles sont redirigées en 301 vers / (voir les routeRules Nitro dans
+// vite.config.ts) — un 301 transmet le référencement, l'absence du sitemap
+// accélère simplement la sortie de l'index.
 const ENTRIES: SitemapEntry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/dropshipping", changefreq: "weekly", priority: "0.95" },
-  { path: "/cod", changefreq: "weekly", priority: "0.95" },
-  ...COD_COUNTRIES.map((c) => ({
-    path: `/cod/${c.slug}`,
-    changefreq: "monthly" as const,
-    priority: "0.85",
-  })),
   { path: "/calculateur-roas", changefreq: "monthly", priority: "0.9" },
   { path: "/pricing", changefreq: "monthly", priority: "0.9" },
   { path: "/blog", changefreq: "weekly", priority: "0.85" },

@@ -156,6 +156,20 @@ export default defineConfig({
       "/api/public/extension-track": {
         cors: true,
       },
+
+      // ── Redirections 301 (le COD est retiré du produit) ──────────────────
+      // `/` sert désormais directement la landing. Ces anciennes URLs portaient
+      // du référencement : un 301 le transfère vers `/` au lieu de le perdre.
+      // Posées au niveau Nitro (donc avant la route) pour être de vrais 301
+      // côté serveur, et pas des redirections côté navigateur.
+      //
+      // ATTENTION : le handler de Nitro lit `options.status`, PAS `statusCode`
+      // (vérifié dans le Worker généré : `redirect$1(target, m.options?.status)`).
+      // Si on ne met que `statusCode`, Nitro injecte son défaut `status: 307`
+      // et la redirection devient TEMPORAIRE — ce qui ne transfère pas le SEO.
+      "/dropshipping": { redirect: { to: "/", status: 301 } },
+      "/cod": { redirect: { to: "/", status: 301 } },
+      "/cod/**": { redirect: { to: "/", status: 301 } },
     },
   },
   vite: {

@@ -195,7 +195,7 @@ function CalculateurRoasPage() {
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <BetaCtaButton variant="hero" className="px-6 py-3 text-sm hover:opacity-90" />
               <Link
-                to="/dropshipping"
+                to="/"
                 className="brutal-border-thin border-background px-6 py-3 font-bold uppercase tracking-wider text-sm hover:bg-background hover:text-foreground"
               >
                 Découvrir Netodash

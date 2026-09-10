@@ -36,13 +36,8 @@ export function SiteFooter({
             </div>
             <ul className="space-y-2 font-mono text-sm">
               <li>
-                <Link to="/dropshipping" className="text-background/70 hover:text-accent">
-                  Pour Dropshipping
-                </Link>
-              </li>
-              <li>
-                <Link to="/cod" className="text-background/70 hover:text-accent">
-                  Pour COD (Afrique)
+                <Link to="/" className="text-background/70 hover:text-accent">
+                  Accueil
                 </Link>
               </li>
               <li>
