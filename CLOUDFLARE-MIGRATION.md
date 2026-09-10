@@ -65,6 +65,44 @@ Si tu veux juste que le domaine serve Cloudflare sans changer de registrar : `Co
 
 ## 3. Déployer le Worker
 
+### ⚠️ D'abord : la branche doit être sur GitHub
+
+Cloudflare Workers Builds construit **`main`**. Or `main` contient encore l'ancien
+code (preset `vercel` + `wrangler.jsonc` du template Lovable). D'où l'échec :
+
+```
+✘ [ERROR] The entry-point file at "@tanstack/react-start/server-entry" was not found.
+```
+
+**Cause exacte** : l'ancien `wrangler.jsonc` de `main` déclarait
+`"main": "@tanstack/react-start/server-entry"`. Ce n'est pas un chemin de fichier
+mais un sous-chemin de paquet : wrangler ne peut pas le résoudre. Ce fichier était
+un vestige inutilisable du template Lovable. Il est **supprimé** sur cette branche,
+donc wrangler retombe sur `.wrangler/deploy/config.json` (généré par le build), qui
+pointe vers `dist/server/wrangler.json`.
+
+Deux options :
+
+- **A (recommandé pour tester)** — dans Cloudflare → Workers & Pages → netodash →
+  Settings → Build → **Branch control**, mets la branche de production sur
+  `cloudflare-migration`. Tu ne touches pas à `main`.
+- **B** — merge `cloudflare-migration` dans `main` quand tu es prêt à basculer la
+  production.
+
+### Configuration du build dans Cloudflare
+
+| Réglage | Valeur |
+|---|---|
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | *(racine du dépôt)* |
+
+`npx wrangler deploy` **sans `--config`** fonctionne : le build génère
+`.wrangler/deploy/config.json` qui redirige vers `dist/server/wrangler.json`.
+Vérifié localement — `Total Upload: 5249.34 KiB / gzip: 967.71 KiB`, binding `ASSETS`.
+
+### Déploiement manuel (alternative)
+
 ```bash
 npm ci
 npx wrangler login          # une seule fois
