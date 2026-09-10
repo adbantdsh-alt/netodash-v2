@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "postbuild": "node scripts/patch-vercel-tslib.cjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "deploy": "vite build && wrangler deploy",
+    "cf:dev": "wrangler dev",
+    "cf:types": "wrangler types",
+    "cf:tail": "wrangler tail",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
@@ -91,6 +94,7 @@
     "prettier": "^3.7.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "wrangler": "^4.100.0"
   }
 }

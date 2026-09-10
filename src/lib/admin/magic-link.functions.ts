@@ -7,6 +7,7 @@ import {
   requireAdmin,
 } from "@/lib/admin/admin-auth.middleware.server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { SITE_URL } from "@/lib/site-url.server";
 
 const MAGIC_LINK_TTL_SECONDS = 3600;
 
@@ -44,11 +45,7 @@ export const adminGenerateForcedMagicLink = createServerFn({ method: "POST" })
       if (upErr) throw new Error(upErr.message);
     }
 
-    const siteUrl = (
-      process.env.PUBLIC_SITE_URL ??
-      process.env.VITE_PUBLIC_SITE_URL ??
-      "https://app.netodash.com"
-    ).replace(/\/$/, "");
+    const siteUrl = SITE_URL;
 
     const { data: linkData, error: linkErr } = await supabaseAdmin.auth.admin.generateLink({
       type: "magiclink",

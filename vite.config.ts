@@ -12,10 +12,9 @@ const _require = createRequire(import.meta.url);
 
 /**
  * tslib est importé comme side-effect par @supabase/auth-js.
- * Sur Vercel Lambda (pas de node_modules), `import "tslib"` échoue.
- * Ce plugin Rollup résout "tslib" vers son fichier réel dans node_modules
- * et le marque sans side-effects → Rollup l'inline OU supprime l'import.
- * Ce plugin est ajouté aux deux builds : Vite ET Nitro (qui génère les _ssr/*.mjs).
+ * On le résout vers son fichier réel dans node_modules et on le marque sans
+ * side-effects → Rollup l'inline au lieu d'émettre un `import "tslib"` nu.
+ * Utile pour tout bundle serverless (Workers comme Lambda).
  */
 const tslibResolvePlugin = {
   name: "resolve-tslib-inline",
@@ -37,10 +36,99 @@ const tslibResolvePlugin = {
   },
 } satisfies Plugin;
 
+/**
+ * En-têtes de sécurité appliqués à toutes les réponses.
+ * Posés ici (et non dans un `_headers` statique) car les pages sont rendues
+ * côté serveur : un fichier `_headers` Cloudflare ne couvre que les assets.
+ */
+const SECURITY_HEADERS: Record<string, string> = {
+  "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(self)",
+  "Cross-Origin-Opener-Policy": "same-origin",
+};
+
+/**
+ * CSP volontairement en **Report-Only** : elle observe sans jamais bloquer.
+ * À passer en `Content-Security-Policy` (enforce) une fois les rapports propres,
+ * sinon risque d'écran blanc sur l'hydratation TanStack (scripts inline).
+ */
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  // TanStack Start injecte des scripts d'hydratation inline : 'unsafe-inline'
+  // reste nécessaire tant qu'on n'a pas câblé de nonce.
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com",
+  "frame-src https://js.stripe.com https://hooks.stripe.com",
+  "form-action 'self' https://checkout.stripe.com",
+].join("; ");
+
 export default defineConfig({
-  // Requis pour Vercel : le preset Lovable (cloudflare-module) est ignoré hors sandbox.
+  // Cible de déploiement : Cloudflare Workers (module ES).
+  //
+  // Note : `cloudflare-module` est le preset PAR DÉFAUT du preset Lovable
+  // (@lovable.dev/vite-tanstack-config) — c'est Vercel qui était la déviation.
+  // Nom canonique du preset Nitro 3 : "cloudflare-module" (stdName: cloudflare_workers).
   nitro: {
-    preset: "vercel",
+    preset: "cloudflare-module",
+    // Date de compatibilité VOLONTAIREMENT PINNÉE.
+    // Sans ça Nitro met la date du jour, ce qui (a) rend le build non
+    // reproductible et (b) casse `wrangler dev` si le workerd installé est plus
+    // ancien que cette date, ou fait refuser le déploiement si l'horloge de la
+    // machine est en avance sur Cloudflare.
+    // 2026-06-18 = dernière date supportée par le workerd de wrangler 4.x ici.
+    // À faire évoluer en même temps que la dépendance `wrangler`.
+    compatibilityDate: { cloudflare: "2026-06-18" },
+    // Nitro ne scanne AUCUN répertoire par défaut (scanDirs: []) : sans cette
+    // ligne, `server/tasks/**` est ignoré et les Cron Triggers se déclenchent
+    // dans le vide (`const tasks = {}` dans le Worker généré).
+    serverDir: "./server",
+    // Mêmes chemins de sortie que la config Lovable en sandbox, pour que
+    // l'arborescence du build soit prévisible (dist/server + dist/client).
+    output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" },
+    cloudflare: {
+      // Injecte nodejs_compat dans la config wrangler générée.
+      nodeCompat: true,
+      // Laisse Nitro ÉCRIRE lui-même wrangler.jsonc (main, assets, crons…).
+      // Les clés qu'on mettrait à la main dans wrangler.jsonc seraient ignorées
+      // avec un avertissement : tout passe donc par `cloudflare.wrangler` ci-dessous.
+      deployConfig: true,
+      // Priorité juste sous les valeurs générées par Nitro (`main`, `assets`,
+      // `triggers.crons`) : c'est ici qu'on met ce que Nitro ne calcule pas.
+      //
+      // @ts-expect-error — `wrangler` est bien lu par Nitro au runtime
+      // (vérifié : ces valeurs apparaissent dans dist/server/wrangler.json),
+      // mais le type public de @lovable.dev/vite-tanstack-config déclare
+      // `cloudflare` de façon fermée avec seulement nodeCompat/deployConfig.
+      // Si cette directive devient inutile, c'est que le type a été complété :
+      // la retirer.
+      wrangler: {
+        name: "netodash",
+        // Logs/analytics d'exécution dans le dashboard Cloudflare.
+        observability: { enabled: true },
+        // On garde l'URL *.workers.dev le temps de valider le déploiement ;
+        // le domaine netodash.com est rattaché ensuite (dashboard ou `routes`).
+        workers_dev: true,
+      },
+    },
+    // Active le runtime de tâches Nitro → génère les `crons` dans la config
+    // wrangler et branche le handler `scheduled` du Worker.
+    experimental: {
+      tasks: true,
+    },
+    // Cron Triggers Cloudflare : remplace l'endpoint HTTP non authentifié
+    // /api/public/hooks/shopify-sync (voir server/tasks/shopify-sync.ts).
+    scheduledTasks: {
+      "0 */2 * * *": ["shopify-sync"],
+    },
     // Le hook rollup:before s'exécute APRÈS que la config par défaut de Nitro est prête
     // (avec ses plugins inject+alias déjà en place). On peut donc ajouter notre plugin
     // sans être écrasé par le defu qui ignore rollupConfig.plugins si le default existe déjà.
@@ -51,13 +139,22 @@ export default defineConfig({
       },
     },
     routeRules: {
-      "/api/public/**": {
-        cors: true,
+      // En-têtes de sécurité sur tout le site.
+      "/**": {
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
+          ...SECURITY_HEADERS,
+          "Content-Security-Policy-Report-Only": CSP_REPORT_ONLY,
         },
+      },
+      // Assets fingerprintés par Vite : immuables.
+      "/assets/**": {
+        headers: { "cache-control": "public, max-age=31536000, immutable" },
+      },
+      // Seul endpoint public réellement appelé depuis un navigateur
+      // (l'extension Chrome). Les webhooks Stripe/Unitech sont server-to-server
+      // et n'ont pas besoin de CORS — on ne l'ouvre donc plus à tout /api/public/**.
+      "/api/public/extension-track": {
+        cors: true,
       },
     },
   },

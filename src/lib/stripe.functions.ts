@@ -3,25 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 import { resolveBetaStripeCoupon } from "@/lib/beta-discount.server";
-
-const ALLOWED_RETURN_ORIGINS = new Set([
-  "https://netodash.com",
-  "https://www.netodash.com",
-  "https://netodash-v2.vercel.app",
-  "https://netodash.lovable.app",
-  "https://id-preview--c8da90f6-5654-47cb-a390-4f9faf5e58ee.lovable.app",
-  "http://localhost:5173",
-  "http://localhost:3000",
-]);
-
-function assertSafeReturnUrl(input: string): string {
-  const u = new URL(input);
-  const origin = `${u.protocol}//${u.host}`;
-  if (!ALLOWED_RETURN_ORIGINS.has(origin)) {
-    throw new Error("Disallowed returnUrl origin");
-  }
-  return input;
-}
+import { assertAllowedOrigin } from "@/lib/site-url.server";
 
 const Input = z.object({
   priceId: z.string().regex(/^[a-zA-Z0-9_-]+$/),
@@ -47,7 +29,7 @@ export const createStripeCheckoutSession = createServerFn({ method: "POST" })
       line_items: [{ price: stripePrice.id, quantity: 1 }],
       mode: isRecurring ? "subscription" : "payment",
       ui_mode: "embedded_page",
-      return_url: assertSafeReturnUrl(data.returnUrl),
+      return_url: assertAllowedOrigin(data.returnUrl),
       payment_method_types: ["card"],
       ...(userEmail && { customer_email: userEmail }),
       metadata: { userId, priceId: data.priceId },

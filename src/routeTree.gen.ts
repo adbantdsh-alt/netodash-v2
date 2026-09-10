@@ -56,7 +56,6 @@ import { Route as AdminAdminAffiliatesRouteImport } from './routes/_admin.admin.
 import { Route as ApiPublicShopifyInstallRouteImport } from './routes/api/public/shopify/install'
 import { Route as ApiPublicShopifyCallbackRouteImport } from './routes/api/public/shopify/callback'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
-import { Route as ApiPublicHooksShopifySyncRouteImport } from './routes/api/public/hooks/shopify-sync'
 import { Route as AdminAdminUsersIdRouteImport } from './routes/_admin.admin.users.$id'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -294,12 +293,6 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksShopifySyncRoute =
-  ApiPublicHooksShopifySyncRouteImport.update({
-    id: '/api/public/hooks/shopify-sync',
-    path: '/api/public/hooks/shopify-sync',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AdminAdminUsersIdRoute = AdminAdminUsersIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -350,7 +343,6 @@ export interface FileRoutesByFullPath {
   '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
-  '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
   '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
@@ -397,7 +389,6 @@ export interface FileRoutesByTo {
   '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
-  '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
   '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
@@ -449,7 +440,6 @@ export interface FileRoutesById {
   '/api/public/extension-track': typeof ApiPublicExtensionTrackRoute
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/_admin/admin/users/$id': typeof AdminAdminUsersIdRoute
-  '/api/public/hooks/shopify-sync': typeof ApiPublicHooksShopifySyncRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
   '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
@@ -500,7 +490,6 @@ export interface FileRouteTypes {
     | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
-    | '/api/public/hooks/shopify-sync'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/callback'
     | '/api/public/shopify/install'
@@ -547,7 +536,6 @@ export interface FileRouteTypes {
     | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
-    | '/api/public/hooks/shopify-sync'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/callback'
     | '/api/public/shopify/install'
@@ -598,7 +586,6 @@ export interface FileRouteTypes {
     | '/api/public/extension-track'
     | '/api/public/unitech-webhook'
     | '/_admin/admin/users/$id'
-    | '/api/public/hooks/shopify-sync'
     | '/api/public/payments/webhook'
     | '/api/public/shopify/callback'
     | '/api/public/shopify/install'
@@ -627,7 +614,6 @@ export interface RootRouteChildren {
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   ApiPublicExtensionTrackRoute: typeof ApiPublicExtensionTrackRoute
   ApiPublicUnitechWebhookRoute: typeof ApiPublicUnitechWebhookRoute
-  ApiPublicHooksShopifySyncRoute: typeof ApiPublicHooksShopifySyncRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicShopifyCallbackRoute: typeof ApiPublicShopifyCallbackRoute
   ApiPublicShopifyInstallRoute: typeof ApiPublicShopifyInstallRoute
@@ -964,13 +950,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/shopify-sync': {
-      id: '/api/public/hooks/shopify-sync'
-      path: '/api/public/hooks/shopify-sync'
-      fullPath: '/api/public/hooks/shopify-sync'
-      preLoaderRoute: typeof ApiPublicHooksShopifySyncRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_admin/admin/users/$id': {
       id: '/_admin/admin/users/$id'
       path: '/$id'
@@ -1102,7 +1081,6 @@ const rootRouteChildren: RootRouteChildren = {
   LegalPrivacyRoute: LegalPrivacyRoute,
   ApiPublicExtensionTrackRoute: ApiPublicExtensionTrackRoute,
   ApiPublicUnitechWebhookRoute: ApiPublicUnitechWebhookRoute,
-  ApiPublicHooksShopifySyncRoute: ApiPublicHooksShopifySyncRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicShopifyCallbackRoute: ApiPublicShopifyCallbackRoute,
   ApiPublicShopifyInstallRoute: ApiPublicShopifyInstallRoute,

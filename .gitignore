@@ -19,6 +19,14 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+worker-configuration.d.ts
+
+# Secrets — ne jamais committer
+.env.local
+.env.*.local
+
+# Ancien hébergeur (Vercel) — ne plus committer d'artefacts de build
+.vercel
 
 # Editor directories and files
 .vscode/*

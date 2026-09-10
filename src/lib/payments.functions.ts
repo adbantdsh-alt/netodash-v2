@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { safeOrigin } from "./site-url.server";
 import {
   PLAN_PRICING,
   generateReference,
@@ -19,33 +20,9 @@ const CreateInput = z.object({
     .max(15)
     .regex(/^[0-9]+$/)
     .optional(),
-  // origin is accepted but strictly validated against the server allowlist below
+  // origin is accepted but strictly validated against the server allowlist
   origin: z.string().url().optional(),
 });
-
-/** Allowlist of legitimate origins that may receive payment redirect callbacks. */
-const ALLOWED_ORIGINS = new Set<string>([
-  "https://netodash.com",
-  "https://www.netodash.com",
-  "https://netodash.lovable.app",
-  "https://id-preview--c8da90f6-5654-47cb-a390-4f9faf5e58ee.lovable.app",
-  "http://localhost:3000",
-  "http://localhost:5173",
-  "http://localhost:8080",
-]);
-
-const DEFAULT_ORIGIN = "https://netodash.com";
-
-function safeOrigin(input: string | undefined): string {
-  if (!input) return DEFAULT_ORIGIN;
-  try {
-    const u = new URL(input);
-    const normalized = `${u.protocol}//${u.host}`;
-    return ALLOWED_ORIGINS.has(normalized) ? normalized : DEFAULT_ORIGIN;
-  } catch {
-    return DEFAULT_ORIGIN;
-  }
-}
 
 export const createUnitechCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

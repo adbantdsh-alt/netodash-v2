@@ -23,7 +23,8 @@ export function ImpersonationBanner() {
     if (!info) return;
     setBusy(true);
     try {
-      await stopImpersonation({ data: { userId: info.userId } });
+      // Plus de userId transmis : le serveur agit sur le compte authentifié.
+      await stopImpersonation({});
       await supabase.auth.signOut();
       window.location.href = "/admin";
     } finally {

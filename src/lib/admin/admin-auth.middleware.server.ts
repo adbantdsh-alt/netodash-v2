@@ -9,8 +9,13 @@ import type { AdminRole } from "./admin-auth.types";
 export type { AdminRole } from "./admin-auth.types";
 export { ensureRole } from "./admin-auth.types";
 
+/**
+ * Auto-bootstrap super-admin, DÉSACTIVÉ par défaut (voir auth.functions.ts).
+ * La liste doit venir de l'environnement ; aucune adresse n'est codée en dur.
+ * Les comptes déjà présents dans `admin.accounts` restent administrateurs.
+ */
 const SUPER_ADMIN_EMAILS = new Set(
-  (process.env.SUPER_ADMIN_EMAILS ?? "adbaxgoat@gmail.com,adbaecomx@gmail.com")
+  (process.env.SUPER_ADMIN_EMAILS ?? "")
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean),

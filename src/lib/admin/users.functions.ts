@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import {
@@ -558,6 +559,29 @@ export const adminImpersonateUser = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     ensureRole(context.adminRole, ["super_admin", "support"]);
     const { admin } = context;
+
+    // SECURITY: interdiction d'impersonner un autre compte ADMIN.
+    // Sans ce garde-fou, un `support` pouvait générer un magic link pour le
+    // compte `super_admin`, obtenir une session complète à son nom, puis
+    // exécuter les actions réservées au super_admin (ban, suppression RGPD,
+    // invitation d'admins, export de auth.users). C'était une escalade
+    // horizontale → verticale complète.
+    const { data: targetIsAdmin, error: adminCheckErr } = (await admin.rpc(
+      "is_admin" as never,
+      { _uid: data.userId } as never,
+    )) as unknown as { data: boolean | null; error: { message: string } | null };
+
+    if (adminCheckErr) {
+      console.error("[adminImpersonateUser] is_admin check failed", adminCheckErr);
+      throw new Response("Impossible de vérifier la cible.", { status: 500 });
+    }
+    if (targetIsAdmin) {
+      throw new Response(
+        "Forbidden: impossible d'impersonner un compte administrateur.",
+        { status: 403 },
+      );
+    }
+
     const { data: prof } = await admin
       .from("profiles")
       .select("email")
@@ -594,19 +618,30 @@ export const adminImpersonateUser = createServerFn({ method: "POST" })
     };
   });
 
+// Efface le marqueur d'impersonation du compte COURANT.
+//
+// SECURITY: cette fonction n'avait AUCUNE authentification et acceptait un
+// `userId` arbitraire tout en utilisant la clé service_role. N'importe qui
+// pouvait donc effacer `impersonated_by`/`impersonated_at` de n'importe quel
+// compte — écriture non authentifiée sur `auth.users` et suppression de la
+// trace d'impersonation (anti-forensics).
+//
+// Désormais : authentification obligatoire, et l'action ne porte QUE sur le
+// compte de l'appelant. Plus aucun `userId` fourni par le client.
 export const stopImpersonation = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => z.object({ userId: z.string().uuid() }).parse(input))
-  .handler(async ({ data }) => {
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const callerId = context.userId as string;
     const { createClient } = await import("@supabase/supabase-js");
     const admin = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
       { auth: { persistSession: false, autoRefreshToken: false } },
     );
-    const { data: u } = await admin.auth.admin.getUserById(data.userId);
+    const { data: u } = await admin.auth.admin.getUserById(callerId);
     const meta = (u.user?.user_metadata ?? {}) as Record<string, unknown>;
     delete meta.impersonated_by;
     delete meta.impersonated_at;
-    await admin.auth.admin.updateUserById(data.userId, { user_metadata: meta });
+    await admin.auth.admin.updateUserById(callerId, { user_metadata: meta });
     return { ok: true };
   });

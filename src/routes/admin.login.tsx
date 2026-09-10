@@ -53,12 +53,11 @@ function AdminLoginPage() {
         throw new Error("Session non établie. Réessaie dans quelques secondes.");
       }
 
-      const check = await checkAdminAccount({ data: { userId: data.user.id } });
+      const check = await checkAdminAccount({});
       if (!check.isAdmin) {
         await supabase.auth.signOut();
-        throw new Error(
-          "Ce compte n'est pas autorisé en admin. Utilise adbaxgoat@gmail.com ou contacte le support.",
-        );
+        // Ne pas divulguer l'e-mail d'un compte privilégié ici.
+        throw new Error("Ce compte n'est pas autorisé en admin. Contacte le support.");
       }
 
       await getSupabaseAuthHeaders();
