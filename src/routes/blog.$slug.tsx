@@ -152,7 +152,7 @@ function BlogPostPage() {
                 key={o.slug}
                 to="/blog/$slug"
                 params={{ slug: o.slug }}
-                className="brutal-border bg-background p-5 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_hsl(var(--accent))] transition-transform block"
+                className="brutal-border bg-background p-5 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--accent)] transition-transform block"
               >
                 <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-accent mb-2">
                   {o.category}

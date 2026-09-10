@@ -428,7 +428,7 @@ export function Pricing({
               key={p.name}
               className={`flex flex-col relative ${
                 p.highlight
-                  ? "brutal-border border-accent bg-background md:scale-[1.04] md:-my-2 shadow-[8px_8px_0_0_hsl(var(--accent))] p-8"
+                  ? "brutal-border border-accent bg-background md:scale-[1.04] md:-my-2 shadow-[8px_8px_0_0_var(--accent)] p-8"
                   : "brutal-border-thin bg-muted/20 p-7 opacity-95"
               }`}
             >

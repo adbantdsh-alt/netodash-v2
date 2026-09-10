@@ -185,7 +185,7 @@ function CodLanding() {
 function PhoneMockup() {
   return (
     <div className="relative">
-      <div className="brutal-border bg-foreground p-2 rounded-[36px] w-[280px] md:w-[320px] shadow-[12px_12px_0_0_hsl(var(--accent))]">
+      <div className="brutal-border bg-foreground p-2 rounded-[36px] w-[280px] md:w-[320px] shadow-[12px_12px_0_0_var(--accent)]">
         <div className="bg-background rounded-[28px] overflow-hidden">
           <div className="h-6 bg-foreground/5 flex items-center justify-center">
             <div className="w-20 h-1.5 bg-foreground rounded-full" />

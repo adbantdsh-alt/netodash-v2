@@ -154,7 +154,7 @@ function HomeLanding() {
                 height={1024}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-auto brutal-border bg-background shadow-[12px_12px_0_0_hsl(var(--accent))]"
+                className="w-full h-auto brutal-border bg-background shadow-[12px_12px_0_0_var(--accent)]"
               />
             </div>
           </div>

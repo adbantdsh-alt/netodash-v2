@@ -74,7 +74,7 @@ function BlogIndex() {
       <main className="max-w-[1200px] mx-auto px-4 md:px-6 pb-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {BLOG_POSTS.map((post) => (
-            <article key={post.slug} className="brutal-border bg-background p-6 flex flex-col hover:-translate-y-1 hover:shadow-[8px_8px_0_0_hsl(var(--accent))] transition-transform">
+            <article key={post.slug} className="brutal-border bg-background p-6 flex flex-col hover:-translate-y-1 hover:shadow-[8px_8px_0_0_var(--accent)] transition-transform">
               <div className="font-mono text-[10px] uppercase tracking-widest font-bold text-accent mb-3">
                 {post.category} · {post.readMin} min
               </div>

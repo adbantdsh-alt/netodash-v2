@@ -6,7 +6,8 @@
 
 /*
  * NETODASH — Brutalist Design System
- * Pure black / pure white / orange #FF4500 (oklch ~0.65 0.22 35)
+ * Pure black / pure white / accent émeraude #10B981
+ * Accent UNIQUE (plus de bascule orange/bleu par mode métier).
  * No rounded corners, no shadows, no gradients.
  */
 
@@ -71,26 +72,26 @@
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.40 0 0);
-  --accent: oklch(0.65 0.22 35);          /* #FF4500 orange (kept) */
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.65 0.22 35);     /* same orange for danger */
+  --accent: #10b981;                      /* emeraude — accent UNIQUE du produit */
+  --accent-foreground: oklch(0 0 0);      /* texte noir : contraste 8.3:1 sur #10b981 */
+  --destructive: oklch(0.58 0.22 25);     /* rouge — distinct de l'accent */
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0 0 0);                 /* black borders on white */
   --input: oklch(0.96 0 0);
-  --ring: oklch(0.65 0.22 35);
+  --ring: #10b981;
   --chart-1: oklch(0 0 0);
-  --chart-2: oklch(0.65 0.22 35);
+  --chart-2: #10b981;
   --chart-3: oklch(0.40 0 0);
   --chart-4: oklch(0.70 0 0);
   --chart-5: oklch(0.20 0 0);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0 0 0);
-  --sidebar-primary: oklch(0.65 0.22 35);
-  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-primary: #10b981;
+  --sidebar-primary-foreground: oklch(0 0 0);
   --sidebar-accent: oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0 0 0);
   --sidebar-border: oklch(0 0 0);
-  --sidebar-ring: oklch(0.65 0.22 35);
+  --sidebar-ring: #10b981;
 }
 
 /* ───────────── DARK MODE (optionnel, toggle utilisateur) ─────────────
@@ -110,15 +111,15 @@
   --secondary-foreground: oklch(0.97 0 0);
   --muted: oklch(0.20 0 0);
   --muted-foreground: oklch(0.70 0 0);
-  --accent: oklch(0.68 0.22 35);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.68 0.22 35);
+  --accent: #10b981;
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.65 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.97 0 0);
   --input: oklch(0.22 0 0);
-  --ring: oklch(0.68 0.22 35);
+  --ring: #10b981;
   --chart-1: oklch(0.97 0 0);
-  --chart-2: oklch(0.68 0.22 35);
+  --chart-2: #10b981;
   --chart-3: oklch(0.70 0 0);
   --chart-4: oklch(0.45 0 0);
   --chart-5: oklch(0.85 0 0);
@@ -126,38 +127,8 @@
   --sidebar-foreground: oklch(0.97 0 0);
   --sidebar-border: oklch(0.97 0 0);
 }
-.dark[data-mode="dropshipping"] {
-  --accent: oklch(0.65 0.22 255);
-  --destructive: oklch(0.65 0.22 255);
-  --ring: oklch(0.65 0.22 255);
-  --chart-2: oklch(0.65 0.22 255);
-}
 .dark ::-webkit-scrollbar-track { background: oklch(0.13 0 0); }
-.dark[data-mode="cod"] ::-webkit-scrollbar-thumb { background: #ff4500; }
-.dark[data-mode="dropshipping"] ::-webkit-scrollbar-thumb { background: #1d5cff; }
-
-/* DROPSHIPPING mode → accent bleu électrique au lieu de l'orange */
-:root[data-mode="dropshipping"] {
-  --accent: oklch(0.58 0.22 255);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.58 0.22 255);
-  --destructive-foreground: oklch(1 0 0);
-  --ring: oklch(0.58 0.22 255);
-  --chart-2: oklch(0.58 0.22 255);
-  --sidebar-primary: oklch(0.58 0.22 255);
-  --sidebar-ring: oklch(0.58 0.22 255);
-  scrollbar-color: #1d5cff #fff;
-}
-:root[data-mode="dropshipping"] ::selection { background: #1d5cff; color: #fff; }
-:root[data-mode="dropshipping"] ::-webkit-scrollbar-thumb { background: #1d5cff; }
-
-/* Scrollbar thumb — orange COD */
-:root[data-mode="cod"] {
-  scrollbar-color: #ff4500 #fff;
-}
-:root[data-mode="cod"] ::-webkit-scrollbar-thumb {
-  background: #ff4500;
-}
+.dark ::-webkit-scrollbar-thumb { background: #10b981; }
 
 @layer base {
   * {
@@ -183,11 +154,11 @@
   /* Numeric tabular figures everywhere by default for KPIs */
   .tabular { font-variant-numeric: tabular-nums; }
 
-  /* Scrollbar minimal — couleur par défaut COD (orange), surchargée via data-mode */
+  /* Scrollbar minimal — couleur accent (émeraude) */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: #fff; }
-  ::-webkit-scrollbar-thumb { background: #ff4500; }
-  ::selection { background: #FF4500; color: #fff; }
+  ::-webkit-scrollbar-thumb { background: #10b981; }
+  ::selection { background: #10b981; color: #000; }
 }
 
 @layer components {
@@ -228,8 +199,8 @@
   --ps-w: 240px;
   --ps-pad: 4px;
   --ps-radius: 999px;
-  --ps-accent: #1d5cff;          /* dropshipping = bleu */
-  --ps-accent-soft: rgba(29,92,255,0.55);
+  --ps-accent: #10b981;          /* accent unique émeraude */
+  --ps-accent-soft: rgba(16,185,129,0.55);
   --ps-track-1: #ececec;
   --ps-track-2: #d9d9d9;
   --ps-track-3: #c4c4c4;
@@ -258,12 +229,7 @@
 .premium-switch[data-size="sm"] { --ps-h: 38px; --ps-w: 200px; --ps-pad: 3px; }
 .premium-switch[data-size="lg"] { --ps-h: 56px; --ps-w: 320px; --ps-pad: 5px; }
 
-.premium-switch[data-active="cod"] {
-  --ps-accent: #ff4500;          /* COD = orange */
-  --ps-accent-soft: rgba(255,69,0,0.55);
-}
-
-/* Billing : annuel = vert (économie) */
+/* Billing : annuel = bleu (se distingue de l'accent émeraude) */
 .premium-switch[data-active="yearly"] {
   --ps-accent: #16a34a;
   --ps-accent-soft: rgba(22,163,74,0.55);
@@ -385,11 +351,11 @@
 .prose-blog ul, .prose-blog ol { margin: 1rem 0 1rem 1.25rem; }
 .prose-blog ul { list-style: none; padding-left: 0; }
 .prose-blog ul li { position: relative; padding-left: 1.25rem; margin: 0.4rem 0; }
-.prose-blog ul li::before { content: "→"; position: absolute; left: 0; color: hsl(var(--accent)); font-weight: 900; }
+.prose-blog ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 900; }
 .prose-blog ol { list-style: decimal; padding-left: 1.5rem; }
 .prose-blog ol li { margin: 0.4rem 0; padding-left: 0.25rem; }
 .prose-blog strong { font-weight: 800; color: hsl(var(--foreground)); }
-.prose-blog a { color: hsl(var(--accent)); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+.prose-blog a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
 .prose-blog code { font-family: "JetBrains Mono", monospace; font-size: 0.875rem; background: hsl(var(--muted)); padding: 0.1rem 0.3rem; border: 1px solid hsl(var(--border)); }
 .prose-blog pre { background: hsl(var(--foreground)); color: hsl(var(--background)); padding: 1rem; border: 2px solid hsl(var(--foreground)); overflow-x: auto; margin: 1.25rem 0; font-size: 0.875rem; line-height: 1.6; }
 .prose-blog pre code { background: transparent; border: none; padding: 0; color: inherit; }

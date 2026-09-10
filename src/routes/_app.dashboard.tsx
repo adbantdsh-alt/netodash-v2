@@ -1116,8 +1116,8 @@ function DashboardPage() {
                 <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                   <defs>
                     <linearGradient id="profitFill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#FF4500" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="#FF4500" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="2 4" stroke="hsl(var(--foreground) / 0.15)" vertical={false} />
@@ -1157,10 +1157,10 @@ function DashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="profit"
-                    stroke="#FF4500"
+                    stroke="#10b981"
                     strokeWidth={2.5}
                     fill="url(#profitFill)"
-                    dot={{ fill: "#FF4500", r: 3 }}
+                    dot={{ fill: "#10b981", r: 3 }}
                     activeDot={{ r: 5 }}
                     name="Profit"
                   />
