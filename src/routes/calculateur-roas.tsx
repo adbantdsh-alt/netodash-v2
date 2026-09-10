@@ -18,7 +18,7 @@ const JSONLD = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description:
-        "Calculateur ROAS gratuit pour dropshipping, COD et e-commerce. Calcule ton Break-Even ROAS, ton ROAS actuel, ton Target ROAS et ton CPA max en quelques secondes.",
+        "Calculateur ROAS gratuit pour e-commerce. Calcule ton Break-Even ROAS, ton ROAS actuel, ton Target ROAS et ton CPA max en quelques secondes.",
       offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
     },
     {
@@ -63,12 +63,12 @@ export const Route = createFileRoute("/calculateur-roas")({
       {
         name: "description",
         content:
-          "Calcule gratuitement ton Break-Even ROAS, ton ROAS actuel et ton CPA max. Outil simple pour dropshipping, COD, Shopify, Meta Ads, TikTok Ads.",
+          "Calcule gratuitement ton Break-Even ROAS, ton ROAS actuel et ton CPA max. Outil simple pour Shopify, Meta Ads et TikTok Ads.",
       },
       {
         name: "keywords",
         content:
-          "calculateur ROAS, break even ROAS, target ROAS, calcul ROAS gratuit, ROAS dropshipping, ROAS COD, CPA max, calculateur publicité Meta",
+          "calculateur ROAS, break even ROAS, target ROAS, calcul ROAS gratuit, ROAS e-commerce, CPA max, calculateur publicité Meta",
       },
       { property: "og:title", content: "Calculateur ROAS Gratuit — Netodash" },
       {
@@ -222,11 +222,6 @@ function CalculateurRoasPage() {
                 frais Shopify, SAV, retours, etc., utilise la version avancée
                 dans l'app Netodash.
               </Faq>
-              <Faq q="Ça marche pour le COD en Afrique ?">
-                Oui. Sélectionne FCFA comme devise et entre tes valeurs. Le
-                calcul est identique : sale_price ÷ (sale_price − coût) =
-                ROAS de rentabilité.
-              </Faq>
               <Faq q="Pourquoi mon Target ROAS dit 'Impossible' ?">
                 Parce que ta marge nette visée dépasse ta marge brute. Baisse
                 ton coût produit, augmente ton prix de vente, ou réduis la
@@ -238,7 +233,7 @@ function CalculateurRoasPage() {
       </main>
 
       <SiteFooter
-        tagline="Le seul outil de suivi rentabilité pensé pour le dropshipping et le COD."
+        tagline="Le seul outil de suivi de rentabilité réellement pensé pour ton e-commerce."
         baseline="ROAS, marge nette et CPA en temps réel."
       />
     </div>

@@ -4,9 +4,9 @@ import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 
 const URL = "https://netodash.com/blog";
-const TITLE = "Blog NETODASH — Dropshipping, COD, ROAS, marge nette";
+const TITLE = "Blog NETODASH — ROAS, marge nette et rentabilité";
 const DESC =
-  "Guides actionnables sur le dropshipping, le Cash on Delivery en Afrique, le calcul du ROAS net et la rentabilité réelle e-commerce.";
+  "Guides actionnables sur le calcul du ROAS net, la marge réelle et la rentabilité e-commerce.";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -66,7 +66,7 @@ function BlogIndex() {
             sur ta rentabilité e-commerce.
           </h1>
           <p className="mt-6 text-base md:text-lg max-w-2xl text-muted-foreground">
-            Pas de promesse magique. Des formules, des benchmarks, des stratégies qui marchent en Dropshipping et en COD Afrique.
+            Pas de promesse magique. Des formules, des benchmarks et des stratégies qui marchent.
           </p>
         </div>
       </header>

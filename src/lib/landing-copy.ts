@@ -124,11 +124,11 @@ export type LandingCopy = {
 // ───────────── DROPSHIPPING ─────────────
 const DROPSHIPPING: LandingCopy = {
   seoTitle:
-    "Netodash — Dashboard rentabilité dropshipping Shopify (ROAS net, marge réelle Meta Ads)",
+    "Netodash — Dashboard de rentabilité Shopify (ROAS net, marge réelle Meta Ads)",
   seoDescription:
-    "Netodash : le dashboard de rentabilité réelle pour les dropshippers Shopify. Calcule ton ROAS net après coût produit, fulfillment, frais Stripe et taxes pub Meta / TikTok / Google.",
+    "Netodash : le dashboard de rentabilité réelle pour les marchands Shopify. Calcule ton ROAS net après coût produit, fulfillment, frais Stripe et taxes pub Meta / TikTok / Google.",
 
-  heroBadge: "Built for Shopify Dropshippers",
+  heroBadge: "Built for Shopify",
   heroH1Line1: "TON SHOPIFY DIT $10K.",
   heroH1Line2: "COMBIEN AS-TU GARDÉ ?",
   heroSubtitle:
@@ -140,13 +140,13 @@ const DROPSHIPPING: LandingCopy = {
   heroSmallprint: "Aucune carte bancaire requise · Plan Pro débloqué · Annule à tout moment",
 
   trustStats: [
-    { v: "+800", l: "Dropshippers actifs" },
+    { v: "+800", l: "Marchands actifs" },
     { v: "$4.2M", l: "CA piloté chaque mois" },
     { v: "32 %", l: "De marge nette gagnée en moyenne" },
     { v: "4,9 / 5", l: "Note utilisateurs" },
   ],
 
-  platformsHeading: "Compatible avec ton stack dropshipping",
+  platformsHeading: "Compatible avec ton stack",
   platforms: [
     { src: shopifyLogo, alt: "Shopify" },
     { src: wooLogo, alt: "WooCommerce" },
@@ -216,7 +216,7 @@ const DROPSHIPPING: LandingCopy = {
     bold: "exactement ce que tu gardes, sur quel produit, et quelle créa scaler la semaine prochaine.",
   },
   beforeAfterTagline: {
-    plain: "9 dropshippers sur 10 scalent sur le ROAS Meta gonflé. ",
+    plain: "9 marchands sur 10 scalent sur le ROAS Meta gonflé. ",
     bold: "NETODASH te montre la vraie marge en 2 minutes par jour.",
   },
 
@@ -312,7 +312,7 @@ const DROPSHIPPING: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "OPÉRATEURS SHOPIFY SÉRIEUX.",
   pricingLead:
-    "14 jours d'essai gratuit avec accès complet. Ensuite, COD à $10/mois (COD uniquement), Starter à $12/mois (3 produits Drop + COD), Pro à $29/mois (10 produits, upsells, multi-zones), Scale à $79/mois (illimité + Analytics Pro).",
+    "14 jours d'essai gratuit avec accès complet. Ensuite : Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, upsells, export CSV), Scale à $79/mois (produits illimités + Analytics Pro EXCLUSIF).",
   plans: [
     {
       name: "Essai gratuit",
@@ -321,7 +321,6 @@ const DROPSHIPPING: LandingCopy = {
       tagline: "Accès complet 14j, sans carte bancaire",
       features: [
         "Jusqu'à 10 produits suivis",
-        "Drop ET COD en parallèle",
         "Dashboard rentabilité + Analytics Pro",
         "Saisies cumulées multi-jours",
         "Aucun engagement",
@@ -333,14 +332,11 @@ const DROPSHIPPING: LandingCopy = {
       name: "Starter",
       price: "$12",
       period: "/mois",
-      tagline: "Démarrer en Drop avec le COD inclus",
+      tagline: "Pour démarrer sereinement",
       features: [
-        "3 produits Dropshipping max",
-        "Mode COD inclus (dashboard basique)",
-        "Produits COD illimités",
+        "3 produits max",
         "Dashboard rentabilité complet",
-        "1 zone de livraison COD",
-        "Historique Drop 60 jours",
+        "Historique 60 jours",
       ],
       cta: "Choisir Starter",
       highlight: false,
@@ -352,11 +348,9 @@ const DROPSHIPPING: LandingCopy = {
       tagline: "Valider 1 à 3 winners",
       features: [
         "10 produits actifs",
-        "Dropshipping ET COD en parallèle",
         "Upsells (ventes additionnelles)",
-        "Multi-zones COD avec tarifs",
         "ROAS net Meta / TikTok / Google",
-        "Capture mobile colorée par mode",
+        "Capture mobile colorée",
         "Historique illimité · Export CSV",
         "Support email + WhatsApp",
       ],
@@ -383,15 +377,15 @@ const DROPSHIPPING: LandingCopy = {
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, accès complet quel que soit le mode au signup. À la fin, tu choisis COD ($10), Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+      a: "14 jours complets, sans carte bancaire, accès complet. À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
     },
     {
       q: "C'est pour quel type d'e-commerce ?",
-      a: "NETODASH gère le Dropshipping (Shopify + Meta/TikTok/Google Ads) ET le COD (Cash on Delivery). Plan COD $10 pour le COD seul, ou plans Drop (Starter/Pro/Scale) avec le COD inclus.",
+      a: "NETODASH pilote ta rentabilité réelle : ROAS net, marge après coûts produits, fulfillment, frais Stripe et taxes publicitaires. Connecté à Shopify, WooCommerce et YouCan, compatible Meta / TikTok / Google Ads.",
     },
     {
-      q: "COD, Starter, Pro ou Scale ?",
-      a: "COD ($10) = mode COD uniquement, produits illimités. Starter ($12) = 3 produits Drop + COD basique. Pro ($29) = 10 produits Drop, upsells, multi-zones, export CSV. Scale ($79) = Drop illimité + Analytics Pro EXCLUSIF.",
+      q: "Quel plan choisir ?",
+      a: "Starter ($12) = 3 produits, l'essentiel du pilotage. Pro ($29) = 10 produits, upsells, export CSV et support WhatsApp. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights).",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
@@ -405,8 +399,8 @@ const DROPSHIPPING: LandingCopy = {
   ctaButton: "Créer mon compte →",
 
   footerTagline:
-    "Le dashboard de rentabilité réelle pour les dropshippers Shopify.",
-  footerBaseline: "BUILT FOR SHOPIFY DROPSHIPPERS",
+    "Le dashboard de rentabilité réelle pour les marchands Shopify.",
+  footerBaseline: "BUILT FOR SHOPIFY MERCHANTS",
 };
 
 // ───────────── COD AFRIQUE ─────────────

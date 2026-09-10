@@ -4,7 +4,7 @@ import { Mail, MessageCircle, Clock, Send } from "lucide-react";
 import { submitContactMessage } from "@/lib/contact.functions";
 
 const CONTACT_URL = "https://netodash.com/contact";
-const CONTACT_TITLE = "Contact — NETODASH | Support Dropshipping & COD";
+const CONTACT_TITLE = "Contact — NETODASH | Support";
 const CONTACT_DESC =
   "Une question, un retour, un partenariat ? Contacte l'équipe NETODASH par email, WhatsApp ou via le formulaire.";
 
@@ -76,7 +76,7 @@ function ContactPage() {
             PARLONS<span className="text-accent">.</span>
           </h1>
           <p className="mt-4 md:mt-6 text-base md:text-lg max-w-2xl text-muted-foreground leading-relaxed">
-            Une question sur ton COD, un bug, une suggestion, un partenariat affilié ? On répond sous 24 h ouvrées.
+            Une question, un bug, une suggestion, un partenariat affilié ? On répond sous 24 h ouvrées.
           </p>
         </div>
       </section>
