@@ -89,6 +89,29 @@ Deux options :
 - **B** — merge `cloudflare-migration` dans `main` quand tu es prêt à basculer la
   production.
 
+### Comment reconnaître un build qui compile le BON code
+
+Le log doit contenir :
+
+```
+[start] [nitro] Building [Nitro] (preset: `cloudflare-module`, ...)
+i Generated dist/server/wrangler.json
+i Generated dist/client/_headers
+```
+
+Et **ne doit plus contenir AUCUNE** de ces trois lignes (signature de l'ancien code) :
+
+| Ligne | Ce qu'elle signifie |
+|---|---|
+| `> postbuild` | le script `patch-vercel-tslib.cjs` existe encore → ancien `package.json` |
+| `[nitro:vercel]` | le preset est encore `vercel` → ancienne `vite.config.ts` |
+| `.vercel/output/` | les sorties partent encore vers `.vercel/` → ancienne config |
+
+**Piège** : le bouton **« Retry » / « Redeploy »** reconstruit **le même commit**
+SHA, pas le dernier. Il faut un **nouveau build** (nouveau push, ou « Create
+deployment »). C'est ce qui a fait échouer deux tentatives d'affilée sur
+`main` = `4b3d901`.
+
 ### Configuration du build dans Cloudflare
 
 | Réglage | Valeur |
