@@ -403,9 +403,7 @@ export function Pricing({
   fcfaEquivalent?: boolean;
 }) {
   const fcfaMap: Record<string, string> = {
-    "$12": "≈ 7 200 F",
-    "$29": "≈ 17 400 F",
-    "$79": "≈ 47 400 F",
+    "$20": "≈ 12 000 F",
   };
 
   return (
@@ -538,9 +536,9 @@ type CompCell = string | boolean;
 type CompRow = { label: string; netodash: CompCell; triple: CompCell; beprofit: CompCell; lifetimely: CompCell; highlight?: boolean };
 
 const COMP_ROWS: CompRow[] = [
-  { label: "Prix d'entrée / mois", netodash: "$12", triple: "$129", beprofit: "$25", lifetimely: "$19", highlight: true },
-  { label: "Plan illimité produits", netodash: "$79", triple: "$299+", beprofit: "$99", lifetimely: "$149" },
-  { label: "Essai gratuit 14 jours", netodash: true, triple: false, beprofit: true, lifetimely: true },
+  { label: "Prix mensuel", netodash: "$20", triple: "$129", beprofit: "$25", lifetimely: "$19", highlight: true },
+  { label: "Produits illimités inclus", netodash: "$20", triple: "$299+", beprofit: "$99", lifetimely: "$149" },
+  { label: "Essai gratuit 7 jours", netodash: true, triple: false, beprofit: true, lifetimely: true },
   { label: "Sans carte bancaire", netodash: true, triple: false, beprofit: false, lifetimely: false },
   { label: "ROAS net (après COGS + frais)", netodash: true, triple: true, beprofit: true, lifetimely: true },
   { label: "Profit / commande en temps réel", netodash: true, triple: true, beprofit: true, lifetimely: true },
@@ -579,7 +577,7 @@ export function CompetitorComparison() {
           </div>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[0.95] mb-4">
             Pourquoi payer <span className="line-through text-muted-foreground">$129/mois</span>{" "}
-            quand <span className="text-accent">$12</span> suffisent ?
+            quand <span className="text-accent">$20</span> suffisent ?
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
             Comparaison honnête face à TripleWhale, BeProfit et Lifetimely.
@@ -655,9 +653,7 @@ export function CompetitorComparison() {
         {/* Pricing trio rappel */}
         <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {[
-            { name: "Starter", price: "$12", desc: "3 produits · 60j d'historique" },
-            { name: "Pro", price: "$29", desc: "10 produits · upsells · export CSV", featured: true },
-            { name: "Scale", price: "$79", desc: "Illimité · Analytics Pro · WhatsApp prio" },
+            { name: "Netodash", price: "$20", desc: "Tout illimité · Analytics Pro · Decision Engine · WhatsApp", featured: true },
           ].map((p) => (
             <div
               key={p.name}

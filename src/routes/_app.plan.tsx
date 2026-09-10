@@ -59,9 +59,9 @@ const DROPSHIP_META: Record<DropshipPlanKey, PlanMeta> = {
     ],
   },
   pro: {
-    label: "Scale",
-    priceMonthly: 79,
-    priceIdMonthly: "scale_monthly_v4",
+    label: "Netodash",
+    priceMonthly: 20,
+    priceIdMonthly: "unlimited_monthly_v6",
     bullets: [
       "Produits illimités",
       "Analytics Pro & Decision Engine",
@@ -221,7 +221,7 @@ function PlanPage() {
               <div className="h-full bg-accent transition-all" style={{ width: `${trialPct}%` }} />
             </div>
             <p className="font-mono text-xs text-muted-foreground mt-2">
-              Essai 14 jours — accès complet Drop + COD. Choisis ton plan ci-dessous avant la fin.
+              Essai 7 jours — accès complet. Passe à Netodash $20/mois avant la fin.
             </p>
           </div>
         )}

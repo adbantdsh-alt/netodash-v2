@@ -42,7 +42,7 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
   const handleChange = (m: BusinessMode) => {
     if (m === "dropshipping" && !dropAllowed) {
       toast.error(
-        "Ton plan COD n'inclut pas le Dropshipping. Passe à Starter ($12) ou plus.",
+        "Passe au plan Netodash ($20/mois) pour tout débloquer.",
       );
       return;
     }
@@ -92,7 +92,7 @@ export function ModeSwitch({ variant = "desktop" }: { variant?: "desktop" | "mob
       {lockedToCod && (
         <Link
           to="/plan"
-          title="Plan COD — Dropshipping via Starter ($12)+"
+          title="Plan Netodash — $20/mois, tout illimité"
           className="text-[10px] font-mono font-bold uppercase tracking-widest underline whitespace-nowrap"
         >
           🔒 COD

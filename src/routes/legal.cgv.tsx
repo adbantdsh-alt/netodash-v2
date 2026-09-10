@@ -19,7 +19,7 @@ function CgvPage() {
     <LegalShell title="Conditions Générales de Vente">
       <h2>Offres et tarifs</h2>
       <p>
-        NETODASH propose un essai gratuit de 14 jours (accès complet, sans carte bancaire),
+        NETODASH propose un essai gratuit de 7 jours (accès complet, sans carte bancaire),
         puis quatre abonnements : Plan COD à $10/mois (mode COD uniquement, produits illimités),
         Starter à $12/mois (3 produits Dropshipping + COD inclus), Pro à $29/mois (10 produits Drop,
         upsells, multi-zones, export CSV) et Scale à $79/mois (Drop illimité + Analytics Pro).
@@ -34,7 +34,7 @@ function CgvPage() {
 
       <h2>Essai gratuit</h2>
       <p>
-        L'essai gratuit de 14 jours est sans carte bancaire et offre un accès complet quel que soit
+        L'essai gratuit de 7 jours est sans carte bancaire et offre un accès complet quel que soit
         le mode choisi à l'inscription. À la fin de l'essai, l'accès est restreint : l'utilisateur
         doit choisir COD, Starter, Pro ou Scale pour continuer à utiliser NETODASH.
       </p>

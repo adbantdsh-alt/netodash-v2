@@ -20,6 +20,9 @@ function planFromPriceId(priceId: string | undefined | null): "cod" | "basic" | 
   // v4 = Starter / Pro / Scale (Drop)
   // Labels publics → IDs internes : Starter=basic, Pro=starter, Scale=pro
   // Mensuel
+  // v6 — plan unique a 20 $/mois, tout illimite (mappe sur la cle `pro`,
+  // qui debloque deja toutes les fonctionnalites).
+  if (priceId === "unlimited_monthly_v6") return "pro";
   if (priceId === "scale_monthly_v4") return "pro";
   if (priceId === "pro_monthly_v4") return "starter";
   if (priceId === "basic_monthly_v4") return "basic";

@@ -4,7 +4,7 @@ import { SignupCtaButton } from "@/components/SignupCtaButton";
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Dashboard de rentabilité";
 const PRICING_DESC =
-  "14 jours d'essai gratuit, sans carte. Starter $12, Pro $29, Scale $79 / mois. Paiement par carte Stripe.";
+  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité. Paiement par carte Stripe.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/pricing")({
 });
 
 type PaidPlan = {
-  name: "Starter" | "Pro" | "Scale";
+  name: "Netodash";
   monthly: number;
   tagline: string;
   features: string[];
@@ -49,43 +49,19 @@ type PaidPlan = {
 
 const DROPSHIP_PLANS: PaidPlan[] = [
   {
-    name: "Starter",
-    monthly: 12,
-    tagline: "Pour démarrer sereinement",
-    features: [
-      "3 produits max",
-      "ROAS net multi-plateformes",
-      "Historique 60 jours",
-    ],
-    cta: "Choisir Starter",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    monthly: 29,
-    tagline: "Valider plusieurs winners",
-    features: [
-      "10 produits max",
-      "Upsells · Export CSV",
-      "Capture mobile · Historique illimité",
-      "Support email + WhatsApp",
-    ],
-    cta: "Choisir Pro",
-    highlight: true,
-  },
-  {
-    name: "Scale",
-    monthly: 79,
-    tagline: "Scaler avec Analytics Pro & Decision Engine",
+    name: "Netodash",
+    monthly: 20,
+    tagline: "Tout illimité, tout inclus",
     features: [
       "Produits illimités",
-      "Tout Pro + Analytics Pro EXCLUSIF",
-      "Decision Engine · Scoring · Waterfall",
-      "Break-even · Simulateur · Insights auto",
-      "Support WhatsApp prioritaire",
+      "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+      "Decision Engine · Insights automatiques",
+      "Upsells · Export CSV",
+      "Historique illimité",
+      "Support WhatsApp",
     ],
-    cta: "Choisir Scale",
-    highlight: false,
+    cta: "Choisir Netodash",
+    highlight: true,
   },
 ];
 
@@ -116,8 +92,8 @@ function PricingPage() {
           PAS DE PIÈGE.
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
-          14 jours d'essai gratuit avec accès complet (plan Pro débloqué), sans carte bancaire.
-          Puis Starter $12, Pro $29 ou Scale $79 — facturation mensuelle par carte Stripe.
+          7 jours d'essai gratuit avec accès complet, sans carte bancaire.
+          Puis $20/mois — tout illimité, sans engagement.
         </p>
 
         {/* Essai */}
@@ -127,10 +103,10 @@ function PricingPage() {
             <div className="text-3xl font-black tracking-tight mt-1">Essai gratuit</div>
             <div className="flex items-baseline gap-1 my-2">
               <span className="text-5xl font-black tracking-tighter">0 $</span>
-              <span className="font-mono text-sm text-muted-foreground">/ 14 jours</span>
+              <span className="font-mono text-sm text-muted-foreground">/ 7 jours</span>
             </div>
             <p className="font-mono text-xs text-muted-foreground mb-5">
-              Accès complet 14 jours, sans carte bancaire
+              Accès complet 7 jours, sans carte bancaire
             </p>
             <SignupCtaButton variant="card" />
           </div>
@@ -141,9 +117,9 @@ function PricingPage() {
             LES PLANS
           </h2>
           <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
-            Starter, Pro ou Scale — facturation mensuelle, sans engagement.
+            Un seul plan, tout illimité — facturation mensuelle, sans engagement.
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-1 gap-6 max-w-2xl">
             {DROPSHIP_PLANS.map((p) => (
               <div
                 key={p.name}
@@ -189,15 +165,15 @@ function PricingPage() {
             {[
               {
                 q: "Comment fonctionne l'essai gratuit ?",
-                a: "14 jours complets, sans carte bancaire, avec accès complet. À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+                a: "7 jours complets, sans carte bancaire, avec accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
               },
               {
-                q: "Quelle différence entre Starter, Pro et Scale ?",
-                a: "Starter ($12) = 3 produits, l'essentiel du pilotage. Pro ($29) = 10 produits, upsells, export CSV et support WhatsApp. Scale ($79) = produits illimités + Analytics Pro et Decision Engine.",
+                q: "Y a-t-il plusieurs plans ?",
+                a: "Non, un seul plan : $20/mois, tout illimité. Produits illimités, Analytics Pro, Decision Engine, upsells, export CSV et support WhatsApp. Aucun palier à choisir, aucune fonctionnalité bridée.",
               },
               {
                 q: "Puis-je changer de plan ou annuler ?",
-                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu passes de Starter à Pro ou Scale (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
               },
             ].map((item) => (
               <div key={item.q} className="brutal-border-thin p-6">

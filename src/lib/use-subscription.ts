@@ -160,7 +160,7 @@ export const PLAN_LABELS: Record<EffectivePlan, string> = {
   cod: "COD",
   basic: "Starter",
   starter: "Pro",
-  pro: "Scale",
+  pro: "Netodash",
   free: "Free",
 };
 
@@ -168,5 +168,5 @@ export const PLAN_PRICES = {
   cod: { amount: 10, currency: "USD", display: "$10/mois" },
   basic: { amount: 12, currency: "USD", display: "$12/mois" },
   starter: { amount: 29, currency: "USD", display: "$29/mois" },
-  pro: { amount: 79, currency: "USD", display: "$79/mois" },
+  pro: { amount: 20, currency: "USD", display: "$20/mois" },
 } as const;

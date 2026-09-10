@@ -135,7 +135,7 @@ const DROPSHIPPING: LandingCopy = {
     "Netodash te montre le vrai profit derrière chaque produit, chaque pub et chaque vente —",
   heroSubtitleBold:
     "pour savoir exactement quoi scaler, surveiller ou couper.",
-  heroCtaPrimary: "Essayer gratuitement 14 jours →",
+  heroCtaPrimary: "Essayer gratuitement 7 jours →",
   heroCtaSecondary: "Voir les tarifs",
   heroSmallprint: "Aucune carte bancaire requise · Plan Pro débloqué · Annule à tout moment",
 
@@ -312,72 +312,44 @@ const DROPSHIPPING: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "OPÉRATEURS SHOPIFY SÉRIEUX.",
   pricingLead:
-    "14 jours d'essai gratuit avec accès complet. Ensuite : Starter à $12/mois (3 produits), Pro à $29/mois (10 produits, upsells, export CSV), Scale à $79/mois (produits illimités + Analytics Pro EXCLUSIF).",
+    "7 jours d'essai gratuit avec accès complet, sans carte bancaire. Ensuite : $20/mois, tout illimité — produits, Analytics Pro, Decision Engine, upsells, export CSV.",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 $",
-      period: "/ 14 jours",
-      tagline: "Accès complet 14j, sans carte bancaire",
+      period: "/ 7 jours",
+      tagline: "Accès complet 7 jours, sans carte bancaire",
       features: [
-        "Jusqu'à 10 produits suivis",
-        "Dashboard rentabilité + Analytics Pro",
+        "Tout débloqué pendant l'essai",
         "Saisies cumulées multi-jours",
         "Aucun engagement",
+        "Aucune carte bancaire",
       ],
       cta: "Démarrer l'essai",
       highlight: false,
     },
     {
-      name: "Starter",
-      price: "$12",
+      name: "Netodash",
+      price: "$20",
       period: "/mois",
-      tagline: "Pour démarrer sereinement",
-      features: [
-        "3 produits max",
-        "Dashboard rentabilité complet",
-        "Historique 60 jours",
-      ],
-      cta: "Choisir Starter",
-      highlight: false,
-    },
-    {
-      name: "Pro",
-      price: "$29",
-      period: "/mois",
-      tagline: "Valider 1 à 3 winners",
-      features: [
-        "10 produits actifs",
-        "Upsells (ventes additionnelles)",
-        "ROAS net Meta / TikTok / Google",
-        "Capture mobile colorée",
-        "Historique illimité · Export CSV",
-        "Support email + WhatsApp",
-      ],
-      cta: "Choisir Pro",
-      highlight: true,
-    },
-    {
-      name: "Scale",
-      price: "$79",
-      period: "/mois",
-      tagline: "Scaler avec Analytics Pro",
+      tagline: "Tout illimité, tout inclus",
       features: [
         "Produits illimités",
-        "Upsells illimités",
-        "Tout ce qui est inclus dans Pro",
-        "Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights)",
-        "Support prioritaire WhatsApp",
+        "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+        "Decision Engine · Insights automatiques",
+        "Upsells · Export CSV",
+        "Historique illimité",
+        "Support WhatsApp",
       ],
-      cta: "Choisir Scale",
-      highlight: false,
+      cta: "Choisir Netodash",
+      highlight: true,
     },
   ],
 
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, accès complet. À la fin, tu choisis Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+      a: "7 jours complets, sans carte bancaire, accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
     },
     {
       q: "C'est pour quel type d'e-commerce ?",
@@ -385,17 +357,17 @@ const DROPSHIPPING: LandingCopy = {
     },
     {
       q: "Quel plan choisir ?",
-      a: "Starter ($12) = 3 produits, l'essentiel du pilotage. Pro ($29) = 10 produits, upsells, export CSV et support WhatsApp. Scale ($79) = produits illimités + Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights).",
+      a: "Un seul plan : $20/mois, tout illimité. Produits illimités, Analytics Pro (scoring, waterfall, break-even, simulateur, insights), Decision Engine, upsells, export CSV et support WhatsApp. Pas de palier à choisir.",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
-      a: "Oui, à tout moment depuis Mon plan. Tu passes de Starter à Pro/Scale (ou inversement), ou tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+      a: "Oui, à tout moment depuis Mon plan. Tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
     },
   ],
 
   ctaTitle: "ARRÊTE DE DEVINER.",
   ctaTitleAccent: "MESURE.",
-  ctaLead: "14 jours d'essai gratuit. Aucune carte requise. Sors enfin de l'aveugle.",
+  ctaLead: "7 jours d'essai gratuit. Aucune carte requise. Sors enfin de l'aveugle.",
   ctaButton: "Créer mon compte →",
 
   footerTagline:

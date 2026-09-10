@@ -16,7 +16,7 @@ export const DROPSHIP_PLAN_PRICING: Record<
 > = {
   basic: { monthly: 12, yearly: 115, monthlyEquivalent: "9,58" },
   starter: { monthly: 29, yearly: 278, monthlyEquivalent: "23,17" },
-  pro: { monthly: 79, yearly: 756, monthlyEquivalent: "63,00" },
+  pro: { monthly: 20, yearly: 192, monthlyEquivalent: "16,00" },
 };
 
 type DropshipCardsProps = {
@@ -37,57 +37,25 @@ export function DropshippingPlanCards({
 }: DropshipCardsProps) {
   return (
     <div
-      className={`grid md:grid-cols-3 gap-6 ${variant === "compact" ? "" : "max-w-6xl"}`}
+      className={`grid md:grid-cols-1 gap-6 ${variant === "compact" ? "" : "max-w-xl"}`}
     >
       <DropshipPlanCard
-        name="Starter"
-        planKey="basic"
-        cycle={cycle}
-        tagline="Pour démarrer sereinement"
-        features={[
-          "3 produits max",
-          "ROAS net · Dashboard rentabilité",
-          "Historique 60 jours",
-        ]}
-        notIncluded={[
-          "Upsells · Export CSV · Multi-zones",
-          "Analytics Pro · Decision Engine",
-        ]}
-        cta="Choisir Starter"
-        onSelectPlan={onSelectPlan}
-        current={showCurrentBadge === "basic"}
-      />
-      <DropshipPlanCard
-        name="Pro"
-        planKey="starter"
-        cycle={cycle}
-        tagline="Valider plusieurs winners"
-        features={[
-          "10 produits max",
-          "Upsells · Export CSV",
-          "Capture mobile · Historique illimité",
-          "Support email + WhatsApp",
-        ]}
-        notIncluded={["Analytics Pro · Decision Engine"]}
-        cta="Choisir Pro"
-        onSelectPlan={onSelectPlan}
-        highlight={highlightPro}
-        current={showCurrentBadge === "starter"}
-      />
-      <DropshipPlanCard
-        name="Scale"
+        name="Netodash"
         planKey="pro"
         cycle={cycle}
-        tagline="Scaler avec Analytics Pro & Decision Engine"
+        tagline="Tout illimité, tout inclus"
         features={[
           "Produits illimités",
-          "Decision Engine · Scoring · Waterfall",
-          "Break-even · Simulateur · Insights auto",
-          "Tout Pro + support WhatsApp prioritaire",
+          "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+          "Decision Engine · Insights automatiques",
+          "Upsells · Export CSV",
+          "Historique illimité",
+          "Support WhatsApp",
         ]}
         notIncluded={[]}
-        cta="Choisir Scale"
+        cta="Choisir Netodash"
         onSelectPlan={onSelectPlan}
+        highlight={highlightPro}
         current={showCurrentBadge === "pro"}
       />
     </div>
