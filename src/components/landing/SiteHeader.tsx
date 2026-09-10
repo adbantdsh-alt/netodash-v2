@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/Logo";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 type Variant = "dropshipping" | "cod";
 
@@ -68,7 +68,7 @@ export function SiteHeader({ variant }: { variant: Variant }) {
               >
                 Connexion
               </Link>
-              <BetaCtaButton variant="header" />
+              <SignupCtaButton variant="header" />
             </>
           )}
         </nav>
@@ -82,7 +82,7 @@ export function SiteHeader({ variant }: { variant: Variant }) {
               Dashboard →
             </Link>
           ) : (
-            <BetaCtaButton variant="headerMobile" />
+            <SignupCtaButton variant="headerMobile" />
           )}
           <button
             type="button"

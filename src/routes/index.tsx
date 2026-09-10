@@ -15,7 +15,7 @@ import { LANDING_COPY } from "@/lib/landing-copy";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { RoasCalculator } from "@/components/landing/RoasCalculator";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 import {
   TrustStats,
   Pillars,
@@ -123,7 +123,7 @@ function HomeLanding() {
               <span className="text-foreground font-bold">{COPY.heroSubtitleBold}</span>
             </p>
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center">
-              <BetaCtaButton variant="hero" />
+              <SignupCtaButton variant="hero" />
               <a
                 href="#pricing"
                 className="brutal-border px-6 md:px-10 py-3 md:py-4 font-black uppercase tracking-wider text-sm md:text-base text-center hover:bg-foreground hover:text-background"

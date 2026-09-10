@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { BLOG_POSTS, getBlogPost } from "@/lib/blog-posts";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -137,7 +137,7 @@ function BlogPostPage() {
           <p className="mt-3 text-sm md:text-base opacity-90">
             Plus jamais d'Excel. ROAS net, marge réelle, taux de livraison COD — Netodash le fait pour toi.
           </p>
-          <BetaCtaButton variant="hero" className="mt-5 px-6 py-3 text-sm border-foreground" />
+          <SignupCtaButton variant="hero" className="mt-5 px-6 py-3 text-sm border-foreground" />
         </div>
       </article>
 

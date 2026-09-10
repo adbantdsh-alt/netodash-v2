@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/landing/SiteFooter";
 import { CodFunnel } from "@/components/landing/CodFunnel";
 import { CodZones } from "@/components/landing/CodZones";
 import { CodProfitCalculator } from "@/components/landing/CodProfitCalculator";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 import {
   TrustStats,
   Pillars,
@@ -122,7 +122,7 @@ function CodLanding() {
               </p>
 
               <div className="mt-6 md:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
-                <BetaCtaButton variant="hero" />
+                <SignupCtaButton variant="hero" />
                 <a
                   href="#pricing"
                   className="brutal-border px-6 md:px-10 py-3 md:py-4 font-black uppercase tracking-wider text-sm md:text-base text-center hover:bg-foreground hover:text-background"

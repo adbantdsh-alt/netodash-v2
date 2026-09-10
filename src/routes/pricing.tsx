@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { COD_PLAN } from "@/components/PlanCards";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Dashboard rentabilité Dropshipping & COD";
@@ -106,7 +106,7 @@ function PricingPage() {
             <Link to="/auth" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
               Connexion
             </Link>
-            <BetaCtaButton variant="header" />
+            <SignupCtaButton variant="header" />
           </nav>
         </div>
       </header>
@@ -137,7 +137,7 @@ function PricingPage() {
             <p className="font-mono text-xs text-muted-foreground mb-5">
               Accès complet 14 jours — peu importe le mode choisi au signup
             </p>
-            <BetaCtaButton variant="card" />
+            <SignupCtaButton variant="card" />
           </div>
         </div>
 
@@ -165,7 +165,7 @@ function PricingPage() {
                 </li>
               ))}
             </ul>
-            <BetaCtaButton variant="card" />
+            <SignupCtaButton variant="card" />
           </div>
         </div>
 
@@ -209,7 +209,7 @@ function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <BetaCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
+                <SignupCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
               </div>
             ))}
           </div>

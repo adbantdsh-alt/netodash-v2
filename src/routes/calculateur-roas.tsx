@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { PublicRoasCalculator } from "@/components/PublicRoasCalculator";
-import { BetaCtaButton } from "@/components/BetaCtaButton";
+import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 const URL = "https://netodash.com/calculateur-roas";
 
@@ -193,7 +193,7 @@ function CalculateurRoasPage() {
               tes produits, crée un compte Netodash en 30 secondes.
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              <BetaCtaButton variant="hero" className="px-6 py-3 text-sm hover:opacity-90" />
+              <SignupCtaButton variant="hero" className="px-6 py-3 text-sm hover:opacity-90" />
               <Link
                 to="/"
                 className="brutal-border-thin border-background px-6 py-3 font-bold uppercase tracking-wider text-sm hover:bg-background hover:text-foreground"
