@@ -1,0 +1,69 @@
+# Modèle des variables d'environnement — Netodash / Cloudflare Workers
+#
+# UTILISATION
+#   1. Copie ce fichier en `.dev.vars` pour le développement local :
+#        cp .dev.vars.example .dev.vars
+#   2. Remplis les valeurs. `.dev.vars` est ignoré par git — n'y mets jamais
+#      de valeurs réelles dans ce fichier `.example`, qui EST committé.
+#   3. Pour la PRODUCTION, ne te sers pas de ce fichier : déclare les variables
+#      dans le dashboard Cloudflare
+#        Workers & Pages → netodash → Settings → Variables and Secrets
+#      ou en CLI :
+#        npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+#
+# RAPPEL : `PUBLIC_SITE_URL` doit pointer sur https://netodash.com en production.
+# Les variables préfixées VITE_ sont injectées AU BUILD (pas au runtime) :
+# les changer impose de relancer `npm run build`.
+# ---------------------------------------------------------------------------
+
+# ── Supabase ────────────────────────────────────────────────────────────────
+# Les deux premières sont PUBLIQUES (exposées au navigateur), la troisième non.
+SUPABASE_URL=""
+SUPABASE_PUBLISHABLE_KEY=""
+SUPABASE_SERVICE_ROLE_KEY=""          # SECRET — bypass total de la RLS
+
+VITE_SUPABASE_URL=""
+VITE_SUPABASE_PUBLISHABLE_KEY=""
+VITE_SUPABASE_PROJECT_ID=""
+
+# ── Domaine ─────────────────────────────────────────────────────────────────
+# URL RACINE du produit, sans slash final. Utilisée pour les magic links admin
+# et comme repli pour les redirections de paiement (src/lib/site-url.server.ts).
+PUBLIC_SITE_URL="https://netodash.com"
+
+# ── Administration ──────────────────────────────────────────────────────────
+# Liste d'e-mails séparés par des virgules, autorisés à l'auto-bootstrap
+# super-admin. VIDE = auto-bootstrap désactivé (comportement sûr par défaut).
+# Tes comptes déjà présents dans admin.accounts restent administrateurs.
+SUPER_ADMIN_EMAILS=""
+
+# ── Stripe (paiement carte, international) ──────────────────────────────────
+# Vraies clés secrètes Stripe sk_* / rk_*. Le code rejette volontairement les
+# clés gateway mk_* de Lovable.
+STRIPE_LIVE_API_KEY=""                # SECRET — sk_live_...
+STRIPE_SANDBOX_API_KEY=""             # SECRET — sk_test_...
+PAYMENTS_LIVE_WEBHOOK_SECRET=""       # SECRET — whsec_... (endpoint ?env=live)
+PAYMENTS_SANDBOX_WEBHOOK_SECRET=""    # SECRET — whsec_... (endpoint ?env=sandbox)
+STRIPE_BETA_50_COUPON_LIVE=""
+STRIPE_BETA_50_COUPON_SANDBOX=""
+
+# Clé PUBLIQUE Stripe exposée au navigateur (injectée au build).
+VITE_PAYMENTS_CLIENT_TOKEN=""
+
+# ── Unitech (Wave / Orange Money / MaxIt — XOF) ─────────────────────────────
+UNITECH_API_KEY=""                    # SECRET
+
+# ── Shopify (OAuth) ─────────────────────────────────────────────────────────
+SHOPIFY_CLIENT_ID=""
+SHOPIFY_CLIENT_SECRET=""              # SECRET
+# Secret HMAC qui signe le paramètre `state` de l'OAuth Shopify.
+# Génère-le : openssl rand -hex 32
+SHOPIFY_OAUTH_STATE_SECRET=""         # SECRET
+
+# ── Coach IA (OpenAI) ───────────────────────────────────────────────────────
+OPENAI_API_KEY=""                     # SECRET
+COACH_MODEL="gpt-4o-mini"             # optionnel : gpt-4o, gpt-4.1-mini…
+
+# ── Divers ──────────────────────────────────────────────────────────────────
+# Nombre de places du programme bêta (lu par le front, plafond réel en base).
+BETA_MAX_SPOTS="10"
