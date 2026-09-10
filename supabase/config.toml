@@ -1,1 +1,10 @@
-project_id = "bkrvmrwlbofzurdnofyc"
+# Projet Supabase de production.
+#
+# Corrigé le 2026-09-10 : valait `bkrvmrwlbofzurdnofyc`, un projet qui n'existe
+# nulle part ailleurs dans ce dépôt (probablement le projet Lovable Cloud
+# d'origine). Un `supabase db push` aurait donc appliqué les migrations sur un
+# projet inconnu.
+#
+# La valeur ci-dessous est celle réellement utilisée par l'application
+# (cf. .env → SUPABASE_URL / VITE_SUPABASE_URL).
+project_id = "kycehzweexbutkxygcpc"
