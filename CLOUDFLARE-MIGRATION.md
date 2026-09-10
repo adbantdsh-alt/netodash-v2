@@ -215,9 +215,14 @@ Chaque ligne est une panne si elle est oubliée.
 
 ---
 
-## 7. Base de données : appliquer la migration de sécurité
+## 7. Base de données : appliquer les migrations en attente
 
-La migration `20260618100000_harden_beta_claim_and_acl.sql` **n'est pas encore appliquée** (elle est dans le dépôt). Applique-la sur Supabase :
+**DEUX migrations** sont dans le dépôt et **pas encore appliquées** :
+
+| Migration | Ce qu'elle corrige |
+|---|---|
+| `20260618100000_harden_beta_claim_and_acl.sql` | Ferme l'auto-octroi du plan Scale via `?beta=1`, restaure la cohérence des ACL, protège `profiles.legacy_dual_mode` |
+| `20260618110000_fix_product_limit_cod_and_mode.sql` | **Le plan COD était bloqué** : `enforce_product_limit` n'avait pas de branche `cod` → un client COD (10 $, illimité) recevait une exception SQL au 2ᵉ produit. Corrige aussi le comptage qui ignorait le mode Drop/COD. |
 
 ```bash
 supabase link --project-ref kycehzweexbutkxygcpc
@@ -228,16 +233,20 @@ supabase db push
 > correspond à rien dans ce dépôt. **Corrige-le avant tout `db push`**, sinon la migration
 > part sur un projet inconnu.
 
-Alternative sans CLI : copie le contenu du fichier dans **Supabase → SQL Editor** et exécute-le.
+Alternative sans CLI : copie le contenu de chaque fichier dans
+**Supabase → SQL Editor** et exécute-les.
 
-### Effet de cette migration
+### Effet de ces migrations
 - Le drapeau `?beta=1` ne permet plus d'obtenir un plan Scale gratuit : il faut une place
-  préexistante dans `beta_testers` (créée via le formulaire public plafonné, ou par un admin).
-  **Le parcours « je m'inscris au programme puis je crée mon compte » est inchangé.**
-- Les RPC bêta ne sont plus appelables en direct depuis PostgREST (l'app les appelle déjà
-  en `service_role`).
-- `profiles.legacy_dual_mode` n'est plus modifiable par l'utilisateur (déblocage gratuit du
-  mode Dropshipping).
+  préexistante dans `beta_testers`. **Le parcours « je m'inscris au programme puis je crée
+  mon compte » est inchangé.**
+- Les RPC bêta ne sont plus appelables en direct depuis PostgREST.
+- `profiles.legacy_dual_mode` n'est plus modifiable par l'utilisateur.
+- **Limites produits alignées sur `src/lib/plan-limits.ts`** : COD illimité pour tout plan
+  payant, et le comptage distingue enfin Dropshipping et COD. Deux resserrements assumés
+  côté Dropshipping — `free` passe de 1 à 0 produit, et un abonné COD seul ne peut plus
+  créer de produit Drop : l'interface les bloquait déjà, le serveur s'aligne.
+
 
 ---
 
