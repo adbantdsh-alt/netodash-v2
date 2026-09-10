@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/command";
 import { useAuth } from "@/lib/auth-context";
 import { useProducts } from "@/lib/queries";
-import { useActiveMode } from "@/lib/use-active-mode";
 
 type Props = {
   open: boolean;
@@ -21,7 +20,6 @@ type Props = {
 export function CommandPalette({ open, onOpenChange }: Props) {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { mode, setMode } = useActiveMode();
   const products = useProducts(user?.id);
   const [query, setQuery] = useState("");
 
@@ -59,15 +57,6 @@ export function CommandPalette({ open, onOpenChange }: Props) {
             keywords={["roas", "calculateur", "pub"]}
           >
             <span className="mr-2">⚖</span> Calculateur ROAS
-          </CommandItem>
-          <CommandItem
-            onSelect={() => {
-              setMode(mode === "cod" ? "dropshipping" : "cod");
-              onOpenChange(false);
-            }}
-            keywords={["mode", "cod", "drop", "basculer"]}
-          >
-            <span className="mr-2">⇄</span> Basculer en mode {mode === "cod" ? "Dropshipping" : "COD"}
           </CommandItem>
         </CommandGroup>
 

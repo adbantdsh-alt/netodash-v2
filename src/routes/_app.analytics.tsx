@@ -72,11 +72,8 @@ function AnalyticsPage() {
     );
   }
 
-  const modeLabel = (mode as string) === "cod" ? "MODE COD · FCFA" : "MODE DROPSHIPPING · " + currency;
   const modeHint =
-    (mode as string) === "cod"
-      ? "Analyses calibrées pour ton activité COD : taux de livraison, coût/commande livrée, marge nette après retours et frais courrier."
-      : "Analyses calibrées pour ton activité dropshipping : € profit / € pub, ROAS vs break-even, taux de remboursement et scaling.";
+    "Analyses calibrées sur ta rentabilité réelle : profit par euro de pub, ROAS vs break-even, taux de remboursement et scaling.";
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10 space-y-6">
@@ -88,9 +85,6 @@ function AnalyticsPage() {
               <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
                 ANALYTICS PRO
               </div>
-              <span className="text-[10px] px-1.5 py-0.5 brutal-border-thin bg-accent text-accent-foreground border-accent font-mono font-bold">
-                {modeLabel}
-              </span>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">
               METRICS

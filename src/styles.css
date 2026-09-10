@@ -6,8 +6,8 @@
 
 /*
  * NETODASH — Brutalist Design System
- * Pure black / pure white / accent émeraude #10B981
- * Accent UNIQUE (plus de bascule orange/bleu par mode métier).
+ * Pure black / pure white / orange #FF4500
+ * Accent UNIQUE (plus de bascule de couleur par mode métier).
  * No rounded corners, no shadows, no gradients.
  */
 
@@ -72,26 +72,26 @@
   --secondary-foreground: oklch(0 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.40 0 0);
-  --accent: #10b981;                      /* emeraude — accent UNIQUE du produit */
-  --accent-foreground: oklch(0 0 0);      /* texte noir : contraste 8.3:1 sur #10b981 */
+  --accent: oklch(0.65 0.22 35);          /* #FF4500 orange */
+  --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.58 0.22 25);     /* rouge — distinct de l'accent */
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0 0 0);                 /* black borders on white */
   --input: oklch(0.96 0 0);
-  --ring: #10b981;
+  --ring: oklch(0.65 0.22 35);
   --chart-1: oklch(0 0 0);
-  --chart-2: #10b981;
+  --chart-2: oklch(0.65 0.22 35);
   --chart-3: oklch(0.40 0 0);
   --chart-4: oklch(0.70 0 0);
   --chart-5: oklch(0.20 0 0);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0 0 0);
-  --sidebar-primary: #10b981;
-  --sidebar-primary-foreground: oklch(0 0 0);
+  --sidebar-primary: oklch(0.65 0.22 35);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0 0 0);
   --sidebar-border: oklch(0 0 0);
-  --sidebar-ring: #10b981;
+  --sidebar-ring: oklch(0.65 0.22 35);
 }
 
 /* ───────────── DARK MODE (optionnel, toggle utilisateur) ─────────────
@@ -111,15 +111,15 @@
   --secondary-foreground: oklch(0.97 0 0);
   --muted: oklch(0.20 0 0);
   --muted-foreground: oklch(0.70 0 0);
-  --accent: #10b981;
-  --accent-foreground: oklch(0 0 0);
+  --accent: oklch(0.68 0.22 35);
+  --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.65 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.97 0 0);
   --input: oklch(0.22 0 0);
-  --ring: #10b981;
+  --ring: oklch(0.68 0.22 35);
   --chart-1: oklch(0.97 0 0);
-  --chart-2: #10b981;
+  --chart-2: oklch(0.68 0.22 35);
   --chart-3: oklch(0.70 0 0);
   --chart-4: oklch(0.45 0 0);
   --chart-5: oklch(0.85 0 0);
@@ -128,7 +128,7 @@
   --sidebar-border: oklch(0.97 0 0);
 }
 .dark ::-webkit-scrollbar-track { background: oklch(0.13 0 0); }
-.dark ::-webkit-scrollbar-thumb { background: #10b981; }
+.dark ::-webkit-scrollbar-thumb { background: #ff4500; }
 
 @layer base {
   * {
@@ -154,11 +154,11 @@
   /* Numeric tabular figures everywhere by default for KPIs */
   .tabular { font-variant-numeric: tabular-nums; }
 
-  /* Scrollbar minimal — couleur accent (émeraude) */
+  /* Scrollbar minimal — couleur accent (orange) */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: #fff; }
-  ::-webkit-scrollbar-thumb { background: #10b981; }
-  ::selection { background: #10b981; color: #000; }
+  ::-webkit-scrollbar-thumb { background: #ff4500; }
+  ::selection { background: #FF4500; color: #fff; }
 }
 
 @layer components {
@@ -199,8 +199,8 @@
   --ps-w: 240px;
   --ps-pad: 4px;
   --ps-radius: 999px;
-  --ps-accent: #10b981;          /* accent unique émeraude */
-  --ps-accent-soft: rgba(16,185,129,0.55);
+  --ps-accent: #ff4500;
+  --ps-accent-soft: rgba(255,69,0,0.55);
   --ps-track-1: #ececec;
   --ps-track-2: #d9d9d9;
   --ps-track-3: #c4c4c4;
@@ -229,7 +229,7 @@
 .premium-switch[data-size="sm"] { --ps-h: 38px; --ps-w: 200px; --ps-pad: 3px; }
 .premium-switch[data-size="lg"] { --ps-h: 56px; --ps-w: 320px; --ps-pad: 5px; }
 
-/* Billing : annuel = bleu (se distingue de l'accent émeraude) */
+/* Billing : annuel = vert (se distingue de l'accent orange) */
 .premium-switch[data-active="yearly"] {
   --ps-accent: #16a34a;
   --ps-accent-soft: rgba(22,163,74,0.55);

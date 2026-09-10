@@ -7,7 +7,6 @@ import { RenewalReminder } from "@/components/RenewalReminder";
 import { OnboardingWelcome } from "@/components/OnboardingWelcome";
 import { OnboardingTour } from "@/components/OnboardingTour";
 import { ProfileCompletionBanner } from "@/components/ProfileCompletionBanner";
-import { ModeSwitch } from "@/components/ModeSwitch";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { usePlanCodModeSync } from "@/lib/use-plan-mode-sync";
 import { ImpersonationBanner } from "@/components/ImpersonationBanner";
@@ -166,8 +165,6 @@ function AppLayout() {
     { to: "/plan", label: "Mon plan" },
   ] as const;
 
-  const modeLabel = activeMode === "cod" ? "COD · FCFA" : "DROP · INTL";
-
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <ImpersonationBanner />
@@ -185,12 +182,6 @@ function AppLayout() {
                 className="h-7 md:h-9 w-auto object-contain shrink-0"
               />
             </Link>
-            <div className="hidden md:flex items-center gap-2 pl-3 md:pl-4 border-l border-foreground/20">
-              <ModeSwitch variant="desktop" />
-              <span className="hidden xl:inline font-mono text-[10px] uppercase tracking-widest font-bold text-accent whitespace-nowrap">
-                {modeLabel}
-              </span>
-            </div>
           </div>
 
           {/* ZONE CENTRE : Navigation principale */}
@@ -325,7 +316,6 @@ function AppLayout() {
         {mobileMenuOpen && (
           <div className="lg:hidden brutal-border-thin border-l-0 border-r-0 border-b-0 bg-background">
             <nav className="max-w-[1600px] mx-auto px-4 py-2 flex flex-col">
-              <ModeSwitch variant="mobile" />
               {/* Mon plan — pas présent dans la bottom nav */}
               <Link
                 to="/plan"
