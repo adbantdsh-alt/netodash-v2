@@ -5,7 +5,7 @@ export const Route = createFileRoute("/legal/privacy")({
   head: () => ({
     meta: [
       { title: "Politique de confidentialité — NETODASH" },
-      { name: "description", content: "Politique de confidentialité de NETODASH — données collectées, finalités, droits RGPD." },
+      { name: "description", content: "Politique de confidentialité de NETODASH — données collectées, finalités, droits des utilisateurs." },
       { name: "robots", content: "index, follow" },
       { property: "og:url", content: "https://netodash.com/legal/privacy" },
     ],
@@ -19,7 +19,9 @@ function PrivacyPage() {
     <LegalShell title="Politique de confidentialité">
       <p>
         NETODASH respecte la vie privée de ses utilisateurs et s'engage à
-        protéger leurs données personnelles conformément au RGPD.
+        protéger leurs données personnelles conformément à la réglementation
+        applicable en matière de protection des données personnelles en Afrique
+        de l'Ouest (loi sénégalaise n° 2008-12 et Convention de Malabo).
       </p>
 
       <h2>Données collectées</h2>

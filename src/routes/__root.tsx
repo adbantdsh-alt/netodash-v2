@@ -68,7 +68,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       {
         name: "description",
         content:
-          "Le dashboard de rentabilité 360° pour Dropshipping & COD : ROAS net, marge réelle, CPA max, taux de livraison. Shopify, Meta Ads, TikTok Ads, FCFA.",
+          "Le dashboard de rentabilité 360° pour l'e-commerce en Afrique de l'Ouest : ROAS net, marge réelle, CPA max, taux de livraison. Meta Ads, TikTok Ads, FCFA.",
       },
       { name: "author", content: "NETODASH" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       {
         property: "og:description",
         content:
-          "Calcule ta marge réelle basée sur les commandes livrées — pas sur les commandes Shopify. ROAS net, CPA max, taux de livraison.",
+          "Calcule ta marge réelle basée sur les commandes livrées. ROAS net, CPA max, taux de livraison, en FCFA.",
       },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "NETODASH — Rentabilité réelle Dropshipping & COD" },

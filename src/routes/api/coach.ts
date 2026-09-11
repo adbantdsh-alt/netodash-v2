@@ -148,7 +148,7 @@ CHIFFRES AGRÉGÉS DE LA PÉRIODE :
 - CA encaissé : ${Math.round(ctx.kpis.revenue)} ${ctx.currency}
 - Pub : ${Math.round(ctx.kpis.adSpend)} ${ctx.currency}
 - ROAS : ${ctx.kpis.roas.toFixed(2)}
-- Commandes Shopify : ${ctx.kpis.shopifyOrders}${ctx.kpis.refundedOrders ? ` · Remboursées : ${ctx.kpis.refundedOrders} (${Math.round(ctx.kpis.refundedAmount ?? 0)} ${ctx.currency})` : ""}
+- Commandes : ${ctx.kpis.shopifyOrders}${ctx.kpis.refundedOrders ? ` · Remboursées : ${ctx.kpis.refundedOrders} (${Math.round(ctx.kpis.refundedAmount ?? 0)} ${ctx.currency})` : ""}
 ${ctx.kpis.costPerOrder ? `- Coût/commande : ${Math.round(ctx.kpis.costPerOrder)} ${ctx.currency}` : ""}
 
 DÉTAIL JOUR PAR JOUR :

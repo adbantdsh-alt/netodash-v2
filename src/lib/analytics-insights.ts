@@ -97,7 +97,6 @@ export function computeBreakdown(kpis: KPIs): BreakdownStep[] {
     { label: "Dépense publicitaire", value: -kpis.adSpend, kind: "cost", pctOfRevenue: -pct(kpis.adSpend) },
     { label: "Taxe Meta", value: -kpis.metaTax, kind: "cost", pctOfRevenue: -pct(kpis.metaTax) },
     { label: "Frais de paiement", value: -kpis.shopifyFees, kind: "cost", pctOfRevenue: -pct(kpis.shopifyFees) },
-    { label: "Droits de douane UE (≈ 2 000 F/CMD)", value: -kpis.euImportDuty, kind: "cost", pctOfRevenue: -pct(kpis.euImportDuty) },
     { label: "Frais Wave (COD)", value: -kpis.waveFees, kind: "cost", pctOfRevenue: -pct(kpis.waveFees) },
     { label: "Remboursés", value: -kpis.refundedAmount, kind: "cost", pctOfRevenue: -pct(kpis.refundedAmount) },
   ];

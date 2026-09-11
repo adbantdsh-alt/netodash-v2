@@ -31,7 +31,6 @@ function SettingsPage() {
   const [currency, setCurrency] = useState("XOF");
   const [usdRate, setUsdRate] = useState("1");
   const [metaTax, setMetaTax] = useState("18");
-  const [autoSync, setAutoSync] = useState(false);
   const [busyProfile, setBusyProfile] = useState(false);
 
   // Email
@@ -55,7 +54,6 @@ function SettingsPage() {
       const fxRate = readDropshippingUsdRate(profileQ.data as any);
       setUsdRate(String(fxRate ?? (normalizeDropshippingCurrency((profileQ.data as any).dropshipping_currency ?? profileQ.data.currency) === "USD" ? 1 : 0.92)));
       setMetaTax(String((profileQ.data as any).meta_tax_pct ?? 18));
-      setAutoSync(!!(profileQ.data as any).auto_sync_enabled);
     }
   }, [profileQ.data]);
 
@@ -82,7 +80,6 @@ function SettingsPage() {
           cod_currency: "XOF",
           dropshipping_usd_fx: rate,
           meta_tax_pct: tax,
-          auto_sync_enabled: autoSync,
         } as any,
         { onConflict: "id" },
       );
@@ -239,24 +236,6 @@ function SettingsPage() {
               Charge fantôme automatiquement déduite de ta marge nette dans tous les
               calculs (TVA Sénégal = 18 % par défaut).
             </p>
-          </label>
-          <label className="block brutal-border-thin p-4">
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div>
-                <div className="text-xs uppercase tracking-widest font-bold">
-                  Synchronisation automatique Shopify
-                </div>
-                <p className="text-xs text-muted-foreground mt-1 font-mono max-w-md">
-                  Désactivée par défaut. Quand activée, NetoDash écrit automatiquement les commandes Shopify dans tes saisies toutes les heures (sans ton budget pub). Recommandé : laisser OFF et utiliser le bouton "Synchroniser" sur la page Saisies pour valider chaque entrée à la main.
-                </p>
-              </div>
-              <input
-                type="checkbox"
-                checked={autoSync}
-                onChange={(e) => setAutoSync(e.target.checked)}
-                className="w-5 h-5 accent-foreground"
-              />
-            </div>
           </label>
           <button
             type="submit"

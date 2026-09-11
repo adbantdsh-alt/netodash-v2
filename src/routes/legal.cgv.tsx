@@ -20,9 +20,8 @@ function CgvPage() {
       <h2>Offres et tarifs</h2>
       <p>
         NETODASH propose un essai gratuit de 7 jours (accès complet, sans carte bancaire),
-        puis quatre abonnements : Plan COD à $10/mois (mode COD uniquement, produits illimités),
-        Starter à $12/mois (3 produits Dropshipping + COD inclus), Pro à $29/mois (10 produits Drop,
-        upsells, multi-zones, export CSV) et Scale à $79/mois (Drop illimité + Analytics Pro).
+        puis un abonnement unique : Netodash à $20/mois, tout illimité — produits illimités,
+        Analytics Pro, Decision Engine, upsells, multi-zones et export CSV.
         Les prix sont affichés en dollar américain, hors taxes locales applicables.
       </p>
 
@@ -34,9 +33,9 @@ function CgvPage() {
 
       <h2>Essai gratuit</h2>
       <p>
-        L'essai gratuit de 7 jours est sans carte bancaire et offre un accès complet quel que soit
-        le mode choisi à l'inscription. À la fin de l'essai, l'accès est restreint : l'utilisateur
-        doit choisir COD, Starter, Pro ou Scale pour continuer à utiliser NETODASH.
+        L'essai gratuit de 7 jours est sans carte bancaire et offre un accès complet.
+        À la fin de l'essai, l'abonnement Netodash ($20/mois) est nécessaire pour
+        continuer à utiliser NETODASH.
       </p>
 
       <h2>Résiliation et remboursement</h2>

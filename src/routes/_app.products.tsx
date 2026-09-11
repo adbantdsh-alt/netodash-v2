@@ -52,25 +52,23 @@ const productCreateSchema = productSchema
     path: ["cost_price"],
   });
 
-const DROPSHIP_COUNTRIES = [
-  { code: "FR", name: "France", flag: "🇫🇷" },
-  { code: "US", name: "États-Unis", flag: "🇺🇸" },
-  { code: "GB", name: "Royaume-Uni", flag: "🇬🇧" },
-  { code: "ES", name: "Espagne", flag: "🇪🇸" },
-  { code: "DE", name: "Allemagne", flag: "🇩🇪" },
-  { code: "IT", name: "Italie", flag: "🇮🇹" },
-];
-
-const COD_COUNTRIES = [
+// Zones livrées : Afrique de l'Ouest uniquement. Le produit ne cible plus
+// l'Europe ni l'Amérique du Nord (zones FR / US / GB / ES / DE / IT retirées).
+const WEST_AFRICA_ZONES = [
   { code: "SN", name: "Sénégal", flag: "🇸🇳" },
   { code: "CI", name: "Côte d'Ivoire", flag: "🇨🇮" },
   { code: "ML", name: "Mali", flag: "🇲🇱" },
   { code: "BF", name: "Burkina Faso", flag: "🇧🇫" },
-  { code: "BJ", name: "Bénin", flag: "🇧🇯" },
+  { code: "GN", name: "Guinée", flag: "🇬🇳" },
   { code: "TG", name: "Togo", flag: "🇹🇬" },
-  { code: "CM", name: "Cameroun", flag: "🇨🇲" },
-  { code: "GA", name: "Gabon", flag: "🇬🇦" },
+  { code: "BJ", name: "Bénin", flag: "🇧🇯" },
+  { code: "NE", name: "Niger", flag: "🇳🇪" },
+  { code: "MR", name: "Mauritanie", flag: "🇲🇷" },
 ];
+
+const DROPSHIP_COUNTRIES = WEST_AFRICA_ZONES;
+
+const COD_COUNTRIES = WEST_AFRICA_ZONES;
 
 function ProductsPage() {
   const { user } = useAuth();

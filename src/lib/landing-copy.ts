@@ -271,7 +271,7 @@ const DROPSHIPPING: LandingCopy = {
     {
       photo: claraPhoto,
       name: "Clara M.",
-      city: "Paris 🇫🇷",
+      city: "Cotonou 🇧🇯",
       niche: "Beauté / skincare",
       before: { label: "ROAS net", v: "1.4" },
       after: { label: "ROAS net", v: "2.2" },
@@ -280,7 +280,7 @@ const DROPSHIPPING: LandingCopy = {
     {
       photo: lucasPhoto,
       name: "Lucas D.",
-      city: "Lyon 🇫🇷",
+      city: "Bamako 🇲🇱",
       niche: "Accessoires tech",
       before: { label: "Profit / mois", v: "1 260 000 F" },
       after: { label: "Profit / mois", v: "3 180 000 F" },
@@ -646,8 +646,8 @@ const COD: LandingCopy = {
       a: "Depuis tes produits, tu définis tes zones (Dakar, régions, Thiès…). Multi-zones dès le plan Pro Drop ($29). Le plan COD $10 inclut 1 zone.",
     },
     {
-      q: "Faut-il connecter Shopify ?",
-      a: "Pas obligatoire. Tu peux fonctionner en saisie manuelle quotidienne (idéal pour les boutiques YouCan ou formulaire). Connexion Shopify dispo en OAuth read-only si tu en as une.",
+      q: "Faut-il connecter une boutique ?",
+      a: "Non. Tu fonctionnes en saisie manuelle quotidienne (idéal pour YouCan, un formulaire ou tes commandes WhatsApp). Ça prend moins d'une minute par jour.",
     },
   ],
 

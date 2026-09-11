@@ -17,7 +17,6 @@ import {
   normalizeDropshippingCurrency,
   type DropshippingCurrency,
 } from "@/lib/calc";
-import type { ShopifyPreview, ShopifyDraft } from "@/lib/import-drafts.types";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -108,7 +107,6 @@ type PendingEntry = {
   ad_budget_currency: AppCurrency;
   include_meta_tax: boolean;
   include_shopify_fees: boolean;
-  include_eu_import_duty: boolean;
   include_wave_fees: boolean;
   // COGs réels de l'agent (optionnel — prioritaires sur le produit si renseignés)
   entry_cogs_per_unit: string;
@@ -170,10 +168,7 @@ function EntriesPage() {
   const products = productsQ.data ?? [];
   const profileCurrency = cleanCurrency(modeCurrency);
 
-  const [shopifyPreview, setShopifyPreview] = useState<ShopifyPreview | null>(null);
-  const [selectedDraftDate, setSelectedDraftDate] = useState<string | null>(null);
   const [pendingEntries, setPendingEntries] = useState<PendingEntry[]>([]);
-  const [bulkBudget, setBulkBudget] = useState("");
   const [bulkSaving, setBulkSaving] = useState(false);
   // Plage de dates pour le bouton "Ajouter une saisie" — supporte un jour unique ou un intervalle
   const [manualRange, setManualRange] = useState<{ from: Date; to?: Date }>({
@@ -187,101 +182,6 @@ function EntriesPage() {
   const manualFromISO = dateToISO(manualRange.from);
   const manualToISO = dateToISO(manualRange.to ?? manualRange.from);
   const manualDaysCount = enumerateDays(manualFromISO, manualToISO).length;
-
-  useEffect(() => {
-    setSelectedDraftDate(null);
-  }, [shopifyPreview]);
-
-  const viewPreview = useMemo<ShopifyPreview | null>(() => {
-    if (!shopifyPreview) return null;
-    if (!selectedDraftDate) return shopifyPreview;
-    const d = selectedDraftDate;
-    const drafts: ShopifyDraft[] = [];
-    for (const draft of shopifyPreview.drafts) {
-      const day = draft.byDate?.[d];
-      if (!day) continue;
-      const hasActivity =
-        day.orders > 0 || day.units > 0 || day.revenue > 0 ||
-        day.refundedOrders > 0 || day.refundedAmount > 0;
-      if (!hasActivity) continue;
-      drafts.push({
-        ...draft,
-        orders: day.orders,
-        units: day.units,
-        revenue: day.revenue,
-        refundedOrders: day.refundedOrders,
-        refundedAmount: day.refundedAmount,
-        byDate: { [d]: day },
-      });
-    }
-    return {
-      ...shopifyPreview,
-      from: d,
-      to: d,
-      drafts: drafts.sort((a, b) => b.orders - a.orders),
-    };
-  }, [shopifyPreview, selectedDraftDate]);
-
-  function prepareShopifyDrafts(preview: ShopifyPreview) {
-    const matched = preview.drafts.filter((d) => d.matchedProductId);
-    if (matched.length === 0) {
-      toast.error("Aucun brouillon associé à un produit local. Crée le produit dans Produits.");
-      return;
-    }
-    const unmatched = preview.drafts.length - matched.length;
-    const totalBudget = Number(bulkBudget) || 0;
-    const totalRevenue = matched.reduce((s, d) => s + d.revenue, 0);
-    const entryDate = preview.to;
-
-    const pending: PendingEntry[] = matched.map((d, i) => {
-      const share = totalRevenue > 0 ? d.revenue / totalRevenue : 1 / matched.length;
-      const adBudget = totalBudget * share;
-      return {
-        key: `${d.matchedProductId}-${entryDate}-${i}-${Date.now()}`,
-        product_id: d.matchedProductId!,
-        productName: d.matchedProductName ?? d.shopifyTitle,
-        entry_date: entryDate,
-        shopify_orders: String(d.orders),
-        visits: "",
-        refunded_orders: d.refundedOrders > 0 ? String(d.refundedOrders) : "",
-        refunded_amount: d.refundedAmount > 0 ? String(d.refundedAmount) : "",
-        total_revenue: d.revenue ? String(d.revenue) : "",
-        total_revenue_currency: cleanCurrency(preview.currency),
-        ad_budget: adBudget > 0 ? String(Math.round(adBudget * 100) / 100) : "",
-        ad_budget_currency: profileCurrency,
-        include_meta_tax: true,
-        include_shopify_fees: true,
-        include_eu_import_duty: activeMode !== "cod",
-        include_wave_fees: activeMode === "cod",
-        entry_cogs_per_unit: "",
-        entry_shipping_per_unit: "",
-        entry_cogs_currency: profileCurrency,
-        received_orders: "",
-        confirmed_orders: "",
-        delivered_orders: "",
-        refused_orders: "",
-        cash_collected: "",
-        delivered_by_zone: {},
-        upsells_enabled: false,
-        upsells: [],
-      };
-    });
-
-
-    setPendingEntries((prev) => [...prev, ...pending]);
-    setShopifyPreview(null);
-    setBulkBudget("");
-    toast.success(
-      `${matched.length} pré-saisie(s) générée(s).${
-        unmatched > 0 ? ` ${unmatched} brouillon(s) ignoré(s).` : ""
-      }`,
-    );
-    if (typeof window !== "undefined") {
-      setTimeout(() => {
-        document.getElementById("pending-entries")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-    }
-  }
 
   function buildBlankEntry(p: any, entryDate: string, periodTo?: string): PendingEntry {
     const revenueCur = cleanCurrency(p.currency || profileCurrency);
@@ -301,7 +201,6 @@ function EntriesPage() {
       ad_budget_currency: profileCurrency,
       include_meta_tax: true,
       include_shopify_fees: true,
-      include_eu_import_duty: activeMode !== "cod",
       include_wave_fees: activeMode === "cod",
       entry_cogs_per_unit: "",
       entry_shipping_per_unit: "",
@@ -387,7 +286,6 @@ function EntriesPage() {
       ad_budget_currency: entry.ad_budget_currency as string,
       include_meta_tax: entry.include_meta_tax,
       include_shopify_fees: isCod ? false : entry.include_shopify_fees,
-      include_eu_import_duty: isCod ? false : entry.include_eu_import_duty,
       include_wave_fees: isCod ? entry.include_wave_fees : false,
       entry_cogs_per_unit: !isCod && entry.entry_cogs_per_unit !== ""
         ? Number(entry.entry_cogs_per_unit)
@@ -437,9 +335,9 @@ function EntriesPage() {
       .upsert([row], { onConflict: "user_id,product_id,entry_date" });
     if (error) {
       // Si les colonnes de la migration ne sont pas encore en prod, on réessaie sans elles.
-      const isColumnMissing = /column .*(include_eu_import_duty|entry_cogs|entry_shipping)/i.test(error.message ?? "");
+      const isColumnMissing = /column .*(entry_cogs|entry_shipping)/i.test(error.message ?? "");
       if (isColumnMissing) {
-        const { include_eu_import_duty, entry_cogs_per_unit, entry_shipping_per_unit, entry_cogs_currency, ...rowLegacy } = row;
+        const { entry_cogs_per_unit, entry_shipping_per_unit, entry_cogs_currency, ...rowLegacy } = row;
         const { error: e2 } = await (supabase.from("daily_entries") as any)
           .upsert([rowLegacy], { onConflict: "user_id,product_id,entry_date" });
         if (e2) throw e2;
@@ -524,7 +422,6 @@ function EntriesPage() {
       ad_budget_currency: cleanCurrency(e.ad_budget_currency ?? profileCurrency),
       include_meta_tax: e.include_meta_tax ?? true,
       include_shopify_fees: e.include_shopify_fees ?? false,
-      include_eu_import_duty: e.include_eu_import_duty ?? true,
       include_wave_fees: e.include_wave_fees ?? false,
       entry_cogs_per_unit: (e as any).entry_cogs_per_unit != null ? String((e as any).entry_cogs_per_unit) : "",
       entry_shipping_per_unit: (e as any).entry_shipping_per_unit != null ? String((e as any).entry_shipping_per_unit) : "",
@@ -728,112 +625,6 @@ function EntriesPage() {
             Ajoute une saisie manuelle vide pour un jour donné. Ça prend moins d'1 minute.
           </p>
 
-          {/* Panneau brouillons d'import (dormant) */}
-          {shopifyPreview && viewPreview && (
-            <div className="brutal-border-thin border-accent bg-accent/5 p-4 grid gap-3">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="text-xs font-mono">
-                  <span className="font-black uppercase tracking-widest text-accent mr-2">
-                    Brouillons Shopify
-                  </span>
-                  {viewPreview.from} → {viewPreview.to} · devise {viewPreview.currency}
-                  {!selectedDraftDate && (shopifyPreview.refundedOrders > 0 || shopifyPreview.cancelledOrders > 0) && (
-                    <>
-                      {" · "}
-                      <span className="text-muted-foreground">
-                        ↩ {shopifyPreview.refundedOrders} remb. · ✕ {shopifyPreview.cancelledOrders} annul.
-                      </span>
-                    </>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShopifyPreview(null)}
-                  className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 hover:bg-foreground/10"
-                >
-                  ✕ Fermer
-                </button>
-              </div>
-
-              {shopifyPreview.availableDates && shopifyPreview.availableDates.length > 0 && (
-                <div className="grid gap-1.5">
-                  <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground">
-                    Filtrer par jour
-                  </div>
-                  <div className="flex gap-1.5 flex-wrap">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedDraftDate(null)}
-                      className={`brutal-border-thin px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${
-                        selectedDraftDate === null
-                          ? "bg-foreground text-background"
-                          : "bg-background hover:bg-foreground/10"
-                      }`}
-                    >
-                      Toute la plage
-                    </button>
-                    {shopifyPreview.availableDates.map((d) => {
-                      const total = shopifyPreview.drafts.reduce(
-                        (s, dr) => s + (dr.byDate?.[d]?.orders ?? 0),
-                        0,
-                      );
-                      return (
-                        <button
-                          key={d}
-                          type="button"
-                          onClick={() => setSelectedDraftDate(d)}
-                          className={`brutal-border-thin px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${
-                            selectedDraftDate === d
-                              ? "bg-foreground text-background"
-                              : "bg-background hover:bg-foreground/10"
-                          }`}
-                          title={`${total} cmd ce jour-là`}
-                        >
-                          {d} · {total}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {viewPreview.drafts.length === 0 ? (
-                <div className="text-xs font-mono text-muted-foreground italic px-1">
-                  Aucune commande pour {selectedDraftDate ?? "cette plage"}.
-                </div>
-              ) : (
-                <div className="brutal-border-thin bg-background p-3 grid gap-2">
-                  <div className="text-[11px] font-mono font-bold uppercase tracking-widest">
-                    Pré-remplir les saisies
-                    {selectedDraftDate && <> — {selectedDraftDate}</>}
-                  </div>
-                  <p className="text-[10px] font-mono text-muted-foreground leading-snug">
-                    Génère une carte éditable par produit (date, commandes, CA pré-remplis).
-                    Le budget pub total (devise {viewPreview.currency}) est réparti au prorata du CA.
-                  </p>
-                  <div className="flex gap-2 flex-wrap items-center">
-                    <input
-                      type="number"
-                      min={0}
-                      step="0.01"
-                      placeholder={`Budget pub total (${viewPreview.currency}) — optionnel`}
-                      value={bulkBudget}
-                      onChange={(e) => setBulkBudget(e.target.value)}
-                      className="flex-1 min-w-[160px] bg-background brutal-border-thin px-3 py-2 font-mono text-sm focus:border-accent focus:border-2 outline-none placeholder:text-muted-foreground/60"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => prepareShopifyDrafts(viewPreview)}
-                      className="brutal-border-thin bg-foreground text-background px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-accent hover:border-accent"
-                    >
-                      Pré-remplir ({viewPreview.drafts.filter((d) => d.matchedProductId).length})
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Pré-saisies à valider */}
           {pendingEntries.length > 0 && (
             <div
@@ -882,9 +673,9 @@ function EntriesPage() {
             </div>
           )}
 
-          {pendingEntries.length === 0 && !shopifyPreview && (
+          {pendingEntries.length === 0 && (
             <div className="brutal-border-thin border-dashed p-6 text-center text-xs font-mono text-muted-foreground uppercase tracking-widest">
-              Aucune saisie en cours. Synchronise depuis Shopify ou clique sur « + Ajouter une saisie ».
+              Aucune saisie en cours. Clique sur « + Ajouter une saisie » pour enregistrer ta journée.
             </div>
           )}
         </div>
@@ -1324,23 +1115,9 @@ function PendingCard({
                 className="mt-0.5 w-4 h-4 accent-foreground cursor-pointer"
               />
               <span className="text-[11px] font-mono leading-snug">
-                <span className="font-bold uppercase tracking-widest">Inclure frais Shopify Payments</span>
+                <span className="font-bold uppercase tracking-widest">Inclure frais de paiement</span>
                 <span className="block text-muted-foreground mt-0.5 text-[10px]">
-                  Pour suivre tes frais de transaction Shopify.
-                </span>
-              </span>
-            </label>
-            <label className="flex items-start gap-2 cursor-pointer select-none brutal-border-thin px-3 py-2">
-              <input
-                type="checkbox"
-                checked={entry.include_eu_import_duty}
-                onChange={(e) => onChange({ include_eu_import_duty: e.target.checked })}
-                className="mt-0.5 w-4 h-4 accent-foreground cursor-pointer"
-              />
-              <span className="text-[11px] font-mono leading-snug">
-                <span className="font-bold uppercase tracking-widest">Droits de douane UE (≈ 2 000 F / cmd)</span>
-                <span className="block text-muted-foreground mt-0.5 text-[10px]">
-                  Frais fixe par commande EU (juillet 2026). Décoche si non concerné.
+                  Frais de transaction de ton prestataire de paiement (2,9 % + 30 $).
                 </span>
               </span>
             </label>

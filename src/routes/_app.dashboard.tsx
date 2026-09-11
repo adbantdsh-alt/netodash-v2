@@ -495,12 +495,6 @@ function DashboardPage() {
                   <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.shopifyFees, currency)}</span>
                 </div>
               )}
-              {kpis.euImportDuty > 0 && (
-                <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
-                  <span>Douanes UE (≈ 2 000 F/cmd)</span>
-                  <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.euImportDuty, currency)}</span>
-                </div>
-              )}
               {kpis.waveFees > 0 && (
                 <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
                   <span>Frais Wave</span>
@@ -750,12 +744,6 @@ function DashboardPage() {
                   <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.shopifyFees, currency)}</span>
                 </div>
               )}
-              {kpis.euImportDuty > 0 && (
-                <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
-                  <span>Douanes UE (≈ 2 000 F/cmd)</span>
-                  <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.euImportDuty, currency)}</span>
-                </div>
-              )}
               {kpis.waveFees > 0 && (
                 <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
                   <span>Frais Wave (1%)</span>
@@ -963,12 +951,6 @@ function DashboardPage() {
               <div className="flex justify-between border-b border-foreground/20 py-2">
                 <span className="text-muted-foreground">Frais de paiement (2,9 % du CA)</span>
                 <span className="font-bold tabular text-accent">− {formatCurrency(kpis.shopifyFees, currency)}</span>
-              </div>
-            )}
-            {kpis.euImportDuty > 0 && (
-              <div className="flex justify-between border-b border-foreground/20 py-2">
-                <span className="text-muted-foreground">Droits de douane UE (≈ 2 000 F / commande)</span>
-                <span className="font-bold tabular text-accent">− {formatCurrency(kpis.euImportDuty, currency)}</span>
               </div>
             )}
             {kpis.waveFees > 0 && (

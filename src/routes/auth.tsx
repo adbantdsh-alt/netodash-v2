@@ -458,7 +458,7 @@ function AuthPage() {
                     onBlur={() => setTimeout(() => setCountryOpen(false), 150)}
                     autoComplete="off"
                     className="w-full bg-background brutal-border-thin px-3 py-3 font-mono text-sm focus:border-accent outline-none focus:border-2"
-                    placeholder="ex. France, Sénégal, Côte d'Ivoire…"
+                    placeholder="ex. Sénégal, Côte d'Ivoire, Mali…"
                   />
                   {country && countryQuery && (
                     <div className="mt-1 text-[10px] font-mono text-emerald-600">
@@ -494,7 +494,7 @@ function AuthPage() {
                     </ul>
                   )}
                   <div className="mt-1 text-[10px] font-mono text-muted-foreground">
-                    Tape les premières lettres (ex. <em>fra</em> pour France).
+                    Tape les premières lettres (ex. <em>sén</em> pour Sénégal).
                   </div>
                 </div>
 

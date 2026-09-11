@@ -244,7 +244,7 @@ function AdminUserDetail() {
             onClick={() => {
               if (
                 confirm(
-                  "Suppression RGPD : toutes les données seront effacées. Action irréversible. Confirmer ?",
+                  "Suppression définitive : toutes les données seront effacées. Action irréversible. Confirmer ?",
                 )
               )
                 wrap(() => deleteUserData({ data: { userId } }));
@@ -252,7 +252,7 @@ function AdminUserDetail() {
             className="admin-btn-ghost"
             style={{ borderColor: "#b32d2c", color: "#b32d2c" }}
           >
-            Supprimer (RGPD)
+            Supprimer les données
           </button>
         </div>
       </div>

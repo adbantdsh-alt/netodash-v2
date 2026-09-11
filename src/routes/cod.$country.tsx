@@ -292,7 +292,7 @@ function CountryPage() {
         </div>
       </section>
 
-      <SiteFooter tagline="COD piloté à la commande livrée." baseline="Pas à la commande Shopify." />
+      <SiteFooter tagline="COD piloté à la commande livrée." baseline="Pas à la commande reçue." />
     </div>
   );
 }

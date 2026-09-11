@@ -423,7 +423,7 @@ function RoasCalculatorPage() {
                     type="number"
                     value={transactionPct}
                     onChange={setTransactionPct}
-                    hint="Shopify / Stripe ≈ 2.9%"
+                    hint="Frais de paiement ≈ 2,9 %"
                   />
                 </div>
               )}

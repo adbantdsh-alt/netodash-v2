@@ -49,8 +49,6 @@ export type DailyEntry = {
   include_shopify_fees?: boolean | null;
   /** Si true, on applique les frais Wave (1%) sur le cash encaissé (COD). */
   include_wave_fees?: boolean | null;
-  /** Si true, on applique 3 € de droits de douane UE par commande (dropshipping EU). */
-  include_eu_import_duty?: boolean | null;
   /**
    * COGs réels fournis par l'agent pour CETTE saisie.
    * Si renseigné, remplace products.cost_price pour le calcul de cette entrée.
@@ -202,30 +200,9 @@ function resolveEntryCogs(
   };
 }
 
-function euImportDutyForEntry(
-  entry: DailyEntry,
-  orders: number,
-  targetCurrency: string,
-  fx?: DropshippingFxOptions,
-): number {
-  if (entry.include_eu_import_duty === false || orders <= 0) return 0;
-  const fxOpts: DropshippingFxOptions = {
-    ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
-  };
-  return convertDropshippingCurrency(
-    orders * EU_IMPORT_DUTY_EUR,
-    "EUR",
-    targetCurrency,
-    fxOpts,
-  );
-}
-
 export const SHOPIFY_FEES_PCT = 2.9;
-/** Frais fixe Stripe/Shopify Payments par transaction (commande). */
+/** Frais fixe du prestataire de paiement par transaction (commande). */
 export const SHOPIFY_FIXED_FEE_USD = 0.30;
-/** Droits de douane UE fixes par commande (depuis juillet 2026). */
-export const EU_IMPORT_DUTY_EUR = 3;
 export const WAVE_FEES_PCT = 1;
 
 export type KPIs = {
@@ -241,8 +218,6 @@ export type KPIs = {
   shopifyFees: number;
   /** Frais Wave (1%) sur le cash encaissé (COD). */
   waveFees: number;
-  /** Droits de douane UE (3 € / commande si activé). */
-  euImportDuty: number;
   netProfit: number;
   roas: number;
   shopifyOrders: number;
@@ -277,7 +252,6 @@ export function computeKPIs(
   let metaTax = 0;
   let shopifyFees = 0;
   let waveFees = 0;
-  let euImportDuty = 0;
   let shopify = 0;
   let refundedOrders = 0;
   let refundedAmount = 0;
@@ -313,7 +287,6 @@ export function computeKPIs(
     if (e.include_wave_fees) {
       waveFees += rev * (WAVE_FEES_PCT / 100);
     }
-    euImportDuty += euImportDutyForEntry(e, orders, targetCurrency, fxOpts);
     const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     revenue += ups.revenue;
     cogs += ups.cogs;
@@ -326,7 +299,7 @@ export function computeKPIs(
     refundedAmount += convertDropshippingCurrency(Number(e.refunded_amount ?? 0), revenueCurrency, targetCurrency, fxOpts);
   }
 
-  const netProfit = revenue - adSpend - cogs - metaTax - shopifyFees - waveFees - euImportDuty;
+  const netProfit = revenue - adSpend - cogs - metaTax - shopifyFees - waveFees;
   const totalAdCost = adSpend + metaTax;
   const roas = totalAdCost > 0 ? revenue / totalAdCost : 0;
 
@@ -338,7 +311,6 @@ export function computeKPIs(
     metaTax,
     shopifyFees,
     waveFees,
-    euImportDuty,
     netProfit,
     roas,
     shopifyOrders: shopify,
@@ -524,11 +496,10 @@ export function computeDailySeries(
         + convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts)
       : 0;
     const waveFees = e.include_wave_fees ? rev * (WAVE_FEES_PCT / 100) : 0;
-    const duty = euImportDutyForEntry(e, orders, targetCurrency, fxOpts);
     const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);
     const revWithUps = rev + ups.revenue;
     const cogsWithUps = cogs + ups.cogs;
-    const profit = revWithUps - ad - cogsWithUps - tax - shopifyFees - waveFees - duty;
+    const profit = revWithUps - ad - cogsWithUps - tax - shopifyFees - waveFees;
 
     const cur = byDay.get(e.entry_date);
     const noteRaw = (e as any).notes;
