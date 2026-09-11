@@ -13,7 +13,7 @@ import { formatCurrency } from "@/lib/calc";
 export function RoasCalculator() {
   const [revenue, setRevenue] = useState(7_500_000);
   const [depositShare, setDepositShare] = useState(40);
-  const [depositRate, setDepositRate] = useState(30);
+  const [depositRate, setDepositRate] = useState(10);
   const [adSpend, setAdSpend] = useState(3_120_000);
   const [cogsPct, setCogsPct] = useState(32);
   const [momoPct, setMomoPct] = useState(5);
@@ -88,7 +88,7 @@ export function RoasCalculator() {
               step={5}
               format={(v) => v + " %"}
               onChange={setDepositRate}
-              hint="Souvent 30 % à la commande, le solde à la livraison"
+              hint="10 % à la commande, le solde à la livraison"
             />
             <SliderRow
               label="Budget pub (Meta / TikTok / Google)"

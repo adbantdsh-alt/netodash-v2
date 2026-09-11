@@ -190,13 +190,13 @@ const COPYX: LandingCopy = {
     { k: "Marge nette réelle", v: "AUCUNE IDÉE.", mode: "accent" },
   ],
   beforeAfterAfterRows: [
-    { k: "Encaissé via XaalipSay", v: "5 400 000 F" },
-    { k: "Reste à encaisser (livraison)", v: "2 100 000 F" },
+    { k: "Encaissé via XaalipSay", v: "4 800 000 F" },
+    { k: "Reste à encaisser (livraison)", v: "2 700 000 F" },
     { k: "− COGS + livraison", v: "− 2 400 000 F" },
     { k: "− Pub + taxe 18 %", v: "− 3 681 600 F" },
-    { k: "− Frais XaalipSay (5 %)", v: "− 270 000 F" },
-    { k: "Marge nette si tout est livré", v: "1 148 400 F", mode: "accent" },
-    { k: "ROAS net sur encaissé", v: "1,47", mode: "accent" },
+    { k: "− Frais XaalipSay (5 %)", v: "− 240 000 F" },
+    { k: "Marge nette si tout est livré", v: "1 178 400 F", mode: "accent" },
+    { k: "ROAS net sur encaissé", v: "1,30", mode: "accent" },
   ],
   beforeAfterBeforeFooter: {
     plain:
@@ -365,7 +365,7 @@ const COPYX: LandingCopy = {
     },
     {
       q: "Comment sont gérés les acomptes ?",
-      a: "Chaque vente CopyX est suivie : acompte encaissé via XaalipSay, paiement intégral, et reste à encaisser à la livraison. Tu vois ce qui est réellement dans ta poche — pas seulement ce que ta boutique affiche.",
+      a: "Chaque vente CopyX est suivie : acompte encaissé via XaalipSay (10 % du montant à la commande), paiement intégral, et reste à encaisser à la livraison. Tu vois ce qui est réellement dans ta poche — pas seulement ce que ta boutique affiche.",
     },
     {
       q: "Quels frais sont déduits de ma marge ?",
