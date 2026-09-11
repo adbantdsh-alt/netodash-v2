@@ -208,9 +208,24 @@ export const ALL_COUNTRIES: WorldCountry[] = [
   { code: "ZW", name: "Zimbabwe", flag: "🇿🇼", dial: "+263" },
 ];
 
+/**
+ * Paye d'Afrique de l'Ouest — SEUL perimetre couvert par Netodash.
+ *
+ * `ALL_COUNTRIES` reste la liste mondiale complete (donnee brute, conservee
+ * telle quelle). Tout ce qui est propose a l'utilisateur passe par
+ * `WEST_AFRICA`, pour ne pas laisser choisir un pays hors zone.
+ */
+const WEST_AFRICA_CODES = new Set([
+  "SN", "CI", "ML", "BF", "GN", "TG", "BJ", "NE", "MR",
+]);
+
+export const WEST_AFRICA: WorldCountry[] = ALL_COUNTRIES.filter((c) =>
+  WEST_AFRICA_CODES.has(c.code),
+);
+
 export function findCountry(code?: string | null): WorldCountry | undefined {
   if (!code) return undefined;
-  return ALL_COUNTRIES.find((c) => c.code === code);
+  return WEST_AFRICA.find((c) => c.code === code);
 }
 
 const normalize = (s: string) =>
@@ -221,7 +236,7 @@ export function searchCountries(q: string, limit = 8): WorldCountry[] {
   if (!query) return [];
   const starts: WorldCountry[] = [];
   const contains: WorldCountry[] = [];
-  for (const c of ALL_COUNTRIES) {
+  for (const c of WEST_AFRICA) {
     const n = normalize(c.name);
     if (n.startsWith(query) || c.code.toLowerCase().startsWith(query)) starts.push(c);
     else if (n.includes(query)) contains.push(c);

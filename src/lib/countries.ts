@@ -1,4 +1,9 @@
-// Pays cibles NETODASH : Afrique francophone (Ouest + Centrale) + Maroc
+// Pays cibles NETODASH : Afrique de l'Ouest uniquement.
+//
+// Les pays d'Afrique centrale, le Maroc et l'entree « Autre » ont ete retires :
+// la seule devise du produit est le FCFA et le marche vise est l'Afrique de
+// l'Ouest. Meme perimetre que ce que l'application proposait deja comme
+// « Afrique de l'Ouest francophone ».
 
 export type Country = {
   code: string; // ISO-2
@@ -18,17 +23,6 @@ export const COUNTRIES: Country[] = [
   { code: "BJ", name: "Bénin", flag: "🇧🇯", dial: "+229" },
   { code: "NE", name: "Niger", flag: "🇳🇪", dial: "+227" },
   { code: "MR", name: "Mauritanie", flag: "🇲🇷", dial: "+222" },
-  // Afrique centrale francophone
-  { code: "CM", name: "Cameroun", flag: "🇨🇲", dial: "+237" },
-  { code: "GA", name: "Gabon", flag: "🇬🇦", dial: "+241" },
-  { code: "CG", name: "Congo", flag: "🇨🇬", dial: "+242" },
-  { code: "CD", name: "RD Congo", flag: "🇨🇩", dial: "+243" },
-  { code: "TD", name: "Tchad", flag: "🇹🇩", dial: "+235" },
-  { code: "CF", name: "Centrafrique", flag: "🇨🇫", dial: "+236" },
-  // Maroc
-  { code: "MA", name: "Maroc", flag: "🇲🇦", dial: "+212" },
-  // Autre
-  { code: "OTHER", name: "Autre", flag: "🌍", dial: "" },
 ];
 
 export const REFERRAL_SOURCES: { value: string; label: string }[] = [

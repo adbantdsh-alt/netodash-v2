@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/Logo";
 import { SignupWhatsAppHelp } from "@/components/SignupWhatsAppHelp";
 import { REFERRAL_SOURCES } from "@/lib/countries";
-import { ALL_COUNTRIES, searchCountries, findCountry } from "@/lib/countries-all";
+import { WEST_AFRICA, searchCountries, findCountry } from "@/lib/countries-all";
 
 
 const searchSchema = z.object({
