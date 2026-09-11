@@ -1,14 +1,20 @@
 /**
  * Conversions monétaires strictement réservées au mode Dropshipping.
- * Devises autorisées : EUR, USD, GBP — jamais XOF / FCFA.
+ * Devise unique du produit : FCFA (XOF).
+ *
+ * Avant, ce module n'acceptait que EUR / USD / GBP pour isoler le dropshipping
+ * du COD. Le COD ayant été retiré et la devise unique étant le FCFA, XOF est
+ * désormais la seule devise autorisée — les autres restent dans le type par
+ * compatibilité avec d'éventuelles lignes existantes en base.
  */
 
-export type DropshippingCurrency = "EUR" | "USD" | "GBP";
+export type DropshippingCurrency = "EUR" | "USD" | "GBP" | "XOF";
 
-export const DROPSHIPPING_CURRENCIES: DropshippingCurrency[] = ["EUR", "USD", "GBP"];
+export const DROPSHIPPING_CURRENCIES: DropshippingCurrency[] = ["XOF"];
 
 /** 1 unité de devise → valeur en USD (taux indicatifs, overridables partiellement). */
 export const DEFAULT_USD_PER_UNIT: Record<DropshippingCurrency, number> = {
+  XOF: 1,
   USD: 1,
   EUR: 1.08,
   GBP: 1.27,

@@ -112,17 +112,15 @@ export const Route = createFileRoute("/_app/roas-calculator")({
 });
 
 type Mode = "actual" | "target" | "breakeven";
-type Currency = "USD" | "EUR" | "GBP";
+type Currency = "USD" | "EUR" | "GBP" | "XOF";
 
 const CURRENCIES: { code: Currency; label: string }[] = [
-  { code: "EUR", label: "EUR €" },
-  { code: "USD", label: "USD $" },
-  { code: "GBP", label: "GBP £" },
+  { code: "XOF", label: "FCFA (XOF)" },
 ];
 
 function RoasCalculatorPage() {
   const [mode, setMode] = useState<Mode>("actual");
-  const [currency, setCurrency] = useState<Currency>("USD");
+  const [currency, setCurrency] = useState<Currency>("XOF");
 
   const [productName, setProductName] = useState("");
   const [salePrice, setSalePrice] = useState("");

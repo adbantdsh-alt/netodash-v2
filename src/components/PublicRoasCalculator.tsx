@@ -6,15 +6,12 @@ type Mode = "breakeven" | "actual" | "target";
 type Currency = "EUR" | "USD" | "GBP" | "XOF";
 
 const CURRENCIES: { code: Currency; label: string }[] = [
-  { code: "EUR", label: "EUR €" },
-  { code: "USD", label: "USD $" },
-  { code: "GBP", label: "GBP £" },
-  { code: "XOF", label: "FCFA" },
+  { code: "XOF", label: "FCFA (XOF)" },
 ];
 
 export function PublicRoasCalculator({ compact = false }: { compact?: boolean }) {
   const [mode, setMode] = useState<Mode>("breakeven");
-  const [currency, setCurrency] = useState<Currency>("USD");
+  const [currency, setCurrency] = useState<Currency>("XOF");
   const [productName, setProductName] = useState("");
   const [salePrice, setSalePrice] = useState("45");
   const [costPrice, setCostPrice] = useState("13");

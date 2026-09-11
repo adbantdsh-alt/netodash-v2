@@ -110,7 +110,7 @@ function ProductsPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   // Pays cible : multi-sélection (surtout utile en COD pour couvrir plusieurs pays).
   const [countries, setCountries] = useState<Set<string>>(new Set([defaultCountry]));
-  const [currency, setCurrency] = useState<DropshippingCurrency>("EUR");
+  const [currency, setCurrency] = useState<DropshippingCurrency>("XOF");
   // Zones de livraison COD : chaque zone est un groupe de régions avec un coût.
   type ZoneDraft = { name: string; cost: string; regions: string[] };
   const defaultZones = (): ZoneDraft[] => [
@@ -174,7 +174,7 @@ function ProductsPage() {
     });
     setImageUrl("");
     setCountries(new Set([defaultCountry]));
-    setCurrency("EUR");
+    setCurrency("XOF");
     setZones(defaultZones());
     setEditing(null);
     setShowForm(false);
@@ -573,9 +573,9 @@ function ProductsPage() {
                 Devise du produit <span className="text-accent">*</span>
               </div>
               <div className="flex gap-2 flex-wrap">
-                {(["USD", "EUR", "GBP"] as const).map((c) => {
+                {(["XOF"] as const).map((c) => {
                   const active = currency === c;
-                  const label = c === "USD" ? "$ USD" : c === "EUR" ? "€ EUR" : "£ GBP";
+                  const label = "FCFA (XOF)";
                   return (
                     <button
                       key={c}

@@ -17,11 +17,7 @@ export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
 });
 
-const CURRENCIES = [
-  { code: "EUR", label: "EUR — Euro (€)" },
-  { code: "USD", label: "USD — Dollar ($)" },
-  { code: "GBP", label: "GBP — Livre sterling (£)" },
-];
+const CURRENCIES = [{ code: "XOF", label: "FCFA — Franc CFA (XOF)" }];
 
 function SettingsPage() {
   const { user, signOut } = useAuth();
@@ -32,7 +28,7 @@ function SettingsPage() {
 
   // Profil
   const [displayName, setDisplayName] = useState("");
-  const [currency, setCurrency] = useState("EUR");
+  const [currency, setCurrency] = useState("XOF");
   const [usdRate, setUsdRate] = useState("1");
   const [metaTax, setMetaTax] = useState("18");
   const [autoSync, setAutoSync] = useState(false);

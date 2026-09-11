@@ -1100,7 +1100,7 @@ function PendingCard({
             <MoneyField
               label="Cash encaissé (XOF)"
               value={entry.cash_collected}
-              currency={"EUR" as AppCurrency}
+              currency={"XOF" as AppCurrency}
               placeholder="0"
               onValueChange={(v) => onChange({ cash_collected: v })}
               onCurrencyChange={() => {}}
@@ -1272,7 +1272,7 @@ function PendingCard({
                 <div>
                   <div className="text-[10px] font-mono font-bold uppercase tracking-widest mb-1">Devise</div>
                   <div className="flex gap-0">
-                    {(["EUR", "USD", "GBP"] as AppCurrency[]).map((c) => (
+                    {(["XOF"] as const).map((c) => (
                       <button
                         key={c}
                         type="button"
@@ -1453,7 +1453,7 @@ function MoneyField({
             onChange={(e) => onCurrencyChange(cleanCurrency(e.target.value))}
             className="bg-foreground text-background brutal-border-thin border-l-0 px-2 py-1.5 font-mono text-xs font-bold focus:border-accent outline-none"
           >
-            <option value="EUR">EUR</option>
+            <option value="XOF">FCFA</option>
             <option value="USD">USD</option>
             <option value="GBP">GBP</option>
           </select>
@@ -1478,7 +1478,7 @@ function UpsellSection({
   onChange: (patch: Partial<PendingEntry>) => void;
 }) {
   const isCod = mode === "cod";
-  const lockedCur: AppCurrency = isCod ? ("EUR" as AppCurrency) : entry.total_revenue_currency;
+  const lockedCur: AppCurrency = isCod ? ("XOF" as AppCurrency) : entry.total_revenue_currency;
   const symbol = isCod ? "XOF" : lockedCur;
 
   if (!canUseUpsells) {
@@ -1509,7 +1509,7 @@ function UpsellSection({
       product_id: firstProduct.id,
       qty: "",
       unit_price: "",
-      currency: isCod ? ("EUR" as AppCurrency) : lockedCur,
+      currency: isCod ? ("XOF" as AppCurrency) : lockedCur,
     };
     onChange({ upsells: [...lines, newLine] });
   }
@@ -1540,7 +1540,7 @@ function UpsellSection({
                     product_id: products[0].id,
                     qty: "",
                     unit_price: "",
-                    currency: isCod ? ("EUR" as AppCurrency) : lockedCur,
+                    currency: isCod ? ("XOF" as AppCurrency) : lockedCur,
                   },
                 ],
               });
