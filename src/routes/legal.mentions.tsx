@@ -17,7 +17,7 @@ function MentionsPage() {
   return (
     <LegalShell title="Mentions légales">
       <h2>Éditeur</h2>
-      <p>NETODASH — service en ligne d'analyse de rentabilité COD.</p>
+      <p>NETODASH — service en ligne d'analyse de rentabilité pour les boutiques CopyX.</p>
       <p>Contact : support@netodash.com</p>
 
       <h2>Directeur de la publication</h2>

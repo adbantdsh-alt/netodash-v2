@@ -29,7 +29,7 @@ import {
   CompetitorComparison,
 } from "@/components/landing/SharedSections";
 
-const COPY = LANDING_COPY.dropshipping;
+const COPY = LANDING_COPY;
 const URL = "https://netodash.com/";
 const OG =
   "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d66852f5-8da1-4b8f-9896-dae638808602/id-preview-45aaf504--c8da90f6-5654-47cb-a390-4f9faf5e58ee.lovable.app-1777284800740.png";
@@ -90,12 +90,12 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeLanding() {
-  // Accent BLEU (Dropshipping) sur toute la page. Plus de bascule vers le COD :
-  // c'est le mode par défaut du produit désormais.
+  // Accent orange Netodash sur toute la page. Plus de bascule Dropshipping / COD :
+  // le produit est calibré à 100 % pour les boutiques CopyX.
   useEffect(() => {
-    document.documentElement.setAttribute("data-mode", "dropshipping");
+    document.documentElement.setAttribute("data-mode", "copyx");
     try {
-      localStorage.setItem("netodash:landing-pref", "dropshipping");
+      localStorage.setItem("netodash:landing-pref", "copyx");
     } catch {}
   }, []);
 
@@ -138,7 +138,7 @@ function HomeLanding() {
         </div>
       </section>
 
-      {/* Calculateur ROAS */}
+      {/* Calculateur de marge CopyX */}
       <RoasCalculator />
 
       {/* Aperçu du dashboard */}
@@ -149,7 +149,7 @@ function HomeLanding() {
               <div className="absolute -inset-3 bg-accent/10 -z-10 brutal-border-thin border-accent" />
               <img
                 src={heroDropshipping}
-                alt="Aperçu du dashboard Netodash — ROAS net, profit et classement des produits"
+                alt="Aperçu du dashboard Netodash — marge nette, acomptes encaissés et classement des produits CopyX"
                 width={1408}
                 height={1024}
                 loading="lazy"
@@ -186,11 +186,11 @@ function HomeLanding() {
       <Pillars pillars={COPY.pillars} />
 
       <BeforeAfter copy={COPY} />
-      <ProductRanking copy={COPY} mode="dropshipping" />
+      <ProductRanking copy={COPY} />
       <DecisionEngine copy={COPY} />
       <Testimonials copy={COPY} />
       <TrustSecurity />
-      <Pricing copy={COPY} />
+      <Pricing copy={COPY} fcfaEquivalent />
       <FinalCta copy={COPY} />
       <SiteFooter tagline={COPY.footerTagline} baseline={COPY.footerBaseline} />
     </div>

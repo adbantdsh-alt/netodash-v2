@@ -6,8 +6,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useProfile } from "@/lib/queries";
-import { normalizeDropshippingCurrency } from "@/lib/calc";
-import { readDropshippingUsdRate } from "@/lib/dropshipping-fx";
 import { deleteAccount } from "@/lib/account.functions";
 import { useOnboarding } from "@/lib/use-onboarding";
 import { useNavigate as useNav } from "@tanstack/react-router";
@@ -16,8 +14,6 @@ export const Route = createFileRoute("/_app/settings")({
   head: () => ({ meta: [{ title: "Compte — NETODASH" }] }),
   component: SettingsPage,
 });
-
-const CURRENCIES = [{ code: "XOF", label: "FCFA — Franc CFA (XOF)" }];
 
 function SettingsPage() {
   const { user, signOut } = useAuth();
@@ -28,8 +24,6 @@ function SettingsPage() {
 
   // Profil
   const [displayName, setDisplayName] = useState("");
-  const [currency, setCurrency] = useState("XOF");
-  const [usdRate, setUsdRate] = useState("1");
   const [metaTax, setMetaTax] = useState("18");
   const [busyProfile, setBusyProfile] = useState(false);
 
@@ -50,19 +44,12 @@ function SettingsPage() {
   useEffect(() => {
     if (profileQ.data) {
       setDisplayName(profileQ.data.display_name ?? "");
-      setCurrency(normalizeDropshippingCurrency((profileQ.data as any).dropshipping_currency ?? profileQ.data.currency));
-      const fxRate = readDropshippingUsdRate(profileQ.data as any);
-      setUsdRate(String(fxRate ?? (normalizeDropshippingCurrency((profileQ.data as any).dropshipping_currency ?? profileQ.data.currency) === "USD" ? 1 : 0.92)));
       setMetaTax(String((profileQ.data as any).meta_tax_pct ?? 18));
     }
   }, [profileQ.data]);
 
   async function saveProfile(e: React.FormEvent) {
     e.preventDefault();
-    const rate = Number(usdRate);
-    if (!Number.isFinite(rate) || rate <= 0) {
-      return toast.error("Taux USD invalide.");
-    }
     const tax = Number(metaTax);
     if (!Number.isFinite(tax) || tax < 0 || tax > 100) {
       return toast.error("Taxe Meta : entre 0 et 100 %.");
@@ -75,10 +62,9 @@ function SettingsPage() {
           id: user!.id,
           email: user!.email,
           display_name: displayName,
-          currency,
-          dropshipping_currency: currency,
+          currency: "XOF",
+          dropshipping_currency: "XOF",
           cod_currency: "XOF",
-          dropshipping_usd_fx: rate,
           meta_tax_pct: tax,
         } as any,
         { onConflict: "id" },
@@ -187,36 +173,12 @@ function SettingsPage() {
             />
           </label>
           <label className="block scroll-mt-24" id="currency">
-            <div className="text-xs uppercase tracking-widest font-bold mb-2">Devise dropshipping</div>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
-              className="w-full bg-background brutal-border-thin px-4 py-3 font-mono focus:border-accent focus:border-2 outline-none"
-            >
-              {CURRENCIES.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-muted-foreground mt-1 font-mono">
-              S'applique uniquement au dropshipping. Le COD reste verrouillé en FCFA (XOF).
-            </p>
-          </label>
-          <label className="block">
-            <div className="text-xs uppercase tracking-widest font-bold mb-2">
-              Taux de change USD → {currency}
+            <div className="text-xs uppercase tracking-widest font-bold mb-2">Devise</div>
+            <div className="w-full bg-muted/40 brutal-border-thin px-4 py-3 font-mono">
+              FCFA — Franc CFA (XOF)
             </div>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={usdRate}
-              onChange={(e) => setUsdRate(e.target.value)}
-              className="w-full bg-background brutal-border-thin px-4 py-3 font-mono focus:border-accent focus:border-2 outline-none"
-            />
             <p className="text-xs text-muted-foreground mt-1 font-mono">
-              Utilisé pour convertir le budget pub saisi en USD vers ta devise. Mets <code>1</code> si tu opères en USD.
+              Devise unique de l'app : tout est saisi et affiché en FCFA.
             </p>
           </label>
           <label className="block">

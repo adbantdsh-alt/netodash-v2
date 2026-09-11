@@ -2,36 +2,39 @@ import { useState, useMemo } from "react";
 import { formatCurrency } from "@/lib/calc";
 
 /**
- * Calculateur ROAS net interactif pour la landing.
- * 4 sliders : CA, Budget Ads, COGS+fulfillment, Taxes pub (Meta 18 %).
- * Sort en live : ROAS Meta affiché vs ROAS net réel + marge nette.
- * Montants en FCFA (devise unique de l'app).
+ * Calculateur de marge CopyX pour la landing.
+ *
+ * Modèle CopyX : les clients paient soit un acompte, soit la totalité, via
+ * mobile money directement sur la boutique. Le calculateur montre donc deux
+ * chiffres que personne ne suit : ce qui est DÉJÀ ENCAISSÉ et ce qui RESTE À
+ * ENCAISSER à la livraison — puis la marge nette réelle en FCFA.
  */
-
-/** Échelle des valeurs de démo : 1 USD ≈ 600 FCFA. */
-const XOF_PER_USD = 600;
-/** Frais fixe de transaction (≈ 30 USD) converti en FCFA. */
-const TX_FIXED_FEE_XOF = 30 * XOF_PER_USD;
-
 export function RoasCalculator() {
-  const [revenue, setRevenue] = useState(12_000 * XOF_PER_USD);
-  const [adSpend, setAdSpend] = useState(5_000 * XOF_PER_USD);
+  const [revenue, setRevenue] = useState(7_500_000);
+  const [depositShare, setDepositShare] = useState(40);
+  const [depositRate, setDepositRate] = useState(30);
+  const [adSpend, setAdSpend] = useState(3_120_000);
   const [cogsPct, setCogsPct] = useState(32);
+  const [momoPct, setMomoPct] = useState(1);
   const [adTaxPct, setAdTaxPct] = useState(18);
 
   const out = useMemo(() => {
     const cogs = (revenue * cogsPct) / 100;
     const adTax = (adSpend * adTaxPct) / 100;
-    const stripe = revenue * 0.029 + TX_FIXED_FEE_XOF;
-    const refunds = revenue * 0.04;
-    const cashIn = revenue - stripe - refunds;
-    const totalCosts = cogs + adSpend + adTax;
-    const profit = cashIn - totalCosts;
+    // Part du CA encaissée tout de suite : paiements intégraux + acomptes.
+    const collected = revenue * ((100 - depositShare) / 100 + (depositShare / 100) * (depositRate / 100));
+    const outstanding = revenue - collected;
+    const momoFees = (collected * momoPct) / 100;
+    const totalCosts = cogs + adSpend + adTax + momoFees;
+    const profit = revenue - totalCosts;
     const margin = revenue > 0 ? (profit / revenue) * 100 : 0;
     const roasMeta = adSpend > 0 ? revenue / adSpend : 0;
-    const roasNet = adSpend > 0 ? cashIn / (adSpend + adTax) : 0;
-    return { cogs, adTax, stripe, refunds, cashIn, profit, margin, roasMeta, roasNet };
-  }, [revenue, adSpend, cogsPct, adTaxPct]);
+    const roasNetCollected = adSpend + adTax > 0 ? collected / (adSpend + adTax) : 0;
+    return {
+      cogs, adTax, adSpend, momoFees, collected, outstanding, totalCosts, profit, margin,
+      roasMeta, roasNetCollected,
+    };
+  }, [revenue, depositShare, depositRate, adSpend, cogsPct, momoPct, adTaxPct]);
 
   const profitable = out.profit > 0;
   const fmt = (n: number) => formatCurrency(n, "XOF");
@@ -40,29 +43,50 @@ export function RoasCalculator() {
     <section className="brutal-border-thin border-l-0 border-r-0 border-b-0 bg-background">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-14 md:py-24">
         <div className="text-xs uppercase tracking-widest text-accent font-bold mb-3">
-          ▍ ROAS NET CALCULATOR · LIVE
+          ▍ CALCULATEUR DE MARGE COPYX · LIVE
         </div>
         <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter max-w-4xl">
           BOUGE LES SLIDERS. <br />
           <span className="text-accent">VOIS CE QUE TU GARDES VRAIMENT.</span>
         </h2>
         <p className="text-muted-foreground mt-5 max-w-2xl text-base md:text-lg">
-          Le ROAS Meta dit une chose. Ta banque dit autre chose. Joue avec ton CA,
-          ton budget pub et ton COGS — on calcule la marge nette réelle, après
-          taxes pub, frais de paiement et refunds.
+          Sur ta boutique CopyX, une partie des clients paie un acompte et l'autre
+          paie tout de suite en mobile money. Mets tes vrais chiffres : on sépare
+          ce qui est encaissé de ce qui reste à encaisser, puis on calcule ta marge
+          nette après pub, COGS, livraison et frais opérateur.
         </p>
 
         <div className="grid lg:grid-cols-5 gap-6 mt-12">
           {/* Sliders */}
           <div className="lg:col-span-3 brutal-border p-6 md:p-8 bg-background space-y-7">
             <SliderRow
-              label="CA (30j)"
+              label="Ventes CopyX (30j)"
               value={revenue}
               min={600_000}
               max={60_000_000}
               step={300_000}
               format={fmt}
               onChange={setRevenue}
+            />
+            <SliderRow
+              label="Clients qui paient un acompte"
+              value={depositShare}
+              min={0}
+              max={100}
+              step={5}
+              format={(v) => v + " %"}
+              onChange={setDepositShare}
+              hint="Le reste paie la totalité en mobile money"
+            />
+            <SliderRow
+              label="Montant de l'acompte"
+              value={depositRate}
+              min={5}
+              max={100}
+              step={5}
+              format={(v) => v + " %"}
+              onChange={setDepositRate}
+              hint="Souvent 30 % à la commande, le solde à la livraison"
             />
             <SliderRow
               label="Budget pub (Meta / TikTok / Google)"
@@ -74,13 +98,23 @@ export function RoasCalculator() {
               onChange={setAdSpend}
             />
             <SliderRow
-              label="COGS + fulfillment (% du CA)"
+              label="COGS + livraison (% du CA)"
               value={cogsPct}
               min={10}
               max={70}
               step={1}
               format={(v) => v + " %"}
               onChange={setCogsPct}
+            />
+            <SliderRow
+              label="Frais mobile money (% de l'encaissé)"
+              value={momoPct}
+              min={0}
+              max={5}
+              step={0.1}
+              format={(v) => v.toFixed(1) + " %"}
+              onChange={setMomoPct}
+              hint="Wave / Orange Money / MTN MoMo / Moov Money"
             />
             <SliderRow
               label="Taxe pub Meta (% du budget)"
@@ -90,7 +124,7 @@ export function RoasCalculator() {
               step={1}
               format={(v) => v + " %"}
               onChange={setAdTaxPct}
-              hint="≈ 18 % au Sénégal, 0 % aux US"
+              hint="≈ 18 % au Sénégal, 0 % dans certains pays"
             />
           </div>
 
@@ -117,10 +151,10 @@ export function RoasCalculator() {
               <div className="grid grid-cols-2 gap-3 mt-2">
                 <div>
                   <div className={`text-4xl md:text-5xl font-black tracking-tighter ${profitable ? "text-accent" : "text-background"}`}>
-                    {out.roasNet.toFixed(2)}x
+                    {out.roasNetCollected.toFixed(2)}x
                   </div>
                   <div className={`text-[10px] uppercase tracking-widest ${profitable ? "text-muted-foreground" : "text-background/70"}`}>
-                    ROAS net réel
+                    ROAS net sur encaissé
                   </div>
                 </div>
                 <div>
@@ -134,7 +168,7 @@ export function RoasCalculator() {
               </div>
               <div className={`mt-5 pt-5 border-t ${profitable ? "border-foreground/20" : "border-background/30"}`}>
                 <div className={`text-[10px] uppercase tracking-widest font-bold ${profitable ? "text-muted-foreground" : "text-background/70"}`}>
-                  Profit net 30j
+                  Marge nette 30j
                 </div>
                 <div className="text-3xl md:text-4xl font-black tracking-tighter mt-1 tabular">
                   {out.profit >= 0 ? fmt(out.profit) : "− " + fmt(-out.profit)}
@@ -143,10 +177,11 @@ export function RoasCalculator() {
             </div>
 
             <div className="brutal-border-thin p-4 font-mono text-[11px] text-muted-foreground space-y-1">
-              <Line k="− COGS / fulfillment" v={"− " + fmt(out.cogs)} />
-              <Line k="− Taxe pub" v={"− " + fmt(out.adTax)} />
-              <Line k="− Frais de paiement" v={"− " + fmt(out.stripe)} />
-              <Line k="− Refunds (~4%)" v={"− " + fmt(out.refunds)} />
+              <Line k="Encaissé maintenant" v={fmt(out.collected)} />
+              <Line k="Reste à encaisser (livraison)" v={fmt(out.outstanding)} />
+              <Line k="− COGS + livraison" v={"− " + fmt(out.cogs)} />
+              <Line k="− Pub + taxe Meta" v={"− " + fmt(out.adSpend + out.adTax)} />
+              <Line k="− Frais mobile money" v={"− " + fmt(out.momoFees)} />
             </div>
           </div>
         </div>

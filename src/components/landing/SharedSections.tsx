@@ -156,10 +156,8 @@ export function BeforeAfter({ copy }: { copy: LandingCopy }) {
 
 export function ProductRanking({
   copy,
-  mode,
 }: {
   copy: LandingCopy;
-  mode: "dropshipping" | "cod";
 }) {
   return (
     <section className="brutal-border-thin border-l-0 border-r-0 border-b-0 bg-background">
@@ -203,7 +201,7 @@ export function ProductRanking({
                     : row.status === "BREAK EVEN"
                       ? "bg-background text-foreground border-foreground"
                       : "bg-accent text-accent-foreground border-accent";
-                const profitGood = mode === "cod" ? row.profit >= 500_000 : row.profit >= 1_200_000;
+                const profitGood = row.profit >= 1_200_000;
                 return (
                   <tr key={row.name} className="border-t border-foreground/20">
                     <td className="p-4 font-black text-foreground tracking-tight text-base">{row.name}</td>
@@ -532,23 +530,27 @@ export function FinalCta({ copy }: { copy: LandingCopy }) {
  * ────────────────────────────────────────────────────────────────────────── */
 
 type CompCell = string | boolean;
-type CompRow = { label: string; netodash: CompCell; triple: CompCell; beprofit: CompCell; lifetimely: CompCell; highlight?: boolean };
+type CompRow = { label: string; netodash: CompCell; tableur: CompCell; brutes: CompCell; highlight?: boolean };
 
+/**
+ * Comparaison pour un marchand CopyX : Netodash face à un tableur maison et
+ * face aux chiffres bruts de la boutique (qui n'intègrent ni la pub, ni les
+ * frais mobile money, ni le reste à encaisser des acomptes).
+ */
 const COMP_ROWS: CompRow[] = [
-  { label: "Prix mensuel", netodash: "$20", triple: "$129", beprofit: "$25", lifetimely: "$19", highlight: true },
-  { label: "Produits illimités inclus", netodash: "$20", triple: "$299+", beprofit: "$99", lifetimely: "$149" },
-  { label: "Essai gratuit 7 jours", netodash: true, triple: false, beprofit: true, lifetimely: true },
-  { label: "Sans carte bancaire", netodash: true, triple: false, beprofit: false, lifetimely: false },
-  { label: "ROAS net (après COGS + frais)", netodash: true, triple: true, beprofit: true, lifetimely: true },
-  { label: "Profit / commande en temps réel", netodash: true, triple: true, beprofit: true, lifetimely: true },
-  { label: "Ranking produits winners / losers", netodash: true, triple: "Limité", beprofit: false, lifetimely: "Limité" },
-  { label: "Décomposition coûts détaillée", netodash: true, triple: true, beprofit: true, lifetimely: true },
-  { label: "Break-even & simulateur de scaling", netodash: true, triple: false, beprofit: false, lifetimely: false },
-  { label: "Insights automatiques (alertes)", netodash: true, triple: true, beprofit: false, lifetimely: false },
-  { label: "Multi-devises (USD, EUR, FCFA…)", netodash: true, triple: "USD only", beprofit: "USD only", lifetimely: "USD only" },
-  { label: "Saisie manuelle + import", netodash: true, triple: false, beprofit: false, lifetimely: false },
-  { label: "Interface FR native", netodash: true, triple: false, beprofit: false, lifetimely: false },
-  { label: "Setup en moins de 60s", netodash: true, triple: false, beprofit: false, lifetimely: false },
+  { label: "Prix mensuel", netodash: "$20", tableur: "Gratuit (ton temps)", brutes: "Inclus", highlight: true },
+  { label: "Ventes CopyX consolidées", netodash: true, tableur: "À la main", brutes: true },
+  { label: "Acomptes vs paiements intégraux", netodash: true, tableur: "Rarement", brutes: "Non" },
+  { label: "Reste à encaisser à la livraison", netodash: true, tableur: "Non", brutes: "Non" },
+  { label: "Frais mobile money (Wave / OM)", netodash: true, tableur: "Non", brutes: "Non" },
+  { label: "ROAS net (après COGS + frais)", netodash: true, tableur: false, brutes: false },
+  { label: "Marge nette par produit", netodash: true, tableur: "Formules à refaire", brutes: false },
+  { label: "Ranking winners / losers", netodash: true, tableur: false, brutes: false },
+  { label: "Break-even & simulateur de scaling", netodash: true, tableur: false, brutes: false },
+  { label: "Insights automatiques (alertes)", netodash: true, tableur: false, brutes: false },
+  { label: "Tout en FCFA", netodash: true, tableur: true, brutes: true },
+  { label: "Interface FR native", netodash: true, tableur: false, brutes: false },
+  { label: "Setup en moins de 60 secondes", netodash: true, tableur: false, brutes: true },
 ];
 
 function CompCellRender({ v, accent }: { v: CompCell; accent?: boolean }) {
@@ -572,15 +574,16 @@ export function CompetitorComparison() {
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
           <div className="font-mono text-xs uppercase tracking-widest text-accent mb-3">
-            Netodash vs la concurrence
+            Netodash vs le tableur
           </div>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[0.95] mb-4">
-            Pourquoi payer <span className="line-through text-muted-foreground">$129/mois</span>{" "}
-            quand <span className="text-accent">$20</span> suffisent ?
+            Ton tableur ne te dit pas{" "}
+            <span className="text-accent">ce que tu gardes.</span>
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
-            Comparaison honnête face à TripleWhale, BeProfit et Lifetimely.
-            Mêmes métriques essentielles, fraction du prix, pensé pour ceux qui scalent à partir de zéro.
+            Tes ventes CopyX affichent un chiffre. Elles ne disent ni ce qui est
+            encaissé, ni ce qui reste à encaisser, ni ce que la pub et les frais
+            mobile money t'ont pris. Netodash, si.
           </p>
         </div>
 
@@ -593,9 +596,8 @@ export function CompetitorComparison() {
                 <th className="px-4 py-4 bg-accent text-accent-foreground font-black uppercase tracking-wider text-xs">
                   Netodash
                 </th>
-                <th className="px-4 py-4 font-black uppercase tracking-wider text-xs">TripleWhale</th>
-                <th className="px-4 py-4 font-black uppercase tracking-wider text-xs">BeProfit</th>
-                <th className="px-4 py-4 font-black uppercase tracking-wider text-xs">Lifetimely</th>
+                <th className="px-4 py-4 font-black uppercase tracking-wider text-xs">Tableur maison</th>
+                <th className="px-4 py-4 font-black uppercase tracking-wider text-xs">Chiffres bruts boutique</th>
               </tr>
             </thead>
             <tbody>
@@ -610,19 +612,18 @@ export function CompetitorComparison() {
                   <td className="px-4 py-3 text-center bg-accent/10">
                     <CompCellRender v={r.netodash} accent />
                   </td>
-                  <td className="px-4 py-3 text-center"><CompCellRender v={r.triple} /></td>
-                  <td className="px-4 py-3 text-center"><CompCellRender v={r.beprofit} /></td>
-                  <td className="px-4 py-3 text-center"><CompCellRender v={r.lifetimely} /></td>
+                  <td className="px-4 py-3 text-center"><CompCellRender v={r.tableur} /></td>
+                  <td className="px-4 py-3 text-center"><CompCellRender v={r.brutes} /></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        {/* Mobile — stacked cards per competitor */}
+        {/* Mobile — stacked cards per alternative */}
         <div className="md:hidden space-y-6">
-          {(["triple", "beprofit", "lifetimely"] as const).map((comp) => {
-            const label = comp === "triple" ? "TripleWhale" : comp === "beprofit" ? "BeProfit" : "Lifetimely";
+          {(["tableur", "brutes"] as const).map((comp) => {
+            const label = comp === "tableur" ? "Tableur maison" : "Chiffres bruts boutique";
             return (
               <div key={comp} className="brutal-border bg-background">
                 <div className="bg-foreground text-background px-4 py-3 font-black uppercase tracking-wider text-xs flex justify-between">
@@ -672,7 +673,7 @@ export function CompetitorComparison() {
         <div className="text-center mt-8">
           <SignupCtaButton variant="hero" />
           <p className="mt-3 text-[11px] font-mono text-muted-foreground">
-            Sans CB · Annulation en 1 clic · Tarifs comparés au 06/2026, susceptibles d'évolution chez les concurrents
+            Sans CB · Annulation en 1 clic · Tarifs en dollars US, facturation mensuelle
           </p>
         </div>
       </div>

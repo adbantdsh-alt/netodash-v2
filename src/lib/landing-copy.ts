@@ -1,14 +1,7 @@
-import type { BusinessMode } from "@/lib/use-active-mode";
-import wooLogo from "@/assets/platforms/woocommerce.webp";
-import youcanLogo from "@/assets/platforms/youcan.webp";
 import lucasPhoto from "@/assets/testimonials/lucas.jpg";
 import claraPhoto from "@/assets/testimonials/clara.jpg";
-import marcoPhoto from "@/assets/testimonials/marco.jpg";
-import juliaPhoto from "@/assets/testimonials/julia.jpg";
 import awaPhoto from "@/assets/testimonials/awa.jpg";
-import fatouPhoto from "@/assets/testimonials/fatou.jpg";
 import kouassiPhoto from "@/assets/testimonials/kouassi.jpg";
-import yaoPhoto from "@/assets/testimonials/yao.jpg";
 
 export type Plan = {
   name: string;
@@ -120,52 +113,51 @@ export type LandingCopy = {
   footerBaseline: string;
 };
 
-// ───────────── DROPSHIPPING ─────────────
-const DROPSHIPPING: LandingCopy = {
+// ───────────── COPYX ─────────────
+// Netodash est calibré à 100 % pour les boutiques CopyX : les clients paient
+// soit un acompte, soit la totalité, via mobile money directement sur le site.
+// Plus aucune notion de COD ni de Shopify dans cette landing.
+const COPYX: LandingCopy = {
   seoTitle:
-    "Netodash — Dashboard de rentabilité (ROAS net, marge réelle Meta Ads)",
+    "Netodash — La rentabilité réelle de ta boutique CopyX (marge nette en FCFA)",
   seoDescription:
-    "Netodash : le dashboard de rentabilité réelle pour les marchands. Calcule ton ROAS net après coût produit, livraison, frais de paiement et taxes pub Meta / TikTok / Google.",
+    "Netodash lit tes ventes CopyX — acomptes et paiements mobile money — et calcule ta vraie marge : pub, taxe Meta, COGS, livraison, frais Wave / Orange Money et remboursements. Décision par produit, en FCFA.",
 
-  heroBadge: "Pilotage de rentabilité",
-  heroH1Line1: "TA BOUTIQUE DIT 6M.",
+  heroBadge: "100 % calibré pour CopyX",
+  heroH1Line1: "TA BOUTIQUE COPYX ENCAISSE.",
   heroH1Line2: "COMBIEN AS-TU GARDÉ ?",
   heroSubtitle:
-    "Netodash te montre le vrai profit derrière chaque produit, chaque pub et chaque vente —",
-  heroSubtitleBold:
-    "pour savoir exactement quoi scaler, surveiller ou couper.",
+    "Acomptes, paiements mobile money, colis à livrer : Netodash transforme tes ventes CopyX en un seul chiffre qui compte —",
+  heroSubtitleBold: "ta marge nette réelle, produit par produit.",
   heroCtaPrimary: "Essayer gratuitement 7 jours →",
   heroCtaSecondary: "Voir les tarifs",
   heroSmallprint: "Aucune carte bancaire requise · Accès complet · Annule à tout moment",
 
   trustStats: [
-    { v: "+800", l: "Marchands actifs" },
-    { v: "2,5 Md FCFA", l: "CA piloté chaque mois" },
+    { v: "+800", l: "Marchands CopyX" },
+    { v: "2,5 Md FCFA", l: "Encaissements pilotés / mois" },
     { v: "32 %", l: "De marge nette gagnée en moyenne" },
     { v: "4,9 / 5", l: "Note utilisateurs" },
   ],
 
-  platformsHeading: "Compatible avec ton stack",
-  platforms: [
-    { src: wooLogo, alt: "WooCommerce" },
-    { src: youcanLogo, alt: "YouCan" },
-  ],
+  platformsHeading: "Encaissements mobile money pris en charge",
+  platforms: [],
 
   pillars: [
     {
       n: "01",
-      t: "MARGE NETTE RÉELLE",
-      d: "CA moins pub, COGS, livraison, frais de paiement et remboursements. Le seul chiffre qui paie ton loyer.",
+      t: "ENCAISSÉ ≠ VENDU",
+      d: "Netodash sépare les acomptes déjà encaissés, les paiements intégraux et le reste à encaisser à la livraison. Tu sais ce qui est réellement dans ta poche.",
     },
     {
       n: "02",
-      t: "ROAS NET",
-      d: "Pas le ROAS gonflé de Meta. Le ratio entre ce que tu encaisses vraiment et ce que tu dépenses, toutes plateformes confondues.",
+      t: "MARGE NETTE RÉELLE",
+      d: "Pub, taxe Meta, COGS, livraison, frais Wave / Orange Money, remboursements : tout est déduit. Il ne reste que ton vrai profit, en FCFA.",
     },
     {
       n: "03",
       t: "DÉCISION PAR PRODUIT",
-      d: "Sache exactement quel produit te rapporte, lequel te coule, et lequel mérite d'être scalé sans hésiter.",
+      d: "Quel produit te rapporte, lequel te coule, lequel mérite d'être scalé. Une réponse par produit, pas un débat.",
     },
   ],
 
@@ -176,59 +168,61 @@ const DROPSHIPPING: LandingCopy = {
     after: " pilote son book.",
   },
   showcaseLead:
-    "Saisis tes chiffres. Netodash classe tes produits par profit net et te dit, en un mot, lequel scaler, lequel surveiller, lequel couper.",
+    "Saisis tes ventes CopyX du jour — ou synchronise ton compte depuis l'onglet Synchro. Netodash classe tes produits par profit net et te dit quoi scaler, surveiller ou couper.",
   showcaseList: [
-    "Product Profit Ranking quotidien",
-    "Winners / Losers en un coup d'œil",
-    "Décision Scale / Watch / Kill par produit",
+    "Ventes CopyX consolidées : acomptes + paiements mobile money",
+    "Ranking des produits par profit net",
+    "Décision Scale / Watch / Kill chaque matin",
   ],
 
   beforeAfterEyebrow: "ÇA TE PARLE ?",
-  beforeAfterTitle: "7 488 000 FCFA DE CA.",
+  beforeAfterTitle: "7 500 000 FCFA DE VENTES COPYX.",
   beforeAfterAccent: "EST-CE QUE TU GAGNES VRAIMENT DE L'ARGENT ?",
-  beforeAfterBeforeBadge: "😵‍💫 Sans NETODASH",
+  beforeAfterBeforeBadge: "😵 Sans NETODASH",
   beforeAfterAfterBadge: "✅ Avec NETODASH",
   beforeAfterBeforeRows: [
-    { k: "CA (30j)", v: "7 488 000 F" },
-    { k: "Budget Meta Ads", v: "3 120 000 F" },
+    { k: "Ventes CopyX (30j)", v: "7 500 000 F" },
+    { k: "Encaissé vs reste à encaisser ?", v: "≈ ?", mode: "accent" },
+    { k: "Budget pub (Meta / TikTok)", v: "3 120 000 F" },
     { k: "ROAS affiché Meta", v: "2,4 ✨", mode: "accent" },
-    { k: "COGS / fulfillment ?", v: "¯\\_(ツ)_/¯", mode: "accent" },
-    { k: "Frais de paiement + refunds ?", v: "≈ ?", mode: "accent" },
+    { k: "Frais mobile money ?", v: "≈ ?", mode: "accent" },
     { k: "Marge nette réelle", v: "AUCUNE IDÉE.", mode: "accent" },
   ],
   beforeAfterAfterRows: [
-    { k: "CA encaissé net", v: "7 113 600 F" },
-    { k: "− COGS + fulfillment", v: "− 2 364 000 F" },
-    { k: "− Meta Ads + taxe 18%", v: "− 3 681 600 F" },
-    { k: "− Frais de paiement + refunds", v: "− 367 200 F" },
-    { k: "Marge nette", v: "700 800 F", mode: "accent" },
-    { k: "ROAS net réel", v: "1,9", mode: "accent" },
+    { k: "Encaissé mobile money", v: "5 400 000 F" },
+    { k: "Reste à encaisser (livraison)", v: "2 100 000 F" },
+    { k: "− COGS + livraison", v: "− 2 400 000 F" },
+    { k: "− Pub + taxe 18 %", v: "− 3 681 600 F" },
+    { k: "− Frais mobile money (1 %)", v: "− 54 000 F" },
+    { k: "Marge nette si tout est livré", v: "1 364 400 F", mode: "accent" },
+    { k: "ROAS net sur encaissé", v: "1,47", mode: "accent" },
   ],
   beforeAfterBeforeFooter: {
     plain:
-      "Tu scales sur le ROAS Meta. Mais à la fin du mois tu regardes ton compte de paiement et tu te demandes : ",
-    bold: "« Pourquoi je n'ai presque rien gardé ? »",
+      "Tu scales sur le ROAS Meta. Mais entre les acomptes, les colis non livrés et les frais mobile money, la vraie question reste : ",
+    bold: "« Combien j'ai gardé ? »",
   },
   beforeAfterAfterFooter: {
     plain: "Tu sais ",
-    bold: "exactement ce que tu gardes, sur quel produit, et quelle créa scaler la semaine prochaine.",
+    bold:
+      "ce qui est encaissé, ce qui reste à encaisser, et ce que chaque produit te rapporte vraiment.",
   },
   beforeAfterTagline: {
-    plain: "9 marchands sur 10 scalent sur le ROAS Meta gonflé. ",
-    bold: "NETODASH te montre la vraie marge en 2 minutes par jour.",
+    plain: "9 marchands sur 10 pilotent au ROAS Meta gonflé. ",
+    bold: "NETODASH te donne la marge nette de ta boutique CopyX en 2 minutes par jour.",
   },
 
   rankingEyebrow: "▍ PRODUCT PROFIT RANKING",
   rankingTitle: "QUELS PRODUITS TE FONT",
   rankingTitleAccent: "VRAIMENT GAGNER DE L'ARGENT",
   rankingLead:
-    "Netodash classe tes produits par profit net. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
-  rankingCols: ["Produit", "CA (FCFA)", "Ad Spend (FCFA)", "Profit net (FCFA)", "Marge", "Status"],
+    "Netodash classe tes produits CopyX par profit net — après pub, taxe Meta, COGS, livraison et frais mobile money. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
+  rankingCols: ["Produit", "Ventes (FCFA)", "Pub (FCFA)", "Profit net (FCFA)", "Marge", "Statut"],
   rankingRows: [
-    { name: "Massage Gun Pro", rev: 11_052_000, ads: 3_120_000, profit: 3_888_000, margin: 35.2, status: "RENTABLE" },
-    { name: "Sleek LED Mirror", rev: 7_428_000, ads: 2_460_000, profit: 1_524_000, margin: 20.5, status: "BREAK EVEN" },
-    { name: "Posture Corrector V2", rev: 5_892_000, ads: 2_340_000, profit: 588_000, margin: 10.0, status: "PAS RENTABLE" },
-    { name: "Aura Diffuser", rev: 4_290_000, ads: 1_092_000, profit: 1_428_000, margin: 33.3, status: "RENTABLE" },
+    { name: "Sérum éclat 30ml", rev: 11_052_000, ads: 3_120_000, profit: 3_888_000, margin: 35.2, status: "RENTABLE" },
+    { name: "Montre minimaliste", rev: 7_428_000, ads: 2_460_000, profit: 1_524_000, margin: 20.5, status: "BREAK EVEN" },
+    { name: "Correcteur de posture", rev: 5_892_000, ads: 2_340_000, profit: 588_000, margin: 10.0, status: "PAS RENTABLE" },
+    { name: "Diffuseur d'ambiance", rev: 4_290_000, ads: 1_092_000, profit: 1_428_000, margin: 33.3, status: "RENTABLE" },
   ],
   rankingCurrencyPrefix: "",
   rankingFooter:
@@ -237,7 +231,7 @@ const DROPSHIPPING: LandingCopy = {
   decisionEyebrow: "▍ DECISION ENGINE",
   decisionTitle: { a: "RENTABLE.", b: "BREAK EVEN.", c: "PAS RENTABLE." },
   decisionLead:
-    "Trois statuts. Une logique hybride marge + ROAS net. Pas de débat, pas de feeling — juste la décision.",
+    "Trois statuts. Une logique hybride marge + ROAS net sur l'encaissé. Pas de débat, pas de feeling — juste la décision.",
   decisionRules: [
     {
       name: "🚀 RENTABLE",
@@ -262,11 +256,11 @@ const DROPSHIPPING: LandingCopy = {
     },
   ],
 
-  testimonialsEyebrow: "▍ RÉSULTATS RÉELS",
+  testimonialsEyebrow: "▍ RÉSULTATS RÉELS · MARCHANDS COPYX",
   testimonialsTitle: "AVANT NETODASH.",
   testimonialsTitleAccent: "APRÈS NETODASH.",
   testimonialsLead:
-    "Pas de quotes vagues. Juste des chiffres avant / après — sur les mêmes boutiques.",
+    "Pas de quotes vagues. Des chiffres avant / après, sur des boutiques CopyX.",
   testimonials: [
     {
       photo: claraPhoto,
@@ -275,7 +269,7 @@ const DROPSHIPPING: LandingCopy = {
       niche: "Beauté / skincare",
       before: { label: "ROAS net", v: "1.4" },
       after: { label: "ROAS net", v: "2.2" },
-      note: "+57% en 6 semaines après avoir killé 2 produits qui maquillaient les chiffres.",
+      note: "+57 % de ROAS net en 6 semaines après avoir coupé 2 produits qui maquillaient les chiffres.",
     },
     {
       photo: lucasPhoto,
@@ -284,16 +278,16 @@ const DROPSHIPPING: LandingCopy = {
       niche: "Accessoires tech",
       before: { label: "Profit / mois", v: "1 260 000 F" },
       after: { label: "Profit / mois", v: "3 180 000 F" },
-      note: "Le ranking m'a montré que 1 produit faisait 70% de mon profit. J'ai scalé que lui.",
+      note: "Le ranking m'a montré qu'un seul produit faisait 70 % de mon profit. J'ai scalé que lui.",
     },
     {
       photo: awaPhoto,
       name: "Awa T.",
       city: "Dakar 🇸🇳",
       niche: "Bijoux fantaisie",
-      before: { label: "Marge nette", v: "8%" },
-      after: { label: "Marge nette", v: "27%" },
-      note: "Le COGS et les refunds me bouffaient tout. Maintenant je sais quoi corriger.",
+      before: { label: "Acomptes suivis", v: "Aucun" },
+      after: { label: "Acomptes suivis", v: "100 %" },
+      note: "Je ne savais pas combien de clients avaient payé un acompte et combien restaient à encaisser. Maintenant je le vois chaque matin.",
     },
     {
       photo: kouassiPhoto,
@@ -308,9 +302,9 @@ const DROPSHIPPING: LandingCopy = {
 
   pricingEyebrow: "▍ PRICING",
   pricingTitle: "PENSÉ POUR LES",
-  pricingTitleAccent: "OPÉRATEURS SÉRIEUX.",
+  pricingTitleAccent: "MARCHANDS COPYX.",
   pricingLead:
-    "7 jours d'essai gratuit avec accès complet, sans carte bancaire. Ensuite : $20/mois, tout illimité — produits, Analytics Pro, Decision Engine, upsells, export CSV.",
+    "7 jours d'essai gratuit avec accès complet, sans carte bancaire. Ensuite : $20/mois, tout illimité — ventes CopyX, acomptes, Analytics Pro, Decision Engine, export CSV.",
   plans: [
     {
       name: "Essai gratuit",
@@ -332,7 +326,8 @@ const DROPSHIPPING: LandingCopy = {
       period: "/mois",
       tagline: "Tout illimité, tout inclus",
       features: [
-        "Produits illimités",
+        "Ventes CopyX illimitées",
+        "Suivi acomptes + paiements mobile money",
         "Analytics Pro (scoring, waterfall, break-even, simulateur)",
         "Decision Engine · Insights automatiques",
         "Upsells · Export CSV",
@@ -346,16 +341,20 @@ const DROPSHIPPING: LandingCopy = {
 
   faq: [
     {
+      q: "Est-ce que ça marche avec ma boutique CopyX ?",
+      a: "Oui, c'est exactement notre base : Netodash est calibré à 100 % pour les ventes de ta boutique CopyX. Tu saisis tes ventes du jour (1 minute), ou tu connectes ton compte CopyX depuis l'onglet Synchro, et Netodash calcule ta marge nette réelle.",
+    },
+    {
+      q: "Comment sont gérés les acomptes ?",
+      a: "Chaque vente CopyX est suivie : acompte encaissé, paiement intégral, et reste à encaisser à la livraison. Tu vois ce qui est réellement dans ta poche — pas seulement ce que ta boutique affiche.",
+    },
+    {
+      q: "Quels frais sont déduits de ma marge ?",
+      a: "Pub + taxe Meta, COGS, livraison, frais mobile money (Wave, Orange Money, MTN MoMo, Moov Money) et remboursements. Tout est paramétrable sur ton profil.",
+    },
+    {
       q: "Comment fonctionne l'essai gratuit ?",
       a: "7 jours complets, sans carte bancaire, accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
-    },
-    {
-      q: "C'est pour quel type d'e-commerce ?",
-      a: "NETODASH pilote ta rentabilité réelle : ROAS net, marge après coûts produits, livraison, frais de paiement et taxes publicitaires. Compatible Meta, TikTok et Google Ads.",
-    },
-    {
-      q: "Quel plan choisir ?",
-      a: "Un seul plan : $20/mois, tout illimité. Produits illimités, Analytics Pro (scoring, waterfall, break-even, simulateur, insights), Decision Engine, upsells, export CSV et support WhatsApp. Pas de palier à choisir.",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
@@ -365,304 +364,12 @@ const DROPSHIPPING: LandingCopy = {
 
   ctaTitle: "ARRÊTE DE DEVINER.",
   ctaTitleAccent: "MESURE.",
-  ctaLead: "7 jours d'essai gratuit. Aucune carte requise. Sors enfin de l'aveugle.",
-  ctaButton: "Créer mon compte →",
-
-  footerTagline:
-    "Le dashboard de rentabilité réelle pour les marchands.",
-  footerBaseline: "BUILT FOR MERCHANTS",
-};
-
-// ───────────── COD AFRIQUE ─────────────
-const COD: LandingCopy = {
-  seoTitle:
-    "Netodash COD — Dashboard rentabilité Cash on Delivery (Sénégal, Côte d'Ivoire, FCFA)",
-  seoDescription:
-    "Le dashboard de rentabilité pour le COD en Afrique de l'Ouest. Suis taux de confirmation, taux de livraison, coût par zone et profit net en FCFA. Conçu pour le call center et la logistique terrain.",
-
-  heroBadge: "Conçu pour le COD en Afrique de l'Ouest",
-  heroH1Line1: "TU FAIS 100 COMMANDES/JOUR.",
-  heroH1Line2: "COMBIEN SONT VRAIMENT PAYÉES ?",
-  heroSubtitle:
-    "Netodash mesure ce qui compte vraiment en COD : confirmation, livraison, coût par zone et pub —",
-  heroSubtitleBold:
-    "pour savoir exactement ce que ta boutique te rapporte en FCFA chaque jour.",
-  heroCtaPrimary: "Tester gratuitement 14 jours →",
-  heroCtaSecondary: "Voir les tarifs",
-  heroSmallprint: "Sans carte bancaire · Plan Pro débloqué · Annule à tout moment",
-
-  trustStats: [
-    { v: "+400", l: "Vendeurs COD actifs" },
-    { v: "65 %", l: "Taux de livraison moyen suivi" },
-    { v: "−28 %", l: "De pertes logistiques évitées" },
-    { v: "4,8 / 5", l: "Note utilisateurs Afrique" },
-  ],
-
-  platformsHeading: "Compatible avec ton stack COD (Sénégal · CI · Mali · Bénin)",
-  platforms: [
-    { src: youcanLogo, alt: "YouCan" },
-    { src: wooLogo, alt: "WooCommerce" },
-  ],
-
-  pillars: [
-    {
-      n: "01",
-      t: "TAUX DE CONFIRMATION",
-      d: "Mesure combien de commandes reçues passent vraiment au closing. Repère tes meilleures sources de leads et les agents qui convertissent le mieux.",
-    },
-    {
-      n: "02",
-      t: "TAUX DE LIVRAISON",
-      d: "Suis le ratio confirmées → livrées. C'est là que ton cash se gagne ou se perd. Tableau de bord clair en FCFA.",
-    },
-    {
-      n: "03",
-      t: "COÛT LIVRAISON PAR ZONE",
-      d: "Définis tes zones (Dakar, régions, hors-pays). Chaque livraison est imputée à sa zone : tu connais ton vrai coût logistique.",
-    },
-  ],
-
-  showcaseEyebrow: "▍ L'OPERATOR CONSOLE COD",
-  showcaseTitleHtml: {
-    before: "Pilote ton COD ",
-    accent: "comme un directeur d'agence",
-    after: " pilote son call center.",
-  },
-  showcaseLead:
-    "Saisis tes commandes reçues, confirmées, livrées par zone. Netodash calcule ton profit net en FCFA, par jour, par produit, et te dit quel canal pousser.",
-  showcaseList: [
-    "Taux confirmation / livraison quotidien",
-    "Coût livraison ventilé par zone",
-    "Profit net en FCFA, par produit",
-  ],
-
-  beforeAfterEyebrow: "ÇA TE PARLE ?",
-  beforeAfterTitle: "300 COMMANDES REÇUES.",
-  beforeAfterAccent: "COMBIEN SONT VRAIMENT PAYÉES À LA FIN DU MOIS ?",
-  beforeAfterBeforeBadge: "😵‍💫 Sans NETODASH",
-  beforeAfterAfterBadge: "✅ Avec NETODASH",
-  beforeAfterBeforeRows: [
-    { k: "Commandes reçues (30j)", v: "300" },
-    { k: "Confirmées (closing)", v: "180" },
-    { k: "Taux de livraison ?", v: "≈ 60 % ?", mode: "accent" },
-    { k: "Coût livraison par zone ?", v: "¯\\_(ツ)_/¯", mode: "accent" },
-    { k: "Retours non payés ?", v: "≈ ?", mode: "accent" },
-    { k: "Profit net réel", v: "AUCUNE IDÉE.", mode: "accent" },
-  ],
-  beforeAfterAfterRows: [
-    { k: "Livrées payées net", v: "168 cmd" },
-    { k: "− Coût produit (livrées)", v: "− 1 260 000 F" },
-    { k: "− Livraison ventilée par zone", v: "− 420 000 F" },
-    { k: "− Budget pub (Meta/TikTok)", v: "− 850 000 F" },
-    { k: "Profit net (FCFA)", v: "+ 720 000 F", mode: "accent" },
-    { k: "Marge nette", v: "21 %", mode: "accent" },
-  ],
-  beforeAfterBeforeFooter: {
-    plain:
-      "Tu paies des livraisons que tu ne récupères pas, ton call center pousse fort mais ton cash en fin de mois te dit : ",
-    bold: "« Où est passé l'argent ? »",
-  },
-  beforeAfterAfterFooter: {
-    plain: "Tu sais ",
-    bold: "exactement quelle zone te coûte trop cher, quel produit livre vraiment, et quel agent ferme le mieux.",
-  },
-  beforeAfterTagline: {
-    plain:
-      "9 vendeurs COD sur 10 ne mesurent pas leur vrai profit par zone. ",
-    bold: "NETODASH te le montre en FCFA, en 2 minutes par jour.",
-  },
-
-  rankingEyebrow: "▍ PROFIT RANKING PAR PRODUIT",
-  rankingTitle: "QUELS PRODUITS LIVRENT",
-  rankingTitleAccent: "ET QUELS PRODUITS TE COÛTENT",
-  rankingLead:
-    "Netodash classe tes produits par profit net en FCFA, après livraison ventilée par zone. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
-  rankingCols: ["Produit", "Reçues", "Livrées", "Profit net (F)", "Marge", "Status"],
-  rankingRows: [
-    { name: "Montre Connectée Pro", rev: 180, ads: 105, profit: 1_240_000, margin: 28.5, status: "RENTABLE" },
-    { name: "Lampe LED Décorative", rev: 120, ads: 72, profit: 540_000, margin: 18.0, status: "BREAK EVEN" },
-    { name: "Casque Bluetooth X3", rev: 95, ads: 38, profit: 120_000, margin: 6.5, status: "PAS RENTABLE" },
-    { name: "Diffuseur Parfum Auto", rev: 70, ads: 48, profit: 680_000, margin: 31.2, status: "RENTABLE" },
-  ],
-  rankingCurrencyPrefix: "",
-  rankingFooter:
-    "→ Tu vois immédiatement quelle zone arrêter de livrer, et quel produit pousser cette semaine.",
-
-  decisionEyebrow: "▍ DECISION ENGINE COD",
-  decisionTitle: { a: "RENTABLE.", b: "BREAK EVEN.", c: "PAS RENTABLE." },
-  decisionLead:
-    "Trois statuts. Logique hybride taux de livraison + marge nette FCFA. Pas de feeling — juste la décision.",
-  decisionRules: [
-    {
-      name: "🚀 RENTABLE",
-      ruleA: "Livraison > 60 %",
-      ruleConn: "ET",
-      ruleB: "Marge > 25 %",
-      copy: "Pousse le budget pub. Renforce le stock et les agents closers.",
-    },
-    {
-      name: "⚖ BREAK EVEN",
-      ruleA: "Livraison 45–60 %",
-      ruleConn: "OU",
-      ruleB: "Marge 10–25 %",
-      copy: "Optimise le closing, change de transporteur, renégocie le COGS.",
-    },
-    {
-      name: "🛑 PAS RENTABLE",
-      ruleA: "Livraison < 45 %",
-      ruleConn: "OU",
-      ruleB: "Marge < 10 %",
-      copy: "Coupe le produit ou la zone. Tu finances de la logistique perdue.",
-    },
-  ],
-
-  testimonialsEyebrow: "▍ RÉSULTATS RÉELS · AFRIQUE DE L'OUEST",
-  testimonialsTitle: "AVANT NETODASH.",
-  testimonialsTitleAccent: "APRÈS NETODASH.",
-  testimonialsLead:
-    "Pas de quotes vagues. Juste des chiffres avant / après — sur les mêmes boutiques COD.",
-  testimonials: [
-    {
-      photo: yaoPhoto,
-      name: "Mamadou S.",
-      city: "Dakar 🇸🇳",
-      niche: "Gadgets & accessoires",
-      before: { label: "Taux livraison", v: "48 %" },
-      after: { label: "Taux livraison", v: "67 %" },
-      note: "J'ai vu que la zone régions me coûtait 3× plus cher. J'ai recadré le transporteur et tout a changé.",
-    },
-    {
-      photo: awaPhoto,
-      name: "Aïssatou D.",
-      city: "Abidjan 🇨🇮",
-      niche: "Beauté & cosmétique",
-      before: { label: "Profit / mois", v: "320 000 F" },
-      after: { label: "Profit / mois", v: "1 150 000 F" },
-      note: "Je voyais 200 commandes/mois et je pensais cartonner. Le dashboard m'a montré 38 % de livraison. J'ai killé 1 produit, scalé l'autre.",
-    },
-    {
-      photo: fatouPhoto,
-      name: "Fatou K.",
-      city: "Bamako 🇲🇱",
-      niche: "Maison & déco",
-      before: { label: "Marge nette", v: "6 %" },
-      after: { label: "Marge nette", v: "24 %" },
-      note: "Le coût par zone, c'est ce qui m'a sauvé. Je savais pas que la zone hors-Bamako me bouffait toute ma marge.",
-    },
-    {
-      photo: kouassiPhoto,
-      name: "Ousmane B.",
-      city: "Dakar 🇸🇳",
-      niche: "Tech & santé",
-      before: { label: "Décisions / sem.", v: "Au feeling" },
-      after: { label: "Décisions / sem.", v: "Scale / Kill" },
-      note: "Mes 3 agents closers ont chacun leur stat de confirmation. Je sais qui pousser, qui former. Game changer.",
-    },
-  ],
-
-  pricingEyebrow: "▍ PRICING",
-  pricingTitle: "PENSÉ POUR LES",
-  pricingTitleAccent: "VENDEURS COD QUI VEULENT SCALER PROPRE.",
-  pricingLead:
-    "14 jours d'essai gratuit avec accès complet. Ensuite, Plan COD à $10/mois (COD uniquement, produits illimités), Starter à $12/mois (Drop + COD), Pro à $29/mois (upsells, multi-zones), Scale à $79/mois (Analytics Pro).",
-  plans: [
-    {
-      name: "Essai gratuit",
-      price: "0 F",
-      period: "/ 14 jours",
-      tagline: "Accès complet 14j, sans carte bancaire",
-      features: [
-        "Jusqu'à 10 produits",
-        "Mode COD ET Dropshipping en parallèle",
-        "Dashboard COD complet (zones, profit FCFA)",
-        "Analytics Pro débloqué pendant l'essai",
-        "Saisies cumulées multi-jours",
-      ],
-      cta: "Démarrer l'essai",
-      highlight: false,
-    },
-    {
-      name: "Starter",
-      price: "$12",
-      period: "/mois",
-      tagline: "Démarrer en Drop avec le COD inclus",
-      features: [
-        "3 produits Dropshipping max",
-        "Mode COD inclus (dashboard basique)",
-        "Produits COD illimités",
-        "Dashboard COD complet (zones, profit FCFA)",
-        "1 zone de livraison",
-        "Historique 60 jours",
-      ],
-      cta: "Choisir Starter",
-      highlight: false,
-    },
-    {
-      name: "Pro",
-      price: "$29",
-      period: "/mois",
-      tagline: "Piloter ton call center & 2–3 winners",
-      features: [
-        "10 produits actifs",
-        "COD ET Dropshipping en parallèle",
-        "Upsells (ventes additionnelles)",
-        "Zones de livraison multi-tarifs illimitées",
-        "ROAS net Meta / TikTok / Google",
-        "Profit net FCFA par produit",
-        "Historique illimité · Export CSV",
-        "Support email + WhatsApp",
-      ],
-      cta: "Choisir Pro",
-      highlight: true,
-    },
-    {
-      name: "Scale",
-      price: "$79",
-      period: "/mois",
-      tagline: "Scaler avec Analytics Pro",
-      features: [
-        "Produits illimités",
-        "Upsells illimités",
-        "Tout ce qui est inclus dans Pro",
-        "Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights)",
-        "Support prioritaire WhatsApp",
-      ],
-      cta: "Choisir Scale",
-      highlight: false,
-    },
-  ],
-
-  faq: [
-    {
-      q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, accès complet quel que soit le mode au signup. À la fin, tu choisis Plan COD ($10), Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
-    },
-    {
-      q: "Ça marche pour le COD en Afrique de l'Ouest ?",
-      a: "Oui. NETODASH est conçu pour le COD au Sénégal, Côte d'Ivoire, Mali, Bénin, Burkina, Togo, Guinée. Devise FCFA gérée nativement, zones de livraison personnalisables par pays.",
-    },
-    {
-      q: "Comment je définis mes zones de livraison ?",
-      a: "Depuis tes produits, tu définis tes zones (Dakar, régions, Thiès…). Multi-zones dès le plan Pro Drop ($29). Le plan COD $10 inclut 1 zone.",
-    },
-    {
-      q: "Faut-il connecter une boutique ?",
-      a: "Non. Tu fonctionnes en saisie manuelle quotidienne (idéal pour YouCan, un formulaire ou tes commandes WhatsApp). Ça prend moins d'une minute par jour.",
-    },
-  ],
-
-  ctaTitle: "ARRÊTE DE PAYER",
-  ctaTitleAccent: "DES LIVRAISONS PERDUES.",
   ctaLead:
-    "14 jours d'essai gratuit. Sans carte. Pilote enfin ton COD avec des chiffres exacts en FCFA.",
+    "7 jours d'essai gratuit. Aucune carte requise. Saisis tes ventes CopyX, Netodash te dit ce qu'il te reste.",
   ctaButton: "Créer mon compte →",
 
-  footerTagline:
-    "Le dashboard de rentabilité réelle pour le COD en Afrique de l'Ouest.",
-  footerBaseline: "CONÇU POUR LE COD EN AFRIQUE DE L'OUEST · FCFA",
+  footerTagline: "Le cockpit de rentabilité des marchands CopyX.",
+  footerBaseline: "POUR LES BOUTIQUES COPYX",
 };
 
-export const LANDING_COPY: Record<BusinessMode, LandingCopy> = {
-  dropshipping: DROPSHIPPING,
-  cod: COD,
-};
+export const LANDING_COPY: LandingCopy = COPYX;

@@ -429,7 +429,7 @@ function DashboardPage() {
                 <div className="leading-tight">
                   <div className="font-black tracking-tight text-sm">NETODASH</div>
                   <div className="text-[9px] font-mono uppercase tracking-[0.2em] opacity-80">
-                    DROPSHIPPING
+                    COPYX
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/legal/cgu")({
   head: () => ({
     meta: [
       { title: "Conditions Générales d'Utilisation — NETODASH" },
-      { name: "description", content: "CGU de NETODASH — règles d'utilisation du service SaaS de rentabilité Dropshipping & COD." },
+      { name: "description", content: "CGU de NETODASH — règles d'utilisation du service SaaS de rentabilité pour les boutiques CopyX." },
       { name: "robots", content: "index, follow" },
       { property: "og:url", content: "https://netodash.com/legal/cgu" },
     ],
@@ -25,7 +25,8 @@ function CguPage() {
       <h2>Objet</h2>
       <p>
         NETODASH est un service SaaS d'analyse de rentabilité destiné aux
-        e-commerçants opérant en COD (Cash On Delivery).
+        marchands qui vendent sur une boutique CopyX (paiement par acompte ou
+        paiement intégral en mobile money).
       </p>
 
       <h2>Compte utilisateur</h2>

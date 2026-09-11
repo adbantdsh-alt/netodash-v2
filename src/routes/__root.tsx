@@ -64,7 +64,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NETODASH — Rentabilité réelle Dropshipping & COD" },
+      { title: "NETODASH — La rentabilité réelle de ta boutique CopyX" },
       {
         name: "description",
         content:
@@ -75,18 +75,18 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { property: "og:site_name", content: "NETODASH" },
       { property: "og:locale", content: "fr_FR" },
       { property: "og:type", content: "website" },
-      { property: "og:title", content: "NETODASH — Rentabilité réelle Dropshipping & COD" },
+      { property: "og:title", content: "NETODASH — La rentabilité réelle de ta boutique CopyX" },
       {
         property: "og:description",
         content:
           "Calcule ta marge réelle basée sur les commandes livrées. ROAS net, CPA max, taux de livraison, en FCFA.",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "NETODASH — Rentabilité réelle Dropshipping & COD" },
+      { name: "twitter:title", content: "NETODASH — La rentabilité réelle de ta boutique CopyX" },
       {
         name: "twitter:description",
         content:
-          "Dashboard rentabilité 360° pour Dropshipping & COD : ROAS net, marge réelle, CPA max, taux de livraison.",
+          "Dashboard de rentabilité pour les boutiques CopyX : acomptes encaissés, paiements mobile money, marge nette réelle, CPA max, ROAS net — en FCFA.",
       },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/mV7h6YTkYxXxdYgCHLJxrtztuOF3/social-images/social-1780681419061-yrjregbh-yh.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/mV7h6YTkYxXxdYgCHLJxrtztuOF3/social-images/social-1780681419061-yrjregbh-yh.webp" },

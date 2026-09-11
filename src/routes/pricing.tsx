@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 const PRICING_URL = "https://netodash.com/pricing";
-const PRICING_TITLE = "Tarifs — NETODASH | Dashboard de rentabilité";
+const PRICING_TITLE = "Tarifs — NETODASH | Marge nette de ta boutique CopyX";
 const PRICING_DESC =
-  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité. Paiement par carte Stripe.";
+  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité : ventes CopyX, acomptes, paiements mobile money, Analytics Pro.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -53,7 +53,8 @@ const DROPSHIP_PLANS: PaidPlan[] = [
     monthly: 20,
     tagline: "Tout illimité, tout inclus",
     features: [
-      "Produits illimités",
+      "Ventes CopyX illimitées",
+      "Suivi acomptes + paiements mobile money",
       "Analytics Pro (scoring, waterfall, break-even, simulateur)",
       "Decision Engine · Insights automatiques",
       "Upsells · Export CSV",
@@ -93,7 +94,8 @@ function PricingPage() {
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
           7 jours d'essai gratuit avec accès complet, sans carte bancaire.
-          Puis $20/mois — tout illimité, sans engagement.
+          Puis $20/mois — tout illimité, pour piloter la marge nette de ta
+          boutique CopyX (acomptes, mobile money, pub, COGS, livraison).
         </p>
 
         {/* Essai */}
@@ -188,7 +190,7 @@ function PricingPage() {
       <footer className="border-t border-foreground">
         <div className="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-            © {new Date().getFullYear()} NETODASH · BUILT FOR E-COMMERCE
+            © {new Date().getFullYear()} NETODASH · POUR LES BOUTIQUES COPYX
           </div>
           <Link to="/" className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-accent">
             ← Retour

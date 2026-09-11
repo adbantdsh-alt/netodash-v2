@@ -20,14 +20,12 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CodIndexRouteImport } from './routes/cod.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalMentionsRouteImport } from './routes/legal.mentions'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LegalCgvRouteImport } from './routes/legal.cgv'
 import { Route as LegalCguRouteImport } from './routes/legal.cgu'
-import { Route as CodCountryRouteImport } from './routes/cod.$country'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiCoachRouteImport } from './routes/api/coach'
 import { Route as AffilieCodeRouteImport } from './routes/affilie.$code'
@@ -109,11 +107,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CodIndexRoute = CodIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => CodRoute,
-} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -143,11 +136,6 @@ const LegalCguRoute = LegalCguRouteImport.update({
   id: '/legal/cgu',
   path: '/legal/cgu',
   getParentRoute: () => rootRouteImport,
-} as any)
-const CodCountryRoute = CodCountryRouteImport.update({
-  id: '/$country',
-  path: '/$country',
-  getParentRoute: () => CodRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -291,7 +279,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/calculateur-roas': typeof CalculateurRoasRoute
-  '/cod': typeof CodRouteWithChildren
+  '/cod': typeof CodRoute
   '/contact': typeof ContactRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -310,14 +298,12 @@ export interface FileRoutesByFullPath {
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/cod/$country': typeof CodCountryRoute
   '/legal/cgu': typeof LegalCguRoute
   '/legal/cgv': typeof LegalCgvRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/mentions': typeof LegalMentionsRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog/': typeof BlogIndexRoute
-  '/cod/': typeof CodIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
   '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
@@ -336,6 +322,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/calculateur-roas': typeof CalculateurRoasRoute
+  '/cod': typeof CodRoute
   '/contact': typeof ContactRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -354,14 +341,12 @@ export interface FileRoutesByTo {
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/cod/$country': typeof CodCountryRoute
   '/legal/cgu': typeof LegalCguRoute
   '/legal/cgv': typeof LegalCgvRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/mentions': typeof LegalMentionsRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog': typeof BlogIndexRoute
-  '/cod': typeof CodIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
   '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
@@ -384,7 +369,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/calculateur-roas': typeof CalculateurRoasRoute
-  '/cod': typeof CodRouteWithChildren
+  '/cod': typeof CodRoute
   '/contact': typeof ContactRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -403,14 +388,12 @@ export interface FileRoutesById {
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/cod/$country': typeof CodCountryRoute
   '/legal/cgu': typeof LegalCguRoute
   '/legal/cgv': typeof LegalCgvRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/mentions': typeof LegalMentionsRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog/': typeof BlogIndexRoute
-  '/cod/': typeof CodIndexRoute
   '/_admin/admin/affiliates': typeof AdminAdminAffiliatesRoute
   '/_admin/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/_admin/admin/communication': typeof AdminAdminCommunicationRoute
@@ -451,14 +434,12 @@ export interface FileRouteTypes {
     | '/affilie/$code'
     | '/api/coach'
     | '/blog/$slug'
-    | '/cod/$country'
     | '/legal/cgu'
     | '/legal/cgv'
     | '/legal/cookies'
     | '/legal/mentions'
     | '/legal/privacy'
     | '/blog/'
-    | '/cod/'
     | '/admin/affiliates'
     | '/admin/beta-testers'
     | '/admin/communication'
@@ -477,6 +458,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/calculateur-roas'
+    | '/cod'
     | '/contact'
     | '/pricing'
     | '/reset-password'
@@ -495,14 +477,12 @@ export interface FileRouteTypes {
     | '/affilie/$code'
     | '/api/coach'
     | '/blog/$slug'
-    | '/cod/$country'
     | '/legal/cgu'
     | '/legal/cgv'
     | '/legal/cookies'
     | '/legal/mentions'
     | '/legal/privacy'
     | '/blog'
-    | '/cod'
     | '/admin/affiliates'
     | '/admin/beta-testers'
     | '/admin/communication'
@@ -543,14 +523,12 @@ export interface FileRouteTypes {
     | '/affilie/$code'
     | '/api/coach'
     | '/blog/$slug'
-    | '/cod/$country'
     | '/legal/cgu'
     | '/legal/cgv'
     | '/legal/cookies'
     | '/legal/mentions'
     | '/legal/privacy'
     | '/blog/'
-    | '/cod/'
     | '/_admin/admin/affiliates'
     | '/_admin/admin/beta-testers'
     | '/_admin/admin/communication'
@@ -573,7 +551,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   CalculateurRoasRoute: typeof CalculateurRoasRoute
-  CodRoute: typeof CodRouteWithChildren
+  CodRoute: typeof CodRoute
   ContactRoute: typeof ContactRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -670,13 +648,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cod/': {
-      id: '/cod/'
-      path: '/'
-      fullPath: '/cod/'
-      preLoaderRoute: typeof CodIndexRouteImport
-      parentRoute: typeof CodRoute
-    }
     '/blog/': {
       id: '/blog/'
       path: '/'
@@ -718,13 +689,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/legal/cgu'
       preLoaderRoute: typeof LegalCguRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/cod/$country': {
-      id: '/cod/$country'
-      path: '/$country'
-      fullPath: '/cod/$country'
-      preLoaderRoute: typeof CodCountryRouteImport
-      parentRoute: typeof CodRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1006,18 +970,6 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
-interface CodRouteChildren {
-  CodCountryRoute: typeof CodCountryRoute
-  CodIndexRoute: typeof CodIndexRoute
-}
-
-const CodRouteChildren: CodRouteChildren = {
-  CodCountryRoute: CodCountryRoute,
-  CodIndexRoute: CodIndexRoute,
-}
-
-const CodRouteWithChildren = CodRoute._addFileChildren(CodRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
@@ -1025,7 +977,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   CalculateurRoasRoute: CalculateurRoasRoute,
-  CodRoute: CodRouteWithChildren,
+  CodRoute: CodRoute,
   ContactRoute: ContactRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,

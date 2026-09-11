@@ -69,7 +69,7 @@ export function PublicRoasCalculator({ compact = false }: { compact?: boolean })
       {!compact && (
         <div className="mb-6 md:mb-8">
           <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
-            OUTIL — Pour COD & Dropshipping
+            OUTIL — Marge & ROAS net CopyX
           </div>
           <h2 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">
             ROAS CALCULATOR

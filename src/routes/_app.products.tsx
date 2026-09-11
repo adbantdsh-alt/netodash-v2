@@ -404,7 +404,7 @@ function ProductsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6 md:mb-8">
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
-            {isCod ? "CATALOGUE COD · AFRIQUE" : "CATALOGUE DROPSHIPPING"}
+            {isCod ? "CATALOGUE COD · AFRIQUE" : "CATALOGUE PRODUITS · COPYX"}
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">PRODUITS</h1>
         </div>
@@ -444,7 +444,7 @@ function ProductsPage() {
         <div className="brutal-border-thin p-4 mb-6 bg-muted/40 flex flex-wrap items-center justify-between gap-3">
           <div className="text-sm font-mono">
             <span className="font-bold uppercase tracking-wider">Dropshipping indisponible</span> · Ton ancien plan COD
-            ne couvre que le mode COD. Passe au plan Netodash (20 $/mois) pour ajouter des produits Dropshipping.
+            ne couvre que le mode COD. Passe au plan Netodash (20 $/mois) pour gérer une boutique CopyX complète.
           </div>
           <Link
             to="/plan"
@@ -656,7 +656,7 @@ function ProductsPage() {
               </div>
               {!multiZonesAllowed && (
                 <div className="brutal-border-thin border-dashed p-3 mb-3 text-[11px] font-mono text-muted-foreground">
-                  🔒 Multi-zones réservé au plan Pro Drop ($29) et au-dessus.{" "}
+                  🔒 Multi-zones réservé au plan Netodash (20 $/mois).{" "}
                   <Link to="/plan" className="underline font-bold text-foreground">
                     Upgrade →
                   </Link>
@@ -891,7 +891,7 @@ function ProductsPage() {
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <div className="text-xl font-black">{p.name}</div>
                   <span className="text-[10px] font-mono brutal-border-thin px-2 py-0.5 bg-foreground text-background font-bold uppercase tracking-widest">
-                    {(p as any).business_mode === "cod" ? "💰 COD" : "📦 Dropship"}
+                    {(p as any).business_mode === "cod" ? "💰 COD" : "📦 Produit"}
                   </span>
                   <span
                     className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest brutal-border-thin ${verdictClass}`}

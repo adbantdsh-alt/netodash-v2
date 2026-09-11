@@ -135,7 +135,7 @@ function BlogPostPage() {
             Calcule ta rentabilité réelle en 5 minutes
           </h2>
           <p className="mt-3 text-sm md:text-base opacity-90">
-            Plus jamais d'Excel. ROAS net, marge réelle, taux de livraison COD — Netodash le fait pour toi.
+            Plus jamais d'Excel. Ventes CopyX, acomptes encaissés, marge nette réelle — Netodash le fait pour toi.
           </p>
           <SignupCtaButton variant="hero" className="mt-5 px-6 py-3 text-sm border-foreground" />
         </div>
