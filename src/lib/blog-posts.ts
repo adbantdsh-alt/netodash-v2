@@ -28,7 +28,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>Quand Meta t'affiche un ROAS de 3.5, ça veut dire : 1 000 FCFA dépensé en ads = 3 500 FCFA de chiffre d'affaires <strong>attribué</strong>. Ça ne veut PAS dire que tu gagnes 2 500 FCFA. Voici ce qui manque :</p>
 <ul>
 <li>Le <strong>coût produit</strong> (achat + frais fournisseur)</li>
-<li>Les <strong>frais de paiement</strong> Wave / Orange Money (≈ 1 % + 200 FCFA par transaction)</li>
+<li>Les <strong>frais de paiement</strong> XaalipSay (5 % du montant réellement encaissé, retrait gratuit, aucun frais fixe par transaction)</li>
 <li>Les <strong>remboursements et litiges</strong> (5 à 15 % du CA en moyenne)</li>
 <li>Les <strong>taxes pub Meta</strong> (jusqu'à 20 % au Sénégal, 0 % dans certains pays)</li>
 <li>Le <strong>delta d'attribution</strong> entre Meta et ta boutique (Meta surestime de 20 à 40 %)</li>
@@ -39,22 +39,22 @@ export const BLOG_POSTS: BlogPost[] = [
 <h3>1. Break-Even ROAS (point mort)</h3>
 <p>Le ROAS minimum pour ne PAS perdre d'argent. La formule :</p>
 <pre><code>Break-Even ROAS = Prix de vente / Marge brute par commande</code></pre>
-<p><strong>Exemple :</strong> tu vends une montre à 32 000 FCFA. Coût produit + livraison + paiement = 11 750 FCFA. Marge brute = 20 250 FCFA. Break-Even ROAS = 32 000 / 20 250 = <strong>1.58</strong>.</p>
-<p>En dessous de 1.58 de ROAS, tu perds de l'argent.</p>
+<p><strong>Exemple :</strong> tu vends une montre à 32 000 FCFA. Coût produit + livraison = 10 400 FCFA, frais XaalipSay = 1 600 FCFA (5 % de l'encaissement), soit 12 000 FCFA de coûts variables. Marge brute = 20 000 FCFA. Break-Even ROAS = 32 000 / 20 000 = <strong>1.60</strong>.</p>
+<p>En dessous de 1.60 de ROAS, tu perds de l'argent.</p>
 
 <h3>2. ROAS actuel (réel)</h3>
 <pre><code>ROAS réel = (CA livré - remboursements) / (Dépense ads + taxes pub)</code></pre>
-<p>C'est ce que Netodash calcule par défaut. Pas le ROAS Meta — le ROAS basé sur les commandes <strong>réellement payées et livrées</strong>.</p>
+<p>C'est ce que Netodash calcule par défaut. Pas le ROAS Meta — le ROAS basé sur les commandes <strong>réellement payées et livrées</strong>. Sur CopyX, une partie de tes clients ne règle qu'un <strong>acompte</strong> à la commande : les frais XaalipSay (5 %) ne s'appliquent donc qu'à ce qui est réellement encaissé, jamais à ton CA théorique.</p>
 
 <h3>3. Target ROAS (objectif marge)</h3>
 <p>Pour gagner X FCFA de marge nette sur chaque vente :</p>
 <pre><code>Target ROAS = Prix de vente / (Marge brute - X)</code></pre>
-<p>Pour la montre à 32 000 FCFA, viser 9 800 FCFA de marge nette par commande : Target ROAS = 32 000 / (20 250 - 9 800) = <strong>3.06</strong>.</p>
+<p>Pour la montre à 32 000 FCFA, viser 10 000 FCFA de marge nette par commande : Target ROAS = 32 000 / (20 000 - 10 000) = <strong>3.20</strong>.</p>
 
 <h2>Le CPA max — la métrique qui change tout</h2>
 <p>Ton CPA max (coût par acquisition maximum) est la dépense ads MAX par commande pour rester rentable :</p>
 <pre><code>CPA max = Marge brute par commande</code></pre>
-<p>Sur la montre à 20 250 FCFA de marge brute, ton CPA max théorique = 20 250 FCFA. Au-dessus, tu perds. En réglant ton enchère Meta sur "Coût par achat = 20 250 FCFA", tu protèges ta marge automatiquement.</p>
+<p>Sur la montre à 20 000 FCFA de marge brute, ton CPA max théorique = 20 000 FCFA. Au-dessus, tu perds. En réglant ton enchère Meta sur "Coût par achat = 20 000 FCFA", tu protèges ta marge automatiquement.</p>
 
 <h2>Exemple chiffré complet</h2>
 <table>
@@ -62,16 +62,16 @@ export const BLOG_POSTS: BlogPost[] = [
 <tbody>
 <tr><td>Prix de vente</td><td>32 000 FCFA</td></tr>
 <tr><td>Coût produit + livraison</td><td>10 400 FCFA</td></tr>
-<tr><td>Frais Wave / Orange Money (1 % + 200 FCFA)</td><td>520 FCFA</td></tr>
-<tr><td>Marge brute par commande</td><td>21 080 FCFA</td></tr>
+<tr><td>Frais XaalipSay (5 % du montant encaissé, retrait gratuit)</td><td>1 600 FCFA</td></tr>
+<tr><td>Marge brute par commande</td><td>20 000 FCFA</td></tr>
 <tr><td>Dépense ads (1 commande)</td><td>14 400 FCFA</td></tr>
 <tr><td>Taxe pub Meta (20 %)</td><td>2 880 FCFA</td></tr>
-<tr><td><strong>Marge nette réelle</strong></td><td><strong>3 800 FCFA</strong></td></tr>
+<tr><td><strong>Marge nette réelle</strong></td><td><strong>2 720 FCFA</strong></td></tr>
 <tr><td>ROAS Meta affiché</td><td>2.22</td></tr>
 <tr><td>ROAS réel Netodash</td><td>1.85</td></tr>
 </tbody>
 </table>
-<p>Le ROAS Meta dit 2.22, mais ta vraie rentabilité est 1.85. Si tu pilotes ton budget sur le ROAS Meta, tu scales un produit qui ne te laisse que 3 800 FCFA — soit 12 % de marge nette.</p>
+<p>Le ROAS Meta dit 2.22, mais ta vraie rentabilité est 1.85. Si tu pilotes ton budget sur le ROAS Meta, tu scales un produit qui ne te laisse que 2 720 FCFA — soit 8,5 % de marge nette.</p>
 
 <h2>Conclusion</h2>
 <p>Tant que tu ne calcules pas ton ROAS réel, tu ne pilotes rien. Netodash le fait automatiquement : tu rentres tes coûts une fois, et chaque jour ton vrai ROAS s'affiche, par produit, par campagne.</p>
@@ -158,7 +158,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <h2>La vraie formule de la marge nette</h2>
 <pre><code>Marge nette = CA livré
   - Coût produit total
-  - Frais paiement (Wave / Orange Money)
+  - Frais paiement XaalipSay (5 % de l'encaissement, retrait gratuit)
   - Remboursements
   - Dépense ads + taxes pub
   - Frais boutique + apps
@@ -167,11 +167,11 @@ export const BLOG_POSTS: BlogPost[] = [
 
 <h2>Les 6 coûts que tu sous-estimes</h2>
 <ol>
-<li><strong>Frais Wave / Orange Money :</strong> ≈ 1 % + 200 FCFA par transaction. Sur 1 000 commandes à 32 000 FCFA, c'est 520 000 FCFA rien que là.</li>
+<li><strong>Frais XaalipSay :</strong> 5 % du montant réellement encaissé, retrait gratuit, aucun frais fixe par transaction. Sur 1 000 commandes à 32 000 FCFA, c'est 1 600 000 FCFA rien que là. Et comme sur CopyX une partie des clients ne paie qu'un <strong>acompte</strong>, ces 5 % ne portent que sur l'argent réellement encaissé — pas sur ton CA théorique.</li>
 <li><strong>Remboursements :</strong> compte 5 à 15 % du CA. Beaucoup oublient.</li>
 <li><strong>Taxe pub Meta :</strong> jusqu'à 20 % au Sénégal selon ton statut (0 % dans certains pays).</li>
 <li><strong>Apps de ta boutique :</strong> Klaviyo, DSers, ReConvert, etc. — vite 130 000 à 330 000 FCFA / mois.</li>
-<li><strong>Frais bancaires & change :</strong> 1 à 3 % sur les paiements internationaux.</li>
+<li><strong>Retraits et transferts :</strong> gratuits chez XaalipSay. Aucun frais bancaire caché, aucun frais fixe par transaction : seulement les 5 % prélevés à l'encaissement.</li>
 <li><strong>Sponsoring créa :</strong> UGC, vidéos. 130 000 – 660 000 FCFA / mois pour scaler.</li>
 </ol>
 
@@ -183,15 +183,15 @@ export const BLOG_POSTS: BlogPost[] = [
 <tr><td>Remboursements (10 %)</td><td>-2 000 000 FCFA</td></tr>
 <tr><td>CA livré</td><td>18 000 000 FCFA</td></tr>
 <tr><td>Coût produit (30 %)</td><td>-5 400 000 FCFA</td></tr>
-<tr><td>Wave / Orange Money (3 %)</td><td>-540 000 FCFA</td></tr>
+<tr><td>XaalipSay (5 % du montant encaissé)</td><td>-900 000 FCFA</td></tr>
 <tr><td>Dépense ads</td><td>-8 000 000 FCFA</td></tr>
 <tr><td>Taxe pub (20 %)</td><td>-1 600 000 FCFA</td></tr>
 <tr><td>Boutique + apps</td><td>-260 000 FCFA</td></tr>
 <tr><td>UGC + créa</td><td>-330 000 FCFA</td></tr>
-<tr><td><strong>Marge nette</strong></td><td><strong>1 870 000 FCFA</strong></td></tr>
+<tr><td><strong>Marge nette</strong></td><td><strong>1 510 000 FCFA</strong></td></tr>
 </tbody>
 </table>
-<p>20 000 000 FCFA de CA = 1 870 000 FCFA de marge nette. Soit <strong>9,3 %</strong>. Beaucoup de drop-shippers se croient à 30 % parce qu'ils ne soustraient que le coût produit.</p>
+<p>20 000 000 FCFA de CA = 1 510 000 FCFA de marge nette. Soit <strong>7,6 %</strong>. Beaucoup de drop-shippers se croient à 30 % parce qu'ils ne soustraient que le coût produit.</p>
 
 <h2>Comment scaler intelligemment</h2>
 <p>Au lieu de scaler le CA, scale la <strong>marge nette par produit</strong>. Le tableau Netodash classe tes produits en :</p>
@@ -294,7 +294,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>Budget BOFU = 20 – 30 % du total ads.</p>
 
 <h3>4. Pilotage au ROAS net, pas au ROAS Meta</h3>
-<p>Meta surestime de 20 à 40 %. Si tu scales sur le ROAS Meta, tu scales sur du vent. Le seul KPI fiable : <strong>ROAS net</strong> = (CA livré - remboursements) / (ads + taxes pub).</p>
+<p>Meta surestime de 20 à 40 %. Si tu scales sur le ROAS Meta, tu scales sur du vent. Le seul KPI fiable : <strong>ROAS net</strong> = (CA livré - remboursements) / (ads + taxes pub). Sur CopyX, pense aux frais XaalipSay (5 % du montant réellement encaissé, retrait gratuit) : comme une partie des clients ne règle qu'un <strong>acompte</strong> à la commande, ces 5 % ne s'appliquent jamais à ton CA théorique.</p>
 
 <h2>Le bon ROAS cible en 2026</h2>
 <table>

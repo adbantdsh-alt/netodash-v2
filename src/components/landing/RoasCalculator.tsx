@@ -4,8 +4,9 @@ import { formatCurrency } from "@/lib/calc";
 /**
  * Calculateur de marge CopyX pour la landing.
  *
- * Modèle CopyX : les clients paient soit un acompte, soit la totalité, via
- * mobile money directement sur la boutique. Le calculateur montre donc deux
+ * Modèle CopyX : les clients paient soit un acompte, soit la totalité, encaissés
+ * via XaalipSay (5 % de frais à l'encaissement, retrait gratuit). Le calculateur
+ * montre donc deux
  * chiffres que personne ne suit : ce qui est DÉJÀ ENCAISSÉ et ce qui RESTE À
  * ENCAISSER à la livraison — puis la marge nette réelle en FCFA.
  */
@@ -15,7 +16,7 @@ export function RoasCalculator() {
   const [depositRate, setDepositRate] = useState(30);
   const [adSpend, setAdSpend] = useState(3_120_000);
   const [cogsPct, setCogsPct] = useState(32);
-  const [momoPct, setMomoPct] = useState(1);
+  const [momoPct, setMomoPct] = useState(5);
   const [adTaxPct, setAdTaxPct] = useState(18);
 
   const out = useMemo(() => {
@@ -51,9 +52,10 @@ export function RoasCalculator() {
         </h2>
         <p className="text-muted-foreground mt-5 max-w-2xl text-base md:text-lg">
           Sur ta boutique CopyX, une partie des clients paie un acompte et l'autre
-          paie tout de suite en mobile money. Mets tes vrais chiffres : on sépare
-          ce qui est encaissé de ce qui reste à encaisser, puis on calcule ta marge
-          nette après pub, COGS, livraison et frais opérateur.
+          paie tout de suite — tout est encaissé via XaalipSay. Mets tes vrais
+          chiffres : on sépare ce qui est encaissé de ce qui reste à encaisser,
+          puis on calcule ta marge nette après pub, COGS, livraison et les 5 % de
+          frais d'encaissement.
         </p>
 
         <div className="grid lg:grid-cols-5 gap-6 mt-12">
@@ -76,7 +78,7 @@ export function RoasCalculator() {
               step={5}
               format={(v) => v + " %"}
               onChange={setDepositShare}
-              hint="Le reste paie la totalité en mobile money"
+              hint="Le reste paie la totalité, encaissée via XaalipSay"
             />
             <SliderRow
               label="Montant de l'acompte"
@@ -107,14 +109,14 @@ export function RoasCalculator() {
               onChange={setCogsPct}
             />
             <SliderRow
-              label="Frais mobile money (% de l'encaissé)"
+              label="Frais XaalipSay (% de l'encaissement)"
               value={momoPct}
               min={0}
-              max={5}
-              step={0.1}
+              max={10}
+              step={0.5}
               format={(v) => v.toFixed(1) + " %"}
               onChange={setMomoPct}
-              hint="Wave / Orange Money / MTN MoMo / Moov Money"
+              hint="5 % à l'encaissement · retrait gratuit"
             />
             <SliderRow
               label="Taxe pub Meta (% du budget)"
@@ -181,7 +183,7 @@ export function RoasCalculator() {
               <Line k="Reste à encaisser (livraison)" v={fmt(out.outstanding)} />
               <Line k="− COGS + livraison" v={"− " + fmt(out.cogs)} />
               <Line k="− Pub + taxe Meta" v={"− " + fmt(out.adSpend + out.adTax)} />
-              <Line k="− Frais mobile money" v={"− " + fmt(out.momoFees)} />
+              <Line k="− Frais XaalipSay" v={"− " + fmt(out.momoFees)} />
             </div>
           </div>
         </div>

@@ -535,14 +535,14 @@ type CompRow = { label: string; netodash: CompCell; tableur: CompCell; brutes: C
 /**
  * Comparaison pour un marchand CopyX : Netodash face à un tableur maison et
  * face aux chiffres bruts de la boutique (qui n'intègrent ni la pub, ni les
- * frais mobile money, ni le reste à encaisser des acomptes).
+ * frais XaalipSay, ni le reste à encaisser des acomptes).
  */
 const COMP_ROWS: CompRow[] = [
   { label: "Prix mensuel", netodash: "$20", tableur: "Gratuit (ton temps)", brutes: "Inclus", highlight: true },
   { label: "Ventes CopyX consolidées", netodash: true, tableur: "À la main", brutes: true },
   { label: "Acomptes vs paiements intégraux", netodash: true, tableur: "Rarement", brutes: "Non" },
   { label: "Reste à encaisser à la livraison", netodash: true, tableur: "Non", brutes: "Non" },
-  { label: "Frais mobile money (Wave / OM)", netodash: true, tableur: "Non", brutes: "Non" },
+  { label: "Frais XaalipSay (5 % à l'encaissement)", netodash: true, tableur: "Non", brutes: "Non" },
   { label: "ROAS net (après COGS + frais)", netodash: true, tableur: false, brutes: false },
   { label: "Marge nette par produit", netodash: true, tableur: "Formules à refaire", brutes: false },
   { label: "Ranking winners / losers", netodash: true, tableur: false, brutes: false },
@@ -582,8 +582,8 @@ export function CompetitorComparison() {
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
             Tes ventes CopyX affichent un chiffre. Elles ne disent ni ce qui est
-            encaissé, ni ce qui reste à encaisser, ni ce que la pub et les frais
-            mobile money t'ont pris. Netodash, si.
+            encaissé, ni ce qui reste à encaisser, ni ce que la pub et les 5 % de
+            frais XaalipSay t'ont pris. Netodash, si.
           </p>
         </div>
 

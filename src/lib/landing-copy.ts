@@ -115,19 +115,20 @@ export type LandingCopy = {
 
 // ───────────── COPYX ─────────────
 // Netodash est calibré à 100 % pour les boutiques CopyX : les clients paient
-// soit un acompte, soit la totalité, via mobile money directement sur le site.
+// Les clients paient soit un acompte, soit la totalité, encaissés via XaalipSay
+// (5 % de frais à l'encaissement, retrait gratuit) directement sur le site.
 // Plus aucune notion de COD ni de Shopify dans cette landing.
 const COPYX: LandingCopy = {
   seoTitle:
     "Netodash — La rentabilité réelle de ta boutique CopyX (marge nette en FCFA)",
   seoDescription:
-    "Netodash lit tes ventes CopyX — acomptes et paiements mobile money — et calcule ta vraie marge : pub, taxe Meta, COGS, livraison, frais Wave / Orange Money et remboursements. Décision par produit, en FCFA.",
+    "Netodash lit tes ventes CopyX — acomptes et encaissements XaalipSay — et calcule ta vraie marge : pub, taxe Meta, COGS, livraison, frais XaalipSay (5 % à l'encaissement) et remboursements. Décision par produit, en FCFA.",
 
   heroBadge: "100 % calibré pour CopyX",
   heroH1Line1: "TA BOUTIQUE COPYX ENCAISSE.",
   heroH1Line2: "COMBIEN AS-TU GARDÉ ?",
   heroSubtitle:
-    "Acomptes, paiements mobile money, colis à livrer : Netodash transforme tes ventes CopyX en un seul chiffre qui compte —",
+    "Acomptes, encaissements XaalipSay, colis à livrer : Netodash transforme tes ventes CopyX en un seul chiffre qui compte —",
   heroSubtitleBold: "ta marge nette réelle, produit par produit.",
   heroCtaPrimary: "Essayer gratuitement 7 jours →",
   heroCtaSecondary: "Voir les tarifs",
@@ -140,7 +141,7 @@ const COPYX: LandingCopy = {
     { v: "4,9 / 5", l: "Note utilisateurs" },
   ],
 
-  platformsHeading: "Encaissements mobile money pris en charge",
+  platformsHeading: "Encaissements XaalipSay · 5 % à l'encaissement · retrait gratuit",
   platforms: [],
 
   pillars: [
@@ -152,7 +153,7 @@ const COPYX: LandingCopy = {
     {
       n: "02",
       t: "MARGE NETTE RÉELLE",
-      d: "Pub, taxe Meta, COGS, livraison, frais Wave / Orange Money, remboursements : tout est déduit. Il ne reste que ton vrai profit, en FCFA.",
+      d: "Pub, taxe Meta, COGS, livraison, frais XaalipSay (5 % à l'encaissement) et remboursements : tout est déduit. Il ne reste que ton vrai profit, en FCFA.",
     },
     {
       n: "03",
@@ -170,7 +171,7 @@ const COPYX: LandingCopy = {
   showcaseLead:
     "Saisis tes ventes CopyX du jour — ou synchronise ton compte depuis l'onglet Synchro. Netodash classe tes produits par profit net et te dit quoi scaler, surveiller ou couper.",
   showcaseList: [
-    "Ventes CopyX consolidées : acomptes + paiements mobile money",
+    "Ventes CopyX consolidées : acomptes + encaissements XaalipSay",
     "Ranking des produits par profit net",
     "Décision Scale / Watch / Kill chaque matin",
   ],
@@ -185,21 +186,21 @@ const COPYX: LandingCopy = {
     { k: "Encaissé vs reste à encaisser ?", v: "≈ ?", mode: "accent" },
     { k: "Budget pub (Meta / TikTok)", v: "3 120 000 F" },
     { k: "ROAS affiché Meta", v: "2,4 ✨", mode: "accent" },
-    { k: "Frais mobile money ?", v: "≈ ?", mode: "accent" },
+    { k: "Frais XaalipSay (5 %) ?", v: "≈ ?", mode: "accent" },
     { k: "Marge nette réelle", v: "AUCUNE IDÉE.", mode: "accent" },
   ],
   beforeAfterAfterRows: [
-    { k: "Encaissé mobile money", v: "5 400 000 F" },
+    { k: "Encaissé via XaalipSay", v: "5 400 000 F" },
     { k: "Reste à encaisser (livraison)", v: "2 100 000 F" },
     { k: "− COGS + livraison", v: "− 2 400 000 F" },
     { k: "− Pub + taxe 18 %", v: "− 3 681 600 F" },
-    { k: "− Frais mobile money (1 %)", v: "− 54 000 F" },
-    { k: "Marge nette si tout est livré", v: "1 364 400 F", mode: "accent" },
+    { k: "− Frais XaalipSay (5 %)", v: "− 270 000 F" },
+    { k: "Marge nette si tout est livré", v: "1 148 400 F", mode: "accent" },
     { k: "ROAS net sur encaissé", v: "1,47", mode: "accent" },
   ],
   beforeAfterBeforeFooter: {
     plain:
-      "Tu scales sur le ROAS Meta. Mais entre les acomptes, les colis non livrés et les frais mobile money, la vraie question reste : ",
+      "Tu scales sur le ROAS Meta. Mais entre les acomptes, les colis non livrés et les 5 % de frais à l'encaissement, la vraie question reste : ",
     bold: "« Combien j'ai gardé ? »",
   },
   beforeAfterAfterFooter: {
@@ -216,7 +217,7 @@ const COPYX: LandingCopy = {
   rankingTitle: "QUELS PRODUITS TE FONT",
   rankingTitleAccent: "VRAIMENT GAGNER DE L'ARGENT",
   rankingLead:
-    "Netodash classe tes produits CopyX par profit net — après pub, taxe Meta, COGS, livraison et frais mobile money. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
+    "Netodash classe tes produits CopyX par profit net — après pub, taxe Meta, COGS, livraison et frais XaalipSay (5 % à l'encaissement). Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
   rankingCols: ["Produit", "Ventes (FCFA)", "Pub (FCFA)", "Profit net (FCFA)", "Marge", "Statut"],
   rankingRows: [
     { name: "Sérum éclat 30ml", rev: 11_052_000, ads: 3_120_000, profit: 3_888_000, margin: 35.2, status: "RENTABLE" },
@@ -327,7 +328,7 @@ const COPYX: LandingCopy = {
       tagline: "Tout illimité, tout inclus",
       features: [
         "Ventes CopyX illimitées",
-        "Suivi acomptes + paiements mobile money",
+        "Suivi acomptes + encaissements XaalipSay",
         "Analytics Pro (scoring, waterfall, break-even, simulateur)",
         "Decision Engine · Insights automatiques",
         "Upsells · Export CSV",
@@ -346,11 +347,11 @@ const COPYX: LandingCopy = {
     },
     {
       q: "Comment sont gérés les acomptes ?",
-      a: "Chaque vente CopyX est suivie : acompte encaissé, paiement intégral, et reste à encaisser à la livraison. Tu vois ce qui est réellement dans ta poche — pas seulement ce que ta boutique affiche.",
+      a: "Chaque vente CopyX est suivie : acompte encaissé via XaalipSay, paiement intégral, et reste à encaisser à la livraison. Tu vois ce qui est réellement dans ta poche — pas seulement ce que ta boutique affiche.",
     },
     {
       q: "Quels frais sont déduits de ma marge ?",
-      a: "Pub + taxe Meta, COGS, livraison, frais mobile money (Wave, Orange Money, MTN MoMo, Moov Money) et remboursements. Tout est paramétrable sur ton profil.",
+      a: "Pub + taxe Meta, COGS, livraison, frais XaalipSay (5 % à l'encaissement, retrait gratuit) et remboursements. Tout est paramétrable sur ton profil.",
     },
     {
       q: "Comment fonctionne l'essai gratuit ?",

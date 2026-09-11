@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       {
         name: "twitter:description",
         content:
-          "Dashboard de rentabilité pour les boutiques CopyX : acomptes encaissés, paiements mobile money, marge nette réelle, CPA max, ROAS net — en FCFA.",
+          "Dashboard de rentabilité pour les boutiques CopyX : acomptes encaissés, encaissements XaalipSay, marge nette réelle, CPA max, ROAS net — en FCFA.",
       },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/mV7h6YTkYxXxdYgCHLJxrtztuOF3/social-images/social-1780681419061-yrjregbh-yh.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/mV7h6YTkYxXxdYgCHLJxrtztuOF3/social-images/social-1780681419061-yrjregbh-yh.webp" },

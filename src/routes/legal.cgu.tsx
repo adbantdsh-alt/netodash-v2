@@ -26,7 +26,7 @@ function CguPage() {
       <p>
         NETODASH est un service SaaS d'analyse de rentabilité destiné aux
         marchands qui vendent sur une boutique CopyX (paiement par acompte ou
-        paiement intégral en mobile money).
+        paiement intégral encaissé via XaalipSay).
       </p>
 
       <h2>Compte utilisateur</h2>

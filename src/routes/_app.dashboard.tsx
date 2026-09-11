@@ -491,7 +491,7 @@ function DashboardPage() {
               )}
               {kpis.shopifyFees > 0 && (
                 <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
-                  <span>Frais de paiement</span>
+                  <span>Frais XaalipSay</span>
                   <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.shopifyFees, currency)}</span>
                 </div>
               )}
@@ -740,7 +740,7 @@ function DashboardPage() {
               )}
               {kpis.shopifyFees > 0 && (
                 <div className="flex justify-between border-b border-dashed border-muted-foreground/30 pb-1">
-                  <span>Frais de paiement (2,9 %)</span>
+                  <span>Frais XaalipSay (5 %)</span>
                   <span className="tabular text-foreground font-bold">− {formatCurrency(kpis.shopifyFees, currency)}</span>
                 </div>
               )}
@@ -949,7 +949,7 @@ function DashboardPage() {
             )}
             {kpis.shopifyFees > 0 && (
               <div className="flex justify-between border-b border-foreground/20 py-2">
-                <span className="text-muted-foreground">Frais de paiement (2,9 % du CA)</span>
+                <span className="text-muted-foreground">Frais XaalipSay (5 % de l'encaissé)</span>
                 <span className="font-bold tabular text-accent">− {formatCurrency(kpis.shopifyFees, currency)}</span>
               </div>
             )}

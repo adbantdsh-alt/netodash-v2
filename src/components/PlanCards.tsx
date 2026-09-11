@@ -46,7 +46,7 @@ export function DropshippingPlanCards({
         tagline="Tout illimité, tout inclus"
         features={[
           "Ventes CopyX illimitées",
-          "Suivi acomptes + paiements mobile money",
+          "Suivi acomptes + encaissements XaalipSay",
           "Analytics Pro (scoring, waterfall, break-even, simulateur)",
           "Decision Engine · Insights automatiques",
           "Upsells · Export CSV",

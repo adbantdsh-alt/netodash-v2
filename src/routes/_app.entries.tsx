@@ -1115,9 +1115,9 @@ function PendingCard({
                 className="mt-0.5 w-4 h-4 accent-foreground cursor-pointer"
               />
               <span className="text-[11px] font-mono leading-snug">
-                <span className="font-bold uppercase tracking-widest">Inclure frais de paiement</span>
+                <span className="font-bold uppercase tracking-widest">Inclure les frais XaalipSay</span>
                 <span className="block text-muted-foreground mt-0.5 text-[10px]">
-                  Frais de transaction de ton prestataire de paiement (2,9 % + 30 $).
+                  5 % du montant encaissé (acomptes + paiements intégraux). Retrait gratuit.
                 </span>
               </span>
             </label>

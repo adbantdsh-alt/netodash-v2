@@ -4,7 +4,7 @@ import { SignupCtaButton } from "@/components/SignupCtaButton";
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Marge nette de ta boutique CopyX";
 const PRICING_DESC =
-  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité : ventes CopyX, acomptes, paiements mobile money, Analytics Pro.";
+  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité : ventes CopyX, acomptes, encaissements XaalipSay, Analytics Pro.";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -54,7 +54,7 @@ const DROPSHIP_PLANS: PaidPlan[] = [
     tagline: "Tout illimité, tout inclus",
     features: [
       "Ventes CopyX illimitées",
-      "Suivi acomptes + paiements mobile money",
+      "Suivi acomptes + encaissements XaalipSay",
       "Analytics Pro (scoring, waterfall, break-even, simulateur)",
       "Decision Engine · Insights automatiques",
       "Upsells · Export CSV",
@@ -95,7 +95,7 @@ function PricingPage() {
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
           7 jours d'essai gratuit avec accès complet, sans carte bancaire.
           Puis $20/mois — tout illimité, pour piloter la marge nette de ta
-          boutique CopyX (acomptes, mobile money, pub, COGS, livraison).
+          boutique CopyX (acomptes, encaissements XaalipSay, pub, COGS, livraison).
         </p>
 
         {/* Essai */}

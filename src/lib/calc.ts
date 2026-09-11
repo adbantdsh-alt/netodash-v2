@@ -45,7 +45,7 @@ export type DailyEntry = {
   total_revenue?: number | null;
   /** Si true, on applique la taxe Meta Ads (case informative seulement pour l'instant). */
   include_meta_tax?: boolean | null;
-  /** Si true, on applique les frais de paiement (2,9 %) sur le CA. */
+  /** Si true, on applique les frais XaalipSay (5 % de l'encaissé) sur le CA. */
   include_shopify_fees?: boolean | null;
   /** Si true, on applique les frais Wave (1%) sur le cash encaissé (COD). */
   include_wave_fees?: boolean | null;
@@ -65,6 +65,12 @@ export type DailyEntry = {
   total_revenue_currency?: string | null;
   /** Nb de commandes remboursées. */
   refunded_orders?: number | null;
+  /**
+   * Montant réellement encaissé via XaalipSay pour cette saisie
+   * (acomptes + paiements intégraux). Si absent, on retombe sur le CA saisi.
+   * Les 5 % de frais XaalipSay s'appliquent à ce montant, pas au CA théorique.
+   */
+  collected_amount?: number | null;
   /** Montant total remboursé. */
   refunded_amount?: number | null;
   /** Ventes additionnelles (upsells) — Plan Pro. */
@@ -200,9 +206,12 @@ function resolveEntryCogs(
   };
 }
 
-export const SHOPIFY_FEES_PCT = 2.9;
-/** Frais fixe du prestataire de paiement par transaction (commande). */
-export const SHOPIFY_FIXED_FEE_USD = 0.30;
+/**
+ * Frais XaalipSay : 5 % du montant réellement encaissé (acomptes + paiements
+ * intégraux). Le retrait est gratuit : aucun frais fixe par transaction.
+ */
+export const XAALIPSAY_FEES_PCT = 5;
+/** @deprecated Frais Wave (1 %) — héritage COD. */
 export const WAVE_FEES_PCT = 1;
 
 export type KPIs = {
@@ -214,7 +223,7 @@ export type KPIs = {
   adSpend: number;
   /** Taxe Meta Ads (% défini sur le profil) sur le budget pub. */
   metaTax: number;
-  /** Frais de paiement (2,9 %) sur le CA. */
+  /** Frais XaalipSay (5 % du montant encaissé). */
   shopifyFees: number;
   /** Frais Wave (1%) sur le cash encaissé (COD). */
   waveFees: number;
@@ -281,8 +290,12 @@ export function computeKPIs(
       metaTax += ad * (Number(metaTaxPct) / 100);
     }
     if (e.include_shopify_fees) {
-      shopifyFees += rev * (SHOPIFY_FEES_PCT / 100);
-      shopifyFees += convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts);
+      // Base = ce qui est réellement encaissé (collected_amount) et non le CA
+      // théorique : les 5 % XaalipSay ne portent que sur l'argent reçu.
+      const collected = e.collected_amount != null
+        ? convertDropshippingCurrency(Number(e.collected_amount), revenueCurrency, targetCurrency, fxOpts)
+        : rev;
+      shopifyFees += collected * (XAALIPSAY_FEES_PCT / 100);
     }
     if (e.include_wave_fees) {
       waveFees += rev * (WAVE_FEES_PCT / 100);
@@ -499,9 +512,11 @@ export function computeDailySeries(
     const cogs = convertDropshippingCurrency(orders * (ec2.costPerUnit + ec2.shippingPerUnit), ec2.currency, targetCurrency, fxOpts);
     const ad = adSpendInCurrency(e, targetCurrency, fxOpts);
     const tax = e.include_meta_tax !== false ? ad * (Number(metaTaxPct) / 100) : 0;
+    const collected = e.collected_amount != null
+      ? convertDropshippingCurrency(Number(e.collected_amount), revenueCurrency, targetCurrency, fxOpts)
+      : rev;
     const shopifyFees = e.include_shopify_fees
-      ? rev * (SHOPIFY_FEES_PCT / 100)
-        + convertDropshippingCurrency(orders * SHOPIFY_FIXED_FEE_USD, "USD", targetCurrency, fxOpts)
+      ? collected * (XAALIPSAY_FEES_PCT / 100)
       : 0;
     const waveFees = e.include_wave_fees ? rev * (WAVE_FEES_PCT / 100) : 0;
     const ups = upsellTotalsForEntry(e, productMap, targetCurrency, fxOpts);

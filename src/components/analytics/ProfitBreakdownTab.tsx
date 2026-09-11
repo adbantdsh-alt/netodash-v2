@@ -42,7 +42,7 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
     { label: "Coûts produits livrés", value: kpis.cogs, color: "hsl(0 75% 55%)" },
     { label: "Pub", value: kpis.adSpend, color: "hsl(220 75% 55%)" },
     { label: "Taxe Meta", value: kpis.metaTax, color: "hsl(260 60% 55%)" },
-    { label: "Frais de paiement", value: kpis.shopifyFees, color: "hsl(180 60% 45%)" },
+    { label: "Frais XaalipSay", value: kpis.shopifyFees, color: "hsl(180 60% 45%)" },
     { label: "Wave", value: kpis.waveFees, color: "hsl(280 55% 50%)" },
     { label: "Remboursés", value: kpis.refundedAmount, color: "hsl(340 60% 50%)" },
     { label: "Bénéfice net", value: Math.max(0, kpis.netProfit), color: "hsl(150 70% 40%)" },
