@@ -45,7 +45,8 @@ export function DropshippingPlanCards({
         cycle={cycle}
         tagline="Tout illimité, tout inclus"
         features={[
-          "Produits illimités",
+          "Ventes CopyX illimitées",
+          "Suivi acomptes + paiements mobile money",
           "Analytics Pro (scoring, waterfall, break-even, simulateur)",
           "Decision Engine · Insights automatiques",
           "Upsells · Export CSV",
