@@ -46,7 +46,7 @@ const JSONLD = {
       description: COPY.seoDescription,
       offers: {
         "@type": "Offer",
-        price: "5",
+        price: "20",
         priceCurrency: "USD",
         category: "subscription",
       },

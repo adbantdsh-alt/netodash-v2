@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { normalizeDropshippingCurrency } from "@/lib/calc";
+import { APP_CURRENCY } from "@/lib/dropshipping-fx";
 
 export type BusinessMode = "cod" | "dropshipping";
 
@@ -44,11 +44,11 @@ export function useActiveMode(): ActiveModeState {
 
   const profile = profileQ.data as any;
   const mode: BusinessMode = (profile?.active_mode ?? "dropshipping") as BusinessMode;
-  const codCurrency = "XOF";
-  const dropshippingCurrency = normalizeDropshippingCurrency(
-    profile?.dropshipping_currency ?? profile?.currency,
-  );
-  const currency = mode === "cod" ? codCurrency : dropshippingCurrency;
+  // App mono-devise : tout l'affichage est en FCFA, quel que soit le mode ou la
+  // devise historiquement stockée sur le profil (anciens comptes EUR / USD).
+  const codCurrency = APP_CURRENCY;
+  const dropshippingCurrency = APP_CURRENCY;
+  const currency = APP_CURRENCY;
 
   const mutation = useMutation({
     mutationFn: async (next: BusinessMode) => {

@@ -1,20 +1,28 @@
 import { useState, useMemo } from "react";
+import { formatCurrency } from "@/lib/calc";
 
 /**
- * Calculateur ROAS net interactif pour la landing Dropshipping.
- * 4 sliders : CA Shopify, Budget Ads, COGS+fulfillment, Taxes pub (Meta 18%).
+ * Calculateur ROAS net interactif pour la landing.
+ * 4 sliders : CA, Budget Ads, COGS+fulfillment, Taxes pub (Meta 18 %).
  * Sort en live : ROAS Meta affiché vs ROAS net réel + marge nette.
+ * Montants en FCFA (devise unique de l'app).
  */
+
+/** Échelle des valeurs de démo : 1 USD ≈ 600 FCFA. */
+const XOF_PER_USD = 600;
+/** Frais fixe de transaction (≈ 30 USD) converti en FCFA. */
+const TX_FIXED_FEE_XOF = 30 * XOF_PER_USD;
+
 export function RoasCalculator() {
-  const [revenue, setRevenue] = useState(12000);
-  const [adSpend, setAdSpend] = useState(5000);
+  const [revenue, setRevenue] = useState(12_000 * XOF_PER_USD);
+  const [adSpend, setAdSpend] = useState(5_000 * XOF_PER_USD);
   const [cogsPct, setCogsPct] = useState(32);
   const [adTaxPct, setAdTaxPct] = useState(18);
 
   const out = useMemo(() => {
     const cogs = (revenue * cogsPct) / 100;
     const adTax = (adSpend * adTaxPct) / 100;
-    const stripe = revenue * 0.029 + 30;
+    const stripe = revenue * 0.029 + TX_FIXED_FEE_XOF;
     const refunds = revenue * 0.04;
     const cashIn = revenue - stripe - refunds;
     const totalCosts = cogs + adSpend + adTax;
@@ -26,8 +34,7 @@ export function RoasCalculator() {
   }, [revenue, adSpend, cogsPct, adTaxPct]);
 
   const profitable = out.profit > 0;
-  const fmt = (n: number) =>
-    "$" + Math.round(n).toLocaleString("en-US");
+  const fmt = (n: number) => formatCurrency(n, "XOF");
 
   return (
     <section className="brutal-border-thin border-l-0 border-r-0 border-b-0 bg-background">
@@ -42,7 +49,7 @@ export function RoasCalculator() {
         <p className="text-muted-foreground mt-5 max-w-2xl text-base md:text-lg">
           Le ROAS Meta dit une chose. Ta banque dit autre chose. Joue avec ton CA,
           ton budget pub et ton COGS — on calcule la marge nette réelle, après
-          taxes pub, frais Stripe et refunds.
+          taxes pub, frais de paiement et refunds.
         </p>
 
         <div className="grid lg:grid-cols-5 gap-6 mt-12">
@@ -51,18 +58,18 @@ export function RoasCalculator() {
             <SliderRow
               label="CA (30j)"
               value={revenue}
-              min={1000}
-              max={100000}
-              step={500}
+              min={600_000}
+              max={60_000_000}
+              step={300_000}
               format={fmt}
               onChange={setRevenue}
             />
             <SliderRow
               label="Budget pub (Meta / TikTok / Google)"
               value={adSpend}
-              min={500}
-              max={50000}
-              step={250}
+              min={300_000}
+              max={30_000_000}
+              step={150_000}
               format={fmt}
               onChange={setAdSpend}
             />
@@ -138,7 +145,7 @@ export function RoasCalculator() {
             <div className="brutal-border-thin p-4 font-mono text-[11px] text-muted-foreground space-y-1">
               <Line k="− COGS / fulfillment" v={"− " + fmt(out.cogs)} />
               <Line k="− Taxe pub" v={"− " + fmt(out.adTax)} />
-              <Line k="− Frais Stripe" v={"− " + fmt(out.stripe)} />
+              <Line k="− Frais de paiement" v={"− " + fmt(out.stripe)} />
               <Line k="− Refunds (~4%)" v={"− " + fmt(out.refunds)} />
             </div>
           </div>

@@ -203,7 +203,7 @@ export function ProductRanking({
                     : row.status === "BREAK EVEN"
                       ? "bg-background text-foreground border-foreground"
                       : "bg-accent text-accent-foreground border-accent";
-                const profitGood = mode === "cod" ? row.profit >= 500_000 : row.profit >= 2000;
+                const profitGood = mode === "cod" ? row.profit >= 500_000 : row.profit >= 1_200_000;
                 return (
                   <tr key={row.name} className="border-t border-foreground/20">
                     <td className="p-4 font-black text-foreground tracking-tight text-base">{row.name}</td>
