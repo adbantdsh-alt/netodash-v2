@@ -127,15 +127,15 @@ const DEFAULT_USD_VALUE: Record<AppCurrency, number> = {
 };
 
 export function normalizeCurrency(currency?: string | null): AppCurrency {
-  const cur = String(currency ?? "EUR").toUpperCase();
-  return SUPPORTED_CURRENCIES.includes(cur as AppCurrency) ? (cur as AppCurrency) : "EUR";
+  const cur = String(currency ?? "XOF").toUpperCase();
+  return SUPPORTED_CURRENCIES.includes(cur as AppCurrency) ? (cur as AppCurrency) : "XOF";
 }
 
 /** Conversion XOF / COD uniquement (DashboardCod). */
 export function convertCurrency(
   value: number,
   fromCurrency?: string | null,
-  toCurrency: string = "EUR",
+  toCurrency: string = "XOF",
   usdToXofRate?: number,
 ): number {
   const raw = Number(value) || 0;
@@ -154,7 +154,7 @@ export function convertCurrency(
 
 export function adSpendInCurrency(
   entry: DailyEntry,
-  targetCurrency: string = "EUR",
+  targetCurrency: string = "XOF",
   fx?: DropshippingFxOptions,
 ): number {
   const fxOpts: DropshippingFxOptions = {
@@ -190,7 +190,7 @@ function resolveEntryCogs(
   entry: DailyEntry,
   product: Product,
 ): { costPerUnit: number; shippingPerUnit: number; currency: string } {
-  const productCurrency = product.currency ?? "EUR";
+  const productCurrency = product.currency ?? "XOF";
   const hasCogs = entry.entry_cogs_per_unit != null && Number(entry.entry_cogs_per_unit) >= 0;
   const hasShip = entry.entry_shipping_per_unit != null && Number(entry.entry_shipping_per_unit) >= 0;
   const entryCurrency = (entry.entry_cogs_currency ?? productCurrency) || productCurrency;
@@ -261,7 +261,7 @@ export type KPIs = {
 export function computeKPIs(
   entries: DailyEntry[],
   products: Product[],
-  targetCurrency: string = "EUR",
+  targetCurrency: string = "XOF",
   fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): KPIs {
@@ -391,7 +391,7 @@ export function roasVerdict(roas: number, hasSpend: boolean): RoasVerdict {
   };
 }
 
-export function formatCurrency(value: number, currency = "EUR"): string {
+export function formatCurrency(value: number, currency = "XOF"): string {
   const code = normalizeCurrency(currency);
   const symbols: Record<string, string> = {
     EUR: "€",
@@ -492,7 +492,7 @@ export function computeDailySeries(
   entries: DailyEntry[],
   products: Product[],
   productId?: string | null,
-  targetCurrency: string = "EUR",
+  targetCurrency: string = "XOF",
   fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): DailyKPI[] {
@@ -794,7 +794,7 @@ export type ProductRankingRow = {
 export function computeProductRanking(
   entries: DailyEntry[],
   products: Product[],
-  targetCurrency: string = "EUR",
+  targetCurrency: string = "XOF",
   fx?: DropshippingFxOptions,
   metaTaxPct = 0,
 ): ProductRankingRow[] {

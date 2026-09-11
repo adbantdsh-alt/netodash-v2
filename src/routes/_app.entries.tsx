@@ -924,8 +924,8 @@ function EntriesPage() {
             )}
             {entriesQ.data?.map((e: any) => {
               const p = productMap.get(e.product_id);
-              const adCur = e.ad_budget_currency ?? "EUR";
-              const revenueCur = e.total_revenue_currency ?? (p as any)?.currency ?? "EUR";
+              const adCur = e.ad_budget_currency ?? "XOF";
+              const revenueCur = e.total_revenue_currency ?? (p as any)?.currency ?? "XOF";
               const isCod = activeMode === "cod";
               // Fallback : anciennes saisies COD ont la valeur dans shopify_orders
               const receivedDisplay = isCod
@@ -1346,7 +1346,7 @@ function PendingCard({
                 className="mt-0.5 w-4 h-4 accent-foreground cursor-pointer"
               />
               <span className="text-[11px] font-mono leading-snug">
-                <span className="font-bold uppercase tracking-widest">Droits de douane UE (3 € / cmd)</span>
+                <span className="font-bold uppercase tracking-widest">Droits de douane UE (≈ 2 000 F / cmd)</span>
                 <span className="block text-muted-foreground mt-0.5 text-[10px]">
                   Frais fixe par commande EU (juillet 2026). Décoche si non concerné.
                 </span>

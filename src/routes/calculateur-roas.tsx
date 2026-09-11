@@ -19,7 +19,7 @@ const JSONLD = {
       operatingSystem: "Web",
       description:
         "Calculateur ROAS gratuit pour e-commerce. Calcule ton Break-Even ROAS, ton ROAS actuel, ton Target ROAS et ton CPA max en quelques secondes.",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+      offers: { "@type": "Offer", price: "0", priceCurrency: "XOF" },
     },
     {
       "@type": "FAQPage",
@@ -45,7 +45,7 @@ const JSONLD = {
           name: "Comment se calcule le ROAS ?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "ROAS = Chiffre d'affaires généré ÷ Dépense publicitaire. Un ROAS de 2x signifie que tu gagnes 2€ pour chaque 1€ dépensé en pub.",
+            text: "ROAS = Chiffre d'affaires généré ÷ Dépense publicitaire. Un ROAS de 2x signifie que tu gagnes 2 F pour chaque 1 F dépensé en pub.",
           },
         },
       ],

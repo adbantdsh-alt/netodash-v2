@@ -73,7 +73,7 @@ function AnalyticsPage() {
   }
 
   const modeHint =
-    "Analyses calibrées sur ta rentabilité réelle : profit par euro de pub, ROAS vs break-even, taux de remboursement et scaling.";
+    "Analyses calibrées sur ta rentabilité réelle : profit par franc de pub, ROAS vs break-even, taux de remboursement et scaling.";
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10 space-y-6">

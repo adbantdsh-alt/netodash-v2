@@ -37,7 +37,7 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
   // Échelle pour la barre visuelle : valeur absolue max
   const maxVal = Math.max(kpis.revenue, 1);
 
-  // Pour le donut "où part chaque euro" : on prend les coûts (positifs)
+  // Pour le donut « où part chaque franc » : on prend les coûts (positifs)
   const costs = [
     { label: "Coûts produits livrés", value: kpis.cogs, color: "hsl(0 75% 55%)" },
     { label: "Pub", value: kpis.adSpend, color: "hsl(220 75% 55%)" },
@@ -55,7 +55,7 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
         <div>
           <h2 className="text-2xl font-black tracking-tight">Décomposition du bénéfice</h2>
           <p className="text-xs uppercase tracking-widest text-muted-foreground font-bold mt-1">
-            Où part chaque euro de CA. Identifie les postes qui pèsent.
+            Où part chaque franc de CA. Identifie les postes qui pèsent.
           </p>
         </div>
         <select
@@ -101,7 +101,7 @@ export function ProfitBreakdownTab({ preset, customRange }: Props) {
 
       {/* Donut visuel via stacked bar */}
       <div className="brutal-border-thin p-5 bg-card">
-        <div className="text-xs uppercase tracking-widest font-bold mb-4">Où part chaque euro de CA</div>
+        <div className="text-xs uppercase tracking-widest font-bold mb-4">Où part chaque franc de CA</div>
         {totalCost > 0 ? (
           <>
             <div className="flex h-8 brutal-border-thin overflow-hidden">

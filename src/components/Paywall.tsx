@@ -71,12 +71,12 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
             {
               icon: "🏆",
               title: "Score de rentabilité",
-              desc: "Chaque produit noté 0-100 selon marge nette, ROAS vs break-even, € profit / € pub et taux de remboursement. Winners et losers identifiés en un coup d'œil.",
+              desc: "Chaque produit noté 0-100 selon marge nette, ROAS vs break-even, F profit / F pub et taux de remboursement. Winners et losers identifiés en un coup d'œil.",
             },
             {
               icon: "💰",
               title: "Waterfall du bénéfice",
-              desc: "Visualise où part chaque euro : CA → COGS → pub → frais → bénéfice net. Tu sais EXACTEMENT quel coût tue ta rentabilité.",
+              desc: "Visualise où part chaque franc : CA → COGS → pub → frais → bénéfice net. Tu sais EXACTEMENT quel coût tue ta rentabilité.",
             },
             {
               icon: "📈",
@@ -91,7 +91,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
             {
               icon: "🧪",
               title: "Simulateur de scénarios",
-              desc: "« Si je passe le budget de 50 à 200 € avec un CPA de 12 € → bénéfice net projeté = X ». Décide avant de cramer le budget.",
+              desc: "« Si je passe le budget de 30 000 à 120 000 F avec un CPA de 7 000 F → bénéfice net projeté = X ». Décide avant de cramer le budget.",
             },
             {
               icon: "🚨",
@@ -115,7 +115,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
         {[
           { kpi: "+38%", label: "de marge nette en moyenne pour les users qui suivent les Insights" },
           { kpi: "−2h/j", label: "de temps perdu à reconstruire les calculs dans un tableur" },
-          { kpi: "0 €", label: "cramé sur un produit que le score avait flaggé loser" },
+          { kpi: "0 F", label: "cramé sur un produit que le score avait flaggé loser" },
         ].map((p) => (
           <div key={p.label} className="brutal-border-thin p-4 bg-card">
             <div className="text-3xl font-black tracking-tighter text-accent">{p.kpi}</div>

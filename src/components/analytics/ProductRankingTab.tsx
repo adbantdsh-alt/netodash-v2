@@ -51,7 +51,7 @@ export function ProductRankingTab({ preset, customRange }: Props) {
 
   const handleExport = () => {
     const rows: (string | number)[][] = [
-      ["Produit", "Score", "Verdict", "CA", "Bénéfice net", "Marge %", "ROAS", "AOV", "Coût/cmd", "Bénéfice/€pub", "Remboursés %", "Cmds", "Break-even ROAS"],
+      ["Produit", "Score", "Verdict", "CA", "Bénéfice net", "Marge %", "ROAS", "AOV", "Coût/cmd", "Bénéfice/pub", "Remboursés %", "Cmds", "Break-even ROAS"],
       ...sorted.map((r) => [
         r.product.name,
         r.score,
@@ -105,7 +105,7 @@ export function ProductRankingTab({ preset, customRange }: Props) {
               <SortableTh label="Bénéfice" k="netProfit" sort={sort} dir={dir} onClick={setSortKey} align="right" />
               <SortableTh label="Marge %" k="marginPct" sort={sort} dir={dir} onClick={setSortKey} align="right" />
               <SortableTh label="ROAS" k="roas" sort={sort} dir={dir} onClick={setSortKey} align="right" />
-              <SortableTh label="€ profit/€ pub" k="profitPerAdEuro" sort={sort} dir={dir} onClick={setSortKey} align="right" />
+              <SortableTh label="F profit / F pub" k="profitPerAdEuro" sort={sort} dir={dir} onClick={setSortKey} align="right" />
               <SortableTh label="Remb. %" k="refundRate" sort={sort} dir={dir} onClick={setSortKey} align="right" />
               <Th align="right">Cmds</Th>
               <Th align="center">Action</Th>
@@ -144,7 +144,7 @@ export function ProductRankingTab({ preset, customRange }: Props) {
 
       <div className="brutal-border-thin p-4 bg-muted/30 text-xs font-mono text-muted-foreground space-y-1">
         <p><strong>Score</strong> : pondère marge nette, bénéfice/€ pub, ROAS vs break-even et taux de remboursement.</p>
-        <p><strong>€ profit/€ pub</strong> : combien tu gagnes par euro investi en publicité (le KPI roi du dropshipping).</p>
+        <p><strong>F profit / F pub</strong> : combien tu gagnes par franc investi en publicité (le KPI roi du dropshipping).</p>
         <p><strong>Verdicts</strong> : 🟢 winner ≥65 · 🟡 watch 40-64 · 🔴 loser &lt;40.</p>
       </div>
     </div>
