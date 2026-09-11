@@ -363,15 +363,23 @@ export function roasVerdict(roas: number, hasSpend: boolean): RoasVerdict {
   };
 }
 
+/** Symboles monétaires réellement utilisés dans l'app. */
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$",
+  XOF: "FCFA",
+};
+
+/**
+ * Formate un montant. Deux devises existent dans l'app :
+ * - XOF (FCFA) : devise unique de l'utilisateur, par défaut ;
+ * - USD : uniquement pour les montants Stripe du back-office.
+ * Tout autre code (EUR, GBP, héritage) est ramené au FCFA : plus aucun symbole
+ * européen ne peut être affiché.
+ */
 export function formatCurrency(value: number, currency = "XOF"): string {
-  const code = normalizeCurrency(currency);
-  const symbols: Record<string, string> = {
-    EUR: "€",
-    USD: "$",
-    GBP: "£",
-    XOF: "FCFA",
-  };
-  const sym = symbols[code] || code;
+  const raw = String(currency ?? "XOF").toUpperCase();
+  const code = raw === "USD" ? "USD" : "XOF";
+  const sym = CURRENCY_SYMBOLS[code] || code;
   const safeValue = Number.isFinite(Number(value)) ? Number(value) : 0;
   const decimals = code === "XOF" || Math.abs(safeValue - Math.round(safeValue)) < 0.005 ? 0 : 2;
   // Pour FCFA on met l'unité après avec un espace insécable (lecture locale).
