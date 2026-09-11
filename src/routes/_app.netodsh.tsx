@@ -494,10 +494,10 @@ function OverviewTab({
           sparkline={stats.revenueSeries}
         />
         <KpiCard label="Trial actifs" value={formatNumber(stats.trialUsers)} />
-        <KpiCard label="COD ($10)" value={formatNumber(stats.codUsers)} />
-        <KpiCard label="Starter ($12)" value={formatNumber(stats.basicUsers)} />
-        <KpiCard label="Pro ($29)" value={formatNumber(stats.starterUsers)} />
-        <KpiCard label="Scale ($79)" value={formatNumber(stats.proUsers)} accent />
+        <KpiCard label="COD (hérité)" value={formatNumber(stats.codUsers)} />
+        <KpiCard label="Basic ($10)" value={formatNumber(stats.basicUsers)} />
+        <KpiCard label="Ancien Pro ($29)" value={formatNumber(stats.starterUsers)} />
+        <KpiCard label="Pro ($15)" value={formatNumber(stats.proUsers)} accent />
         <KpiCard label="Free / expirés" value={formatNumber(stats.freeUsers)} />
         <KpiCard label="Revenu total" value={fmt(stats.totalRevenue)} />
       </div>
@@ -983,10 +983,10 @@ function UsersTab({
         {[
           { k: "all", l: `Tous (${users.length})` },
           { k: "trial", l: `Trial` },
-          { k: "cod", l: "COD $10" },
-          { k: "basic", l: "Starter $12" },
-          { k: "starter", l: "Pro $29" },
-          { k: "pro", l: "Scale $79" },
+          { k: "cod", l: "COD (hérité)" },
+          { k: "basic", l: "Basic $10" },
+          { k: "starter", l: "Ancien Pro $29" },
+          { k: "pro", l: "Pro $15" },
           { k: "free", l: "Free" },
           { k: "paid", l: "💰 A payé" },
           { k: "expiring", l: "⚠ Expire <3j" },
