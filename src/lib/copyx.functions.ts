@@ -60,7 +60,12 @@ export const connectCopyx = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const userId = context.userId as string;
 
-    const check = await copyxCheckAccount(data.token);
+    // Tant que l'API CopyX n'est pas branchée (COPYX_API_URL vide), on
+    // enregistre la connexion SANS la valider : la base est posée et testable,
+    // la vérification du jeton se fera au moment de la synchronisation.
+    const check = isCopyxConfigured()
+      ? await copyxCheckAccount(data.token)
+      : { ok: true as const, label: undefined as string | undefined };
     if (!check.ok) throw new Error(check.message ?? "Connexion CopyX refusée.");
 
     const row = {
