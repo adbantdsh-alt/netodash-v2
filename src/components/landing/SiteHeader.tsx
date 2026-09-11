@@ -2,17 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/Logo";
-import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 // Header unique du site.
 //
-// Avant : un sélecteur croisé « Tu fais du COD ? / Tu fais du Dropshipping ? »
-// renvoyait d'une landing à l'autre, plus un badge de mode à côté du logo.
-// Le COD est retiré du produit : il n'y a plus qu'une seule landing (`/`),
-// donc plus rien à basculer.
-//
-// La prop `variant` est conservée en optionnel pour ne pas casser les appels
-// existants (les pages COD en passent encore une) — elle n'a plus d'effet.
+// Les boutons « Connexion » et « Créer un compte » ont été retirés de la
+// landing (inscriptions fermées côté site public) : la navigation ne propose
+// plus que Calc. ROAS / Tarifs / Contact, et « Dashboard → » uniquement aux
+// visiteurs déjà connectés. La page /auth reste accessible par URL directe.
 type Variant = "dropshipping" | "cod";
 
 export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } = {}) {
@@ -54,27 +50,18 @@ export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } =
               >
                 Contact
               </Link>
-              <Link
-                to="/auth"
-                className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent"
-              >
-                Connexion
-              </Link>
-              <SignupCtaButton variant="header" />
             </>
           )}
         </nav>
 
         <div className="flex md:hidden items-center gap-2">
-          {!loading && user ? (
+          {!loading && user && (
             <Link
               to="/dashboard"
               className="brutal-border bg-accent text-accent-foreground border-accent px-3 py-2 font-bold uppercase tracking-wider text-xs"
             >
               Dashboard →
             </Link>
-          ) : (
-            <SignupCtaButton variant="headerMobile" />
           )}
           <button
             type="button"
@@ -108,19 +95,10 @@ export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } =
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="px-2 py-3 font-bold uppercase tracking-wider text-sm border-b border-foreground/20"
+              className="px-2 py-3 font-bold uppercase tracking-wider text-sm"
             >
               Contact
             </Link>
-            {!loading && !user && (
-              <Link
-                to="/auth"
-                onClick={() => setOpen(false)}
-                className="px-2 py-3 font-bold uppercase tracking-wider text-sm"
-              >
-                Connexion
-              </Link>
-            )}
           </nav>
         </div>
       )}

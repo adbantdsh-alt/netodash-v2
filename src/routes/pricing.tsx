@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SignupCtaButton } from "@/components/SignupCtaButton";
 import { Logo } from "@/components/Logo";
 
 const PRICING_URL = "https://netodash.com/pricing";
@@ -89,10 +88,9 @@ function PricingPage() {
             <Logo size="sm" />
           </Link>
           <nav className="flex items-center gap-2">
-            <Link to="/auth" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
-              Connexion
+            <Link to="/" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
+              ← Accueil
             </Link>
-            <SignupCtaButton variant="header" />
           </nav>
         </div>
       </header>
@@ -122,10 +120,9 @@ function PricingPage() {
               <span className="text-5xl font-black tracking-tighter">0 $</span>
               <span className="font-mono text-sm text-muted-foreground">/ 7 jours</span>
             </div>
-            <p className="font-mono text-xs text-muted-foreground mb-5">
+            <p className="font-mono text-xs text-muted-foreground">
               Accès complet 7 jours, sans carte bancaire — limité à 3 produits
             </p>
-            <SignupCtaButton variant="card" />
           </div>
         </div>
         {/* Les plans */}
@@ -169,7 +166,6 @@ function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <SignupCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
               </div>
             ))}
           </div>

@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Lock, XCircle, BadgeCheck, Server } from "lucide-react";
 import stripeLogo from "@/assets/stripe-logo.png";
 import type { LandingCopy } from "@/lib/landing-copy";
-import { SignupCtaButton } from "@/components/SignupCtaButton";
 
 /* ────────────────────────────────────────────────────────────────────────── *
  * Sections réutilisées par les deux landings (Drop & COD)                    *
@@ -459,7 +458,6 @@ export function Pricing({
                   </li>
                 ))}
               </ul>
-              <SignupCtaButton variant={p.highlight ? "cardHighlight" : "card"} />
             </div>
           ))}
         </div>
@@ -518,9 +516,6 @@ export function FinalCta({ copy }: { copy: LandingCopy }) {
         <p className="font-mono text-sm md:text-base mt-6 text-background/70 max-w-xl mx-auto">
           {copy.ctaLead}
         </p>
-        <div className="mt-10">
-          <SignupCtaButton variant="final" />
-        </div>
       </div>
     </section>
   );
@@ -675,9 +670,8 @@ export function CompetitorComparison() {
         </div>
 
         <div className="text-center mt-8">
-          <SignupCtaButton variant="hero" />
-          <p className="mt-3 text-[11px] font-mono text-muted-foreground">
-            Sans CB · Annulation en 1 clic · Tarifs en dollars US, facturation mensuelle
+          <p className="text-[11px] font-mono text-muted-foreground">
+            Tarifs en dollars US, facturation mensuelle, sans engagement
           </p>
         </div>
       </div>
