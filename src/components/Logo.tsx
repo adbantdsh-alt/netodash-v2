@@ -1,61 +1,38 @@
 /**
- * Logo Netodash qui change automatiquement de couleur selon le mode actif :
- * - data-mode="dropshipping" → point bleu  (/netodash-logo-blue.png)
- * - data-mode="cod"          → point orange (/netodash-logo.png)
+ * Logo Netodash — version TEXTE uniquement.
  *
- * Tu peux aussi forcer une variante via la prop `mode`.
+ * Le pictogramme « N » (image PNG) a été retiré : le logo est désormais le mot
+ * NETODASH en typographie brutaliste, partout (landing, app connectée, tarifs,
+ * pages légales, contact, dashboard).
+ *
+ * Les props `mode` / `alt` / `priority` sont conservées uniquement pour ne pas
+ * casser les appels existants : elles n'ont plus d'effet.
  */
-import { useEffect, useState } from "react";
 
-type Mode = "dropshipping" | "cod";
+const SIZES = {
+  sm: "text-lg md:text-xl",
+  md: "text-2xl md:text-3xl",
+  lg: "text-3xl md:text-4xl",
+  xl: "text-5xl md:text-6xl",
+} as const;
 
-const SRC: Record<Mode, string> = {
-  dropshipping: "/netodash-logo-blue.png",
-  cod: "/netodash-logo.png",
+type LogoProps = {
+  size?: keyof typeof SIZES;
+  className?: string;
+  /** @deprecated sans effet — le logo n'est plus une image. */
+  mode?: "dropshipping" | "cod";
+  /** @deprecated sans effet — le logo est du texte (donc déjà accessible). */
+  alt?: string;
+  /** @deprecated sans effet — rien à précharger pour du texte. */
+  priority?: boolean;
 };
 
-function readDocMode(): Mode {
-  if (typeof document === "undefined") return "cod";
-  const v = document.documentElement.getAttribute("data-mode");
-  return v === "dropshipping" ? "dropshipping" : "cod";
-}
-
-export function Logo({
-  mode,
-  className = "h-7 md:h-9 w-auto object-contain shrink-0",
-  alt = "NETODASH",
-  priority = false,
-}: {
-  mode?: Mode;
-  className?: string;
-  alt?: string;
-  priority?: boolean;
-}) {
-  const [docMode, setDocMode] = useState<Mode>(() => mode ?? readDocMode());
-
-  useEffect(() => {
-    if (mode) return; // contrôlé par prop
-    const update = () => setDocMode(readDocMode());
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-mode"],
-    });
-    return () => observer.disconnect();
-  }, [mode]);
-
-  const src = SRC[mode ?? docMode];
-
+export function Logo({ size = "md", className = "" }: LogoProps) {
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={1650}
-      height={297}
-      fetchPriority={priority ? "high" : "auto"}
-      decoding="async"
-      className={className}
-    />
+    <span
+      className={`font-black uppercase tracking-tighter leading-none select-none ${SIZES[size]} ${className}`}
+    >
+      NETODASH
+    </span>
   );
 }

@@ -230,7 +230,7 @@ function AuthPage() {
         </Link>
         <div className="mt-6 brutal-border p-6 sm:p-8 md:p-10">
           <div className="flex items-center mb-6">
-            <Logo mode="cod" priority className="h-7 md:h-8 w-auto object-contain shrink-0" />
+            <Logo size="sm" />
           </div>
 
           {signupSentTo ? (

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Logo } from "@/components/Logo";
 
 export function SiteFooter({
   tagline,
@@ -14,16 +15,7 @@ export function SiteFooter({
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
             <div className="flex items-center gap-1.5 mb-3">
-              <img
-                src="/netodash-logo.png"
-                alt="NETODASH"
-                width={40}
-                height={40}
-                loading="lazy"
-                decoding="async"
-                className="w-10 h-10 object-contain"
-              />
-              <span className="font-black text-xl tracking-tight">NETODASH</span>
+              <Logo size="md" />
             </div>
             <p className="font-mono text-xs text-background/70 leading-relaxed">
               {tagline}

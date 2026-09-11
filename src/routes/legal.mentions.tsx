@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Logo } from "@/components/Logo";
 
 export const Route = createFileRoute("/legal/mentions")({
   head: () => ({
@@ -57,7 +58,7 @@ export function LegalShell({
       <header className="brutal-border-thin border-t-0 border-l-0 border-r-0">
         <div className="max-w-[1400px] mx-auto px-6 py-5 flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img src="/netodash-logo.png" alt="NETODASH" className="h-9 w-auto object-contain" />
+            <Logo size="sm" />
           </Link>
           <Link
             to="/"

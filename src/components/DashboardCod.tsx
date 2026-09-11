@@ -316,11 +316,6 @@ export function DashboardCod({
             >
               <div className="flex items-center justify-between gap-3 relative z-10">
                 <div className="flex items-center gap-2">
-                  <img
-                    src="/netodash-logo.png"
-                    alt=""
-                    className="w-7 h-7 object-contain bg-white p-0.5 rounded-sm"
-                  />
                   <div className="leading-tight">
                     <div className="font-black tracking-tight text-sm">NETODASH</div>
                     <div className="text-[9px] font-mono uppercase tracking-[0.2em] opacity-90">

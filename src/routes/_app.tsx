@@ -10,6 +10,7 @@ import { ProfileCompletionBanner } from "@/components/ProfileCompletionBanner";
 import { useActiveMode } from "@/lib/use-active-mode";
 import { usePlanCodModeSync } from "@/lib/use-plan-mode-sync";
 import { ImpersonationBanner } from "@/components/ImpersonationBanner";
+import { Logo } from "@/components/Logo";
 import { AnnouncementsBanner } from "@/components/AnnouncementsBanner";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
@@ -172,16 +173,10 @@ function AppLayout() {
       <AnnouncementsBanner userPlan={null} />
       <header className="brutal-border-thin border-t-0 border-l-0 border-r-0 sticky top-0 bg-background z-40">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-3 md:gap-6">
-          {/* ZONE GAUCHE : Logo + Mode */}
+          {/* ZONE GAUCHE : Logo texte */}
           <div className="flex items-center gap-3 md:gap-4 min-w-0">
             <Link to="/dashboard" className="flex items-center min-w-0">
-              <img
-                src={activeMode === "dropshipping" ? "/netodash-logo-blue.png" : "/netodash-logo.png"}
-                alt="NETODASH"
-                width={1650}
-                height={297}
-                className="h-7 md:h-9 w-auto object-contain shrink-0"
-              />
+              <Logo size="sm" />
             </Link>
           </div>
 

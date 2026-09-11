@@ -23,11 +23,7 @@ export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } =
     <header className="sticky top-0 z-50 bg-background brutal-border-thin border-t-0 border-l-0 border-r-0">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-5 flex items-center justify-between gap-2">
         <Link to="/" className="flex items-center gap-2 min-w-0">
-          <Logo
-            mode={variant}
-            priority
-            className="h-8 md:h-10 w-auto object-contain shrink-0"
-          />
+          <Logo size="md" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-2">

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, MessageCircle, Clock, Send } from "lucide-react";
 import { submitContactMessage } from "@/lib/contact.functions";
+import { Logo } from "@/components/Logo";
 
 const CONTACT_URL = "https://netodash.com/contact";
 const CONTACT_TITLE = "Contact — NETODASH | Support";
@@ -58,8 +59,7 @@ function ContactPage() {
       <header className="sticky top-0 z-50 bg-background brutal-border-thin border-t-0 border-l-0 border-r-0">
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 md:py-5 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-1.5">
-            <img src="/netodash-logo.png" alt="NETODASH" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
-            <span className="font-black text-lg md:text-2xl tracking-tight">NETODASH</span>
+            <Logo size="md" />
           </Link>
           <Link to="/" className="brutal-border-thin px-4 py-2 font-bold uppercase tracking-wider text-xs md:text-sm">
             ← Accueil
