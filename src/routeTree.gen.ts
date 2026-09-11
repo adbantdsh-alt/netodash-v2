@@ -32,6 +32,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiCoachRouteImport } from './routes/api/coach'
 import { Route as AffilieCodeRouteImport } from './routes/affilie.$code'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AppSynchroRouteImport } from './routes/_app.synchro'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppRoasCalculatorRouteImport } from './routes/_app.roas-calculator'
 import { Route as AppProductsRouteImport } from './routes/_app.products'
@@ -168,6 +169,11 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSynchroRoute = AppSynchroRouteImport.update({
+  id: '/synchro',
+  path: '/synchro',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof AppProductsRoute
   '/roas-calculator': typeof AppRoasCalculatorRoute
   '/settings': typeof AppSettingsRoute
+  '/synchro': typeof AppSynchroRoute
   '/admin/login': typeof AdminLoginRoute
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
@@ -342,6 +349,7 @@ export interface FileRoutesByTo {
   '/products': typeof AppProductsRoute
   '/roas-calculator': typeof AppRoasCalculatorRoute
   '/settings': typeof AppSettingsRoute
+  '/synchro': typeof AppSynchroRoute
   '/admin/login': typeof AdminLoginRoute
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
@@ -390,6 +398,7 @@ export interface FileRoutesById {
   '/_app/products': typeof AppProductsRoute
   '/_app/roas-calculator': typeof AppRoasCalculatorRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_app/synchro': typeof AppSynchroRoute
   '/admin/login': typeof AdminLoginRoute
   '/affilie/$code': typeof AffilieCodeRoute
   '/api/coach': typeof ApiCoachRoute
@@ -437,6 +446,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/roas-calculator'
     | '/settings'
+    | '/synchro'
     | '/admin/login'
     | '/affilie/$code'
     | '/api/coach'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/roas-calculator'
     | '/settings'
+    | '/synchro'
     | '/admin/login'
     | '/affilie/$code'
     | '/api/coach'
@@ -527,6 +538,7 @@ export interface FileRouteTypes {
     | '/_app/products'
     | '/_app/roas-calculator'
     | '/_app/settings'
+    | '/_app/synchro'
     | '/admin/login'
     | '/affilie/$code'
     | '/api/coach'
@@ -741,6 +753,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/synchro': {
+      id: '/_app/synchro'
+      path: '/synchro'
+      fullPath: '/synchro'
+      preLoaderRoute: typeof AppSynchroRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -958,6 +977,7 @@ interface AppRouteChildren {
   AppProductsRoute: typeof AppProductsRoute
   AppRoasCalculatorRoute: typeof AppRoasCalculatorRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppSynchroRoute: typeof AppSynchroRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -969,6 +989,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProductsRoute: AppProductsRoute,
   AppRoasCalculatorRoute: AppRoasCalculatorRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppSynchroRoute: AppSynchroRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

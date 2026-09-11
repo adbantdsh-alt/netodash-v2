@@ -163,6 +163,7 @@ function AppLayout() {
     { to: "/entries", label: "Saisies" },
     { to: "/analytics", label: "Analytics", badge: "PRO" as const },
     { to: "/plan", label: "Mon plan" },
+    { to: "/synchro", label: "Synchro" },
   ] as const;
 
   return (
