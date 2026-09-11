@@ -49,7 +49,6 @@ import { Route as AdminAdminRevenueRouteImport } from './routes/_admin.admin.rev
 import { Route as AdminAdminExtensionRouteImport } from './routes/_admin.admin.extension'
 import { Route as AdminAdminExportRouteImport } from './routes/_admin.admin.export'
 import { Route as AdminAdminCommunicationRouteImport } from './routes/_admin.admin.communication'
-import { Route as AdminAdminBetaTestersRouteImport } from './routes/_admin.admin.beta-testers'
 import { Route as AdminAdminAffiliatesRouteImport } from './routes/_admin.admin.affiliates'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AdminAdminUsersIdRouteImport } from './routes/_admin.admin.users.$id'
@@ -252,11 +251,6 @@ const AdminAdminCommunicationRoute = AdminAdminCommunicationRouteImport.update({
   path: '/communication',
   getParentRoute: () => AdminAdminRoute,
 } as any)
-const AdminAdminBetaTestersRoute = AdminAdminBetaTestersRouteImport.update({
-  id: '/beta-testers',
-  path: '/beta-testers',
-  getParentRoute: () => AdminAdminRoute,
-} as any)
 const AdminAdminAffiliatesRoute = AdminAdminAffiliatesRouteImport.update({
   id: '/affiliates',
   path: '/affiliates',
@@ -305,7 +299,6 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog/': typeof BlogIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
-  '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
   '/admin/extension': typeof AdminAdminExtensionRoute
@@ -348,7 +341,6 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog': typeof BlogIndexRoute
   '/admin/affiliates': typeof AdminAdminAffiliatesRoute
-  '/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/admin/communication': typeof AdminAdminCommunicationRoute
   '/admin/export': typeof AdminAdminExportRoute
   '/admin/extension': typeof AdminAdminExtensionRoute
@@ -395,7 +387,6 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/blog/': typeof BlogIndexRoute
   '/_admin/admin/affiliates': typeof AdminAdminAffiliatesRoute
-  '/_admin/admin/beta-testers': typeof AdminAdminBetaTestersRoute
   '/_admin/admin/communication': typeof AdminAdminCommunicationRoute
   '/_admin/admin/export': typeof AdminAdminExportRoute
   '/_admin/admin/extension': typeof AdminAdminExtensionRoute
@@ -441,7 +432,6 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/blog/'
     | '/admin/affiliates'
-    | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
     | '/admin/extension'
@@ -484,7 +474,6 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/blog'
     | '/admin/affiliates'
-    | '/admin/beta-testers'
     | '/admin/communication'
     | '/admin/export'
     | '/admin/extension'
@@ -530,7 +519,6 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/blog/'
     | '/_admin/admin/affiliates'
-    | '/_admin/admin/beta-testers'
     | '/_admin/admin/communication'
     | '/_admin/admin/export'
     | '/_admin/admin/extension'
@@ -851,13 +839,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminCommunicationRouteImport
       parentRoute: typeof AdminAdminRoute
     }
-    '/_admin/admin/beta-testers': {
-      id: '/_admin/admin/beta-testers'
-      path: '/beta-testers'
-      fullPath: '/admin/beta-testers'
-      preLoaderRoute: typeof AdminAdminBetaTestersRouteImport
-      parentRoute: typeof AdminAdminRoute
-    }
     '/_admin/admin/affiliates': {
       id: '/_admin/admin/affiliates'
       path: '/affiliates'
@@ -896,7 +877,6 @@ const AdminAdminUsersRouteWithChildren = AdminAdminUsersRoute._addFileChildren(
 
 interface AdminAdminRouteChildren {
   AdminAdminAffiliatesRoute: typeof AdminAdminAffiliatesRoute
-  AdminAdminBetaTestersRoute: typeof AdminAdminBetaTestersRoute
   AdminAdminCommunicationRoute: typeof AdminAdminCommunicationRoute
   AdminAdminExportRoute: typeof AdminAdminExportRoute
   AdminAdminExtensionRoute: typeof AdminAdminExtensionRoute
@@ -908,7 +888,6 @@ interface AdminAdminRouteChildren {
 
 const AdminAdminRouteChildren: AdminAdminRouteChildren = {
   AdminAdminAffiliatesRoute: AdminAdminAffiliatesRoute,
-  AdminAdminBetaTestersRoute: AdminAdminBetaTestersRoute,
   AdminAdminCommunicationRoute: AdminAdminCommunicationRoute,
   AdminAdminExportRoute: AdminAdminExportRoute,
   AdminAdminExtensionRoute: AdminAdminExtensionRoute,

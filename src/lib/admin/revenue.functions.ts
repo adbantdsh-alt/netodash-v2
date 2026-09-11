@@ -2,7 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { ensureRole, logAdminAction, requireAdmin } from "./admin-auth.middleware.server";
 
-const PRICES: Record<string, number> = { basic: 5000, starter: 15000, pro: 30000 };
+// Montants mensuels en FCFA (grille actuelle : Basic 10 $ ≈ 6 000 F,
+// Pro 15 $ ≈ 9 000 F). `cod` et `starter` = clés héritées, prix historiques.
+const PRICES: Record<string, number> = {
+  basic: 6000,
+  pro: 9000,
+  cod: 6000,
+  starter: 17400,
+};
 
 export const getRevenueOverview = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
@@ -19,7 +26,7 @@ export const getRevenueOverview = createServerFn({ method: "GET" })
     const subscriptions = subs ?? [];
 
     let mrr = 0;
-    const planCounts: Record<string, number> = { basic: 0, starter: 0, pro: 0, trial: 0, free: 0 };
+    const planCounts: Record<string, number> = { cod: 0, basic: 0, starter: 0, pro: 0, trial: 0, free: 0 };
     for (const s of subscriptions) {
       const plan = String(s.plan ?? "free");
       const status = String(s.status ?? "");

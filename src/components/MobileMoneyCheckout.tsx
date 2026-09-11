@@ -12,9 +12,9 @@ type Plan = "basic" | "starter" | "pro";
 type Method = "wave" | "orange_qr" | "orange_maxit" | "orange_om";
 
 const PRICES: Record<Plan, { usd: string; label: string }> = {
-  basic: { usd: "5", label: "Basic" },
-  starter: { usd: "17", label: "Pro" },
-  pro: { usd: "27", label: "Premium" },
+  basic: { usd: "10", label: "Basic" },
+  pro: { usd: "15", label: "Pro" },
+  starter: { usd: "29", label: "Ancien Pro (hérité)" },
 };
 
 const METHODS: { id: Method; label: string; needsPhone: boolean; logo: string }[] = [

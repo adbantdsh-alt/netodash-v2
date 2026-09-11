@@ -133,7 +133,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
       </div>
 
       <div className="brutal-border-thin p-5 text-xs font-mono text-muted-foreground">
-        💡 Les plans <strong>Starter</strong> et <strong>Pro</strong> restent pleins d'outils utiles : Dashboard,
+        💡 Le forfait <strong>Basic</strong> reste plein d'outils utiles : Dashboard,
         Produits, Saisies, ROAS net, Calculateur. Analytics Pro vise ceux qui scalent
         plusieurs produits en parallèle et veulent une lecture experte de leurs chiffres.
       </div>

@@ -16,10 +16,10 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { ArrowLeft, ExternalLink, Gift } from "lucide-react";
 
 const GRANT_PLANS = [
-  { id: "cod", label: "COD ($10)" },
-  { id: "basic", label: "Starter ($12)" },
-  { id: "starter", label: "Pro ($29)" },
-  { id: "pro", label: "Scale ($79)" },
+  { id: "basic", label: "Basic ($10)" },
+  { id: "pro", label: "Pro ($15)" },
+  { id: "cod", label: "COD — hérité ($10)" },
+  { id: "starter", label: "Ancien Pro — hérité ($29)" },
 ] as const;
 
 export const Route = createFileRoute("/_admin/admin/users/$id")({

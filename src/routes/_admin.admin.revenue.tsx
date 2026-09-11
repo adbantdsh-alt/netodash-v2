@@ -14,6 +14,16 @@ type Tx = Awaited<ReturnType<typeof listTransactions>>["rows"][number];
 
 const fmt = (n: number) => `${Math.round(n).toLocaleString("fr-FR")} FCFA`;
 
+/** Grille actuelle + clés héritées (abonnés existants). */
+const PAYMENT_PLAN_LABELS: Record<string, string> = {
+  basic: "Basic ($10)",
+  pro: "Pro ($15)",
+  cod: "COD — hérité ($10)",
+  starter: "Ancien Pro — hérité ($29)",
+  trial: "Essai gratuit",
+  free: "Free",
+};
+
 function RevenuePage() {
   const fetchRevenueOverview = useServerFn(getRevenueOverview);
   const fetchTransactions = useServerFn(listTransactions);
@@ -152,7 +162,7 @@ function RevenuePage() {
                 <tr key={r.id as string} className="border-t border-black/10">
                   <td className="p-3 font-mono text-xs">{r.reference as string}</td>
                   <td className="p-3">{r.user_email}</td>
-                  <td className="p-3 uppercase font-bold">{r.plan as string}</td>
+                  <td className="p-3 font-bold">{PAYMENT_PLAN_LABELS[String(r.plan)] ?? (r.plan as string)}</td>
                   <td className="p-3 text-right font-bold">{fmt(Number(r.amount))}</td>
                   <td className="p-3"><span className="admin-pill">{r.status as string}</span></td>
                   <td className="p-3 text-xs">{new Date(r.created_at as string).toLocaleString("fr-FR")}</td>

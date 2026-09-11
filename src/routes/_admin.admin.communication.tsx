@@ -25,13 +25,13 @@ const SEVERITIES = [
 
 const AUDIENCES = [
   { v: "all", label: "Tous les utilisateurs" },
-  { v: "free", label: "Plan Gratuit" },
-  { v: "trial", label: "En essai" },
+  { v: "free", label: "Free (sans abonnement)" },
+  { v: "trial", label: "En essai gratuit" },
   { v: "paying", label: "Tous les payants" },
-  { v: "cod", label: "Plan COD" },
-  { v: "basic", label: "Plan Starter" },
-  { v: "starter", label: "Plan Pro" },
-  { v: "pro", label: "Plan Scale" },
+  { v: "basic", label: "Basic ($10)" },
+  { v: "pro", label: "Pro ($15)" },
+  { v: "cod", label: "COD — hérité" },
+  { v: "starter", label: "Ancien Pro — hérité" },
 ] as const;
 
 const toLocalInput = (iso: string) => {

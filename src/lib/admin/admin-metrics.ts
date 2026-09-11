@@ -3,18 +3,24 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type PaidPlan = "cod" | "basic" | "starter" | "pro";
 
+/**
+ * Prix mensuels en USD utilisés pour le MRR estimé.
+ * Grille actuelle : Basic 10 $ · Pro 15 $.
+ * `cod` (10 $) et `starter` (29 $) sont des clés HÉRITÉES conservées pour les
+ * abonnés existants : leurs prix historiques ne changent pas.
+ */
 export const DEFAULT_PLAN_USD: Record<PaidPlan, number> = {
   cod: 10,
-  basic: 12,
+  basic: 10,
   starter: 29,
-  pro: 79,
+  pro: 15,
 };
 
 export const PLAN_DISPLAY: Record<PaidPlan, string> = {
-  cod: "COD",
-  basic: "Starter",
-  starter: "Pro",
-  pro: "Scale",
+  cod: "COD (hérité)",
+  basic: "Basic",
+  starter: "Pro (hérité 29$)",
+  pro: "Pro",
 };
 
 export type SubscriptionRow = {

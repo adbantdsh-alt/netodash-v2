@@ -7,15 +7,15 @@ export type UnitechMethod = "wave" | "orange_qr" | "orange_maxit" | "orange_om";
 
 export type PlanKey = "basic" | "starter" | "pro";
 
-// Mapping interne → label public : basic→Basic, starter→Pro, pro→Premium.
-// Tarif XOF basé sur ~600 XOF/USD (Sénégal).
+// Grille actuelle : Basic 10 $ ≈ 6 000 F · Pro 15 $ ≈ 9 000 F.
+// `starter` = clé héritée (ancien Pro 29 $) conservée pour les abonnés existants.
 export const PLAN_PRICING: Record<
   PlanKey,
   { amountXof: number; amountUsd: number; label: string }
 > = {
-  basic: { amountXof: 7200, amountUsd: 12, label: "Basic" },
-  starter: { amountXof: 17400, amountUsd: 29, label: "Pro" },
-  pro: { amountXof: 47400, amountUsd: 79, label: "Premium" },
+  basic: { amountXof: 6000, amountUsd: 10, label: "Basic" },
+  pro: { amountXof: 9000, amountUsd: 15, label: "Pro" },
+  starter: { amountXof: 17400, amountUsd: 29, label: "Ancien Pro (hérité)" },
 };
 
 function getApiKey(): string {

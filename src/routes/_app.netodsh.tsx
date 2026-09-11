@@ -272,14 +272,15 @@ function AdminPage() {
         .reduce((s: number, p: any) => s + Number(p.amount), 0);
       const newUsers30d = profiles.filter((p: any) => new Date(p.created_at).getTime() >= d30).length;
 
-      // MRR estimé en USD : cod=$10, basic (Starter)=$12, starter (Pro)=$29, pro (Scale)=$79
+      // MRR estimé en USD — grille actuelle : basic=10 $, pro=15 $.
+      // cod (10 $) et starter (29 $) = clés héritées, prix historiques.
       let mrr = 0;
       for (const s of subs) {
         if (!["active", "incomplete"].includes((s as any).status)) continue;
         const plan = (s as any).plan;
-        if (plan === "pro") mrr += 79;
+        if (plan === "pro") mrr += 15;
         else if (plan === "starter") mrr += 29;
-        else if (plan === "basic") mrr += 12;
+        else if (plan === "basic") mrr += 10;
         else if (plan === "cod") mrr += 10;
       }
 
@@ -1166,11 +1167,11 @@ function PlanBadge({ plan }: { plan: string }) {
   };
   // Mapping interne → label public affiché à l'admin
   const labelMap: Record<string, string> = {
-    pro: "Scale",
-    starter: "Pro",
-    basic: "Starter",
-    cod: "COD",
-    trial: "Trial",
+    pro: "Pro 15$",
+    basic: "Basic 10$",
+    starter: "Ancien Pro 29$",
+    cod: "COD hérité",
+    trial: "Essai",
     free: "Free",
   };
   return (

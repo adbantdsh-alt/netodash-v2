@@ -19,10 +19,10 @@ export const Route = createFileRoute("/_admin/admin/users")({
 type Row = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
 
 const GRANT_PLANS = [
-  { id: "cod", label: "COD ($10)" },
-  { id: "basic", label: "Starter ($12)" },
-  { id: "starter", label: "Pro ($29)" },
-  { id: "pro", label: "Scale ($79)" },
+  { id: "basic", label: "Basic ($10)" },
+  { id: "pro", label: "Pro ($15)" },
+  { id: "cod", label: "COD — hérité ($10)" },
+  { id: "starter", label: "Ancien Pro — hérité ($29)" },
 ] as const;
 
 function AdminUsersPage() {
@@ -242,11 +242,11 @@ function AdminUsersPage() {
           >
             <option value="">Tous plans</option>
             <option value="free">Free</option>
-            <option value="trial">Trial</option>
-            <option value="cod">COD</option>
-            <option value="basic">Starter</option>
-            <option value="starter">Pro</option>
-            <option value="pro">Scale</option>
+            <option value="trial">Essai gratuit</option>
+            <option value="basic">Basic ($10)</option>
+            <option value="pro">Pro ($15)</option>
+            <option value="cod">COD — hérité</option>
+            <option value="starter">Ancien Pro — hérité</option>
           </select>
           <select
             value={status}

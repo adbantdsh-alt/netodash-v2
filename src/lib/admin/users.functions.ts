@@ -327,10 +327,10 @@ export const adminChangeUserPlan = createServerFn({ method: "POST" })
   });
 
 const GRANT_PLAN_LABELS: Record<"cod" | "basic" | "starter" | "pro", string> = {
-  cod: "COD",
-  basic: "Starter",
-  starter: "Pro",
-  pro: "Scale",
+  cod: "COD (hérité)",
+  basic: "Basic (10$)",
+  starter: "Pro hérité (29$)",
+  pro: "Pro (15$)",
 };
 
 function addDuration(base: Date, amount: number, unit: "days" | "months" | "years"): Date {

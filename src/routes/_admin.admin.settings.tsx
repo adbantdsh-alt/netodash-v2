@@ -24,10 +24,11 @@ const SECTIONS: Array<{
   {
     title: "Tarification (FCFA / mois)",
     fields: [
-      { key: "pricing.basic_xof", label: "Plan Basic", type: "number" },
-      { key: "pricing.starter_xof", label: "Plan Starter", type: "number" },
-      { key: "pricing.pro_xof", label: "Plan Pro", type: "number" },
-      { key: "trial.default_days", label: "Durée d'essai par défaut (jours)", type: "number" },
+      { key: "pricing.basic_xof", label: "Basic — 6 000 F (10 $)", type: "number" },
+      { key: "pricing.pro_xof", label: "Pro — 9 000 F (15 $)", type: "number" },
+      { key: "pricing.starter_xof", label: "Ancien Pro hérité — 17 400 F (29 $)", type: "number" },
+      { key: "trial.default_days", label: "Durée d'essai par défaut (jours)", type: "number", help: "Grille actuelle : 7 jours, limité à 3 produits." },
+      { key: "trial.max_products", label: "Produits max pendant l'essai", type: "number" },
     ],
   },
   {
