@@ -7,7 +7,7 @@ type Props = {
 
 /**
  * Full-section paywall shown when the user lacks the required plan.
- * - "analytics": user n'a pas Analytics Pro → upsell vers Netodash ($20/mois)
+ * - "analytics": user n'a pas Analytics Pro → upsell vers le forfait Pro ($15/mois)
  * - "trial-expired": global block when trial ended without payment
  */
 export function Paywall({ variant, trialDaysLeft }: Props) {
@@ -40,14 +40,14 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
           🔒 Accès bloqué
         </div>
         <div className="text-xs uppercase tracking-widest font-bold text-accent mb-2 mt-2">
-          ANALYTICS PRO · INCLUS DANS NETODASH ($20/MOIS)
+          ANALYTICS PRO · INCLUS DANS LE FORFAIT PRO ($15/MOIS)
         </div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-3">
           TON PLAN ACTUEL N'A PAS ACCÈS<br/>À ANALYTICS PRO
         </h2>
         <p className="font-mono text-sm text-muted-foreground max-w-2xl">
           Tu vois les chiffres bruts, mais pas <strong className="text-foreground">la lecture qui transforme un test en winner</strong>.
-          Passe au plan <strong className="text-foreground">Netodash</strong> pour débloquer le hub de rentabilité avancée.
+          Passe au forfait <strong className="text-foreground">Pro ($15/mois)</strong> pour débloquer le hub de rentabilité avancée.
         </p>
         {trialDaysLeft != null && trialDaysLeft <= 2 && (
           <div className="font-mono text-xs text-accent mt-4 font-bold">

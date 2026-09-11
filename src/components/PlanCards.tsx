@@ -6,7 +6,7 @@ export type BillingCycle = "monthly" | "yearly";
 /** Réactiver quand la facturation annuelle sera disponible. */
 export const YEARLY_BILLING_ENABLED = false;
 
-export type DropshipPlanKey = "basic" | "starter" | "pro";
+export type DropshipPlanKey = "basic" | "pro";
 export type PlanKey = DropshipPlanKey;
 
 
@@ -14,10 +14,20 @@ export const DROPSHIP_PLAN_PRICING: Record<
   DropshipPlanKey,
   { monthly: number; yearly: number; monthlyEquivalent: string }
 > = {
-  basic: { monthly: 12, yearly: 115, monthlyEquivalent: "9,58" },
-  starter: { monthly: 29, yearly: 278, monthlyEquivalent: "23,17" },
-  pro: { monthly: 20, yearly: 192, monthlyEquivalent: "16,00" },
+  basic: { monthly: 10, yearly: 96, monthlyEquivalent: "8,00" },
+  pro: { monthly: 15, yearly: 144, monthlyEquivalent: "12,00" },
 };
+
+export const DROPSHIP_PLAN_LABELS: Record<DropshipPlanKey, string> = {
+  basic: "Basic",
+  pro: "Pro",
+};
+
+/** Ce que le forfait Basic n'inclut pas (réservé au forfait Pro). */
+export const PRO_ONLY_FEATURES = [
+  "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+  "Decision Engine · Insights automatiques",
+];
 
 type DropshipCardsProps = {
   highlightPro?: boolean;
@@ -27,7 +37,7 @@ type DropshipCardsProps = {
   onSelectPlan?: (plan: DropshipPlanKey) => void;
 };
 
-/** Cartes Starter / Pro / Scale. */
+/** Cartes Basic ($10) et Pro ($15). */
 export function DropshippingPlanCards({
   highlightPro = true,
   showCurrentBadge = null,
@@ -37,24 +47,41 @@ export function DropshippingPlanCards({
 }: DropshipCardsProps) {
   return (
     <div
-      className={`grid md:grid-cols-1 gap-6 ${variant === "compact" ? "" : "max-w-xl"}`}
+      className={`grid md:grid-cols-2 gap-6 ${variant === "compact" ? "" : "max-w-3xl"}`}
     >
       <DropshipPlanCard
-        name="Netodash"
+        name="Basic"
+        planKey="basic"
+        cycle={cycle}
+        tagline="Produits illimités, sans Analytics Pro"
+        features={[
+          "Produits illimités",
+          "Ventes CopyX : acomptes + encaissements XaalipSay",
+          "Dashboard marge nette, ROAS net, CPA max",
+          "Upsells · Multi-zones · Export CSV",
+          "Historique illimité",
+          "Support WhatsApp",
+        ]}
+        notIncluded={PRO_ONLY_FEATURES}
+        cta="Choisir Basic"
+        onSelectPlan={onSelectPlan}
+        highlight={!highlightPro}
+        current={showCurrentBadge === "basic"}
+      />
+      <DropshipPlanCard
+        name="Pro"
         planKey="pro"
         cycle={cycle}
-        tagline="Tout illimité, tout inclus"
+        tagline="Basic + accès Analytics"
         features={[
-          "Ventes CopyX illimitées",
-          "Suivi acomptes + encaissements XaalipSay",
+          "Tout le forfait Basic",
           "Analytics Pro (scoring, waterfall, break-even, simulateur)",
           "Decision Engine · Insights automatiques",
-          "Upsells · Export CSV",
           "Historique illimité",
           "Support WhatsApp",
         ]}
         notIncluded={[]}
-        cta="Choisir Netodash"
+        cta="Choisir Pro"
         onSelectPlan={onSelectPlan}
         highlight={highlightPro}
         current={showCurrentBadge === "pro"}

@@ -1256,7 +1256,7 @@ function UpsellSection({
         <div className="text-[11px] font-mono leading-snug">
           <span className="font-bold uppercase tracking-widest">🔒 Upsell</span>
           <span className="block text-muted-foreground mt-0.5 text-[10px]">
-            Ventes additionnelles — incluses dans l'abonnement Netodash (20 $/mois, tout illimité).
+            Ventes additionnelles — incluses dans les forfaits Basic ($10) et Pro ($15).
           </span>
         </div>
         <Link

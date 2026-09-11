@@ -36,37 +36,26 @@ type PlanMeta = {
 
 const DROPSHIP_META: Record<DropshipPlanKey, PlanMeta> = {
   basic: {
-    label: "Starter",
-    priceMonthly: 12,
-    priceIdMonthly: "basic_monthly_v4",
+    label: "Basic",
+    priceMonthly: 10,
+    priceIdMonthly: "basic_monthly_v5",
     bullets: [
-      "Dropshipping complet + COD inclus",
-      "3 produits Dropshipping max",
-      "Produits COD illimités",
-      "Dashboard basique COD (7j / 30j)",
-      "Historique Drop 60 jours",
-    ],
-  },
-  starter: {
-    label: "Pro",
-    priceMonthly: 29,
-    priceIdMonthly: "pro_monthly_v4",
-    bullets: [
-      "10 produits Dropshipping max",
-      "COD inclus · Upsells · Multi-zones · Export CSV",
-      "Capture mobile · Historique illimité",
-      "Support email + WhatsApp",
+      "Produits illimités",
+      "Ventes CopyX : acomptes + encaissements XaalipSay",
+      "Marge nette, ROAS net, CPA max, classement produits",
+      "Upsells · Multi-zones · Export CSV",
+      "Historique illimité · Support WhatsApp",
     ],
   },
   pro: {
-    label: "Netodash",
-    priceMonthly: 20,
-    priceIdMonthly: "unlimited_monthly_v6",
+    label: "Pro",
+    priceMonthly: 15,
+    priceIdMonthly: "pro_monthly_v5",
     bullets: [
-      "Produits illimités",
-      "Analytics Pro & Decision Engine",
-      "Tout Pro inclus",
-      "Support WhatsApp prioritaire",
+      "Tout le forfait Basic",
+      "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+      "Decision Engine · Insights automatiques",
+      "Support WhatsApp",
     ],
   },
 };
@@ -112,9 +101,9 @@ function PlanPage() {
       const msg =
         action === "cancel_to_free"
           ? "Annulation programmée. Tu gardes l'accès jusqu'à la fin de la période payée, puis tu retombes sur Free."
-          : action === "downgrade_to_pro"
-            ? "Tu es repassé sur Pro. La différence est créditée sur ta prochaine facture."
-            : "Tu es repassé sur Starter. La différence est créditée sur ta prochaine facture.";
+          : action === "switch_to_pro"
+            ? "Tu es passé au forfait Pro ($15). La différence est créditée sur ta prochaine facture."
+            : "Tu es passé au forfait Basic ($10). La différence est créditée sur ta prochaine facture.";
       toast.success(msg);
       setConfirmAction(null);
       setTimeout(() => window.location.reload(), 800);
@@ -148,7 +137,7 @@ function PlanPage() {
   const planLabel = PLAN_LABELS[sub.plan];
   const isTrial = sub.isTrialing;
   const trialPct =
-    sub.trialDaysLeft != null ? Math.max(0, Math.min(100, (sub.trialDaysLeft / 14) * 100)) : 0;
+    sub.trialDaysLeft != null ? Math.max(0, Math.min(100, (sub.trialDaysLeft / 7) * 100)) : 0;
 
   const periodEnd = sub.raw?.current_period_end ? new Date(sub.raw.current_period_end) : null;
   const daysToRenew = periodEnd
@@ -161,9 +150,11 @@ function PlanPage() {
     sub.plan === "starter" ||
     sub.plan === "pro";
   const dropshipBadge: DropshipPlanKey | null =
-    sub.plan === "basic" || sub.plan === "starter" || sub.plan === "pro"
+    sub.plan === "basic" || sub.plan === "pro"
       ? sub.plan
-      : null;
+      : sub.plan === "starter" || sub.plan === "cod"
+        ? "pro"
+        : null;
 
   const openStripe = (plan: CheckoutPlan) => setStripePlan(plan);
 
@@ -221,7 +212,8 @@ function PlanPage() {
               <div className="h-full bg-accent transition-all" style={{ width: `${trialPct}%` }} />
             </div>
             <p className="font-mono text-xs text-muted-foreground mt-2">
-              Essai 7 jours — accès complet. Passe à Netodash $20/mois avant la fin.
+              Essai gratuit 7 jours — accès complet, 3 produits max. Passe à Basic
+              ($10/mois) ou Pro ($15/mois, avec Analytics) avant la fin.
             </p>
           </div>
         )}
@@ -229,7 +221,7 @@ function PlanPage() {
         {sub.plan === "free" && (
           <div className="brutal-border-thin border-accent p-4 mt-4 bg-accent/5">
             <div className="text-sm font-bold text-accent">
-              Tu es en plan Free. Choisis le plan COD ($10) ou un plan Dropshipping (Starter $12, Pro $29, Scale $79).
+              Tu es en plan Free. Choisis le forfait Basic ($10/mois) ou Pro ($15/mois — Basic + Analytics).
             </div>
           </div>
         )}
@@ -288,7 +280,7 @@ function PlanPage() {
           LES PLANS
         </h2>
         <p className="font-mono text-xs text-muted-foreground mt-2 mb-6 max-w-2xl">
-          Starter / Pro / Scale · Facturation mensuelle, sans engagement
+          Basic $10/mois · Pro $15/mois (Basic + Analytics) · Facturation mensuelle, sans engagement
         </p>
         <DropshippingPlanCards
           highlightPro
@@ -301,26 +293,26 @@ function PlanPage() {
       {isPaid && sub.plan !== "cod" && !sub.raw?.cancel_at_period_end && (
         <section className="brutal-border-thin p-5 md:p-6 mb-6">
           <h3 className="text-sm font-black uppercase tracking-widest mb-2">
-            Rétrograder ou annuler
+            Changer de forfait ou annuler
           </h3>
           <p className="font-mono text-xs text-muted-foreground mb-4">
-            Tu peux rétrograder à tout moment. Tu gardes tes données — seules les limites changent.
+            Tu peux changer de forfait à tout moment. Tu gardes tes données — seules les limites changent.
           </p>
           <div className="flex flex-wrap gap-3">
-            {sub.plan === "pro" && (
+            {sub.plan === "basic" && (
               <button
-                onClick={() => setConfirmAction("downgrade_to_pro")}
-                className="brutal-border-thin px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                onClick={() => setConfirmAction("switch_to_pro")}
+                className="brutal-border-thin border-accent bg-accent text-accent-foreground px-4 py-2 text-xs font-bold uppercase tracking-widest hover:opacity-90"
               >
-                ↓ Rétrograder vers Pro ($29)
+                ↑ Passer à Pro ($15) — débloquer Analytics
               </button>
             )}
             {(sub.plan === "pro" || sub.plan === "starter") && (
               <button
-                onClick={() => setConfirmAction("downgrade_to_basic")}
+                onClick={() => setConfirmAction("switch_to_basic")}
                 className="brutal-border-thin px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-accent-foreground hover:border-accent"
               >
-                ↓ Rétrograder vers Starter ($12)
+                ↓ Passer à Basic ($10)
               </button>
             )}
             <button
@@ -347,7 +339,8 @@ function PlanPage() {
           💡 COMMENT ÇA MARCHE
         </h3>
         <ol className="space-y-1 font-mono text-xs text-muted-foreground list-decimal list-inside">
-          <li>Choisis COD seul ou un plan Dropshipping (COD inclus)</li>
+          <li>Essai gratuit 7 jours : accès complet, 3 produits max</li>
+          <li>Ensuite : Basic ($10/mois, produits illimités) ou Pro ($15/mois, Basic + Analytics)</li>
           <li>Paie par carte bancaire (Visa, Mastercard, Amex) via Stripe</li>
           <li>Ton accès s'active automatiquement (renouvellement mensuel)</li>
         </ol>
@@ -451,17 +444,17 @@ function PlanPage() {
               Confirmation
             </div>
             <h3 className="text-2xl font-black tracking-tighter mb-3">
-              {confirmAction === "downgrade_to_pro"
-                ? "Rétrograder en Pro ?"
-                : confirmAction === "downgrade_to_basic"
-                  ? "Rétrograder en Starter ?"
+              {confirmAction === "switch_to_pro"
+                ? "Passer au forfait Pro ?"
+                : confirmAction === "switch_to_basic"
+                  ? "Passer au forfait Basic ?"
                   : "Annuler l'abonnement ?"}
             </h3>
             <p className="font-mono text-xs text-muted-foreground mb-5">
-              {confirmAction === "downgrade_to_pro"
-                ? "Tu passes immédiatement sur Pro ($29/mois). Tu perds Analytics Pro (Scale) et la limite passe à 10 produits Drop."
-                : confirmAction === "downgrade_to_basic"
-                  ? "Tu passes immédiatement sur Starter ($12/mois). 3 produits Drop, COD basique inclus, plus d'upsells ni d'export CSV."
+              {confirmAction === "switch_to_pro"
+                ? "Tu passes immédiatement sur Pro ($15/mois) et tu débloques Analytics Pro (scoring, waterfall, break-even, simulateur) et le Decision Engine. Le prorata est calculé par Stripe."
+                : confirmAction === "switch_to_basic"
+                  ? "Tu passes immédiatement sur Basic ($10/mois) : produits illimités, mais tu perds Analytics Pro et le Decision Engine. Le prorata est calculé par Stripe."
                   : "Ton abonnement reste actif jusqu'à la fin de la période payée, puis tu retombes sur Free."}
             </p>
             <div className="flex gap-3">

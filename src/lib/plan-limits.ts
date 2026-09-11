@@ -2,20 +2,20 @@ import type { EffectivePlan } from "./use-subscription";
 import type { BusinessMode } from "./use-active-mode";
 
 /**
- * Grille v5 :
- *   - cod      = Plan COD $10 (COD uniquement, dashboard basique 7/30j)
- *   - basic    = Starter Drop $12 (3 prod. Drop + COD inclus)
- *   - starter  = Pro $29 (10 prod. Drop + COD + upsells/export/multi-zones)
- *   - pro      = Scale $79 (illimité Drop + Analytics Pro)
- *   - trial    = 14j accès complet
- *   - free     = post-essai sans abo
+ * Grille actuelle :
+ *   - trial    = essai gratuit 7 jours, accès complet mais 3 produits max
+ *   - basic    = Basic $10/mois, produits illimités (sans Analytics Pro)
+ *   - pro      = Pro $15/mois, produits illimités + Analytics Pro
+ *   - free     = post-essai sans abonnement
+ * Clés héritées (abonnés existants intouchés) : cod (ancien COD $10),
+ * starter (ancien Pro $29).
  */
 export const DROPSHIP_PRODUCT_LIMITS: Record<EffectivePlan, number> = {
   free: 0,
-  trial: 10,
+  trial: 3,
   cod: 0,
-  basic: 3,
-  starter: 10,
+  basic: -1,
+  starter: -1,
   pro: -1,
 };
 
@@ -32,10 +32,10 @@ export const COD_PRODUCT_LIMITS: Record<EffectivePlan, number> = {
 /** @deprecated Utiliser DROPSHIP_PRODUCT_LIMITS / COD_PRODUCT_LIMITS selon le mode. */
 export const PRODUCT_LIMITS: Record<EffectivePlan, number> = {
   free: 1,
-  trial: 10,
+  trial: 3,
   cod: -1,
-  basic: 3,
-  starter: 10,
+  basic: -1,
+  starter: -1,
   pro: -1,
 };
 
@@ -43,7 +43,7 @@ export const HISTORY_DAYS_LIMITS: Record<EffectivePlan, number | null> = {
   free: 30,
   trial: null,
   cod: 30,
-  basic: 60,
+  basic: null,
   starter: null,
   pro: null,
 };
@@ -103,38 +103,38 @@ export function canUseDualMode(plan: EffectivePlan, legacyDualMode: boolean): bo
   return canAccessDropshipping(plan, legacyDualMode);
 }
 
-/** Capture mobile colorée : Pro et Scale (Drop). */
+/** Capture mobile colorée : tous les forfaits payants + essai. */
 export function canUseMobileCapture(plan: EffectivePlan): boolean {
-  return plan === "trial" || plan === "starter" || plan === "pro";
+  return plan === "trial" || plan === "basic" || plan === "starter" || plan === "pro";
 }
 
-/** Upsells : Pro / Scale / essai — Dropshipping uniquement. */
+/** Upsells : inclus dans Basic et Pro (+ essai). */
 export function canUseUpsells(plan: EffectivePlan, mode: BusinessMode = "dropshipping"): boolean {
   if (mode === "cod") return false;
-  return plan === "starter" || plan === "pro" || plan === "trial";
+  return plan === "basic" || plan === "starter" || plan === "pro" || plan === "trial";
 }
 
 export function canUseWhatsAppSupport(plan: EffectivePlan): boolean {
-  return plan === "starter" || plan === "pro";
+  return plan === "basic" || plan === "starter" || plan === "pro";
 }
 
-/** Multi-zones COD : Pro / Scale / essai — pas en plan COD $10 seul. */
+/** Multi-zones : inclus dès Basic (+ hérités + essai). */
 export function canUseMultiZonesCod(plan: EffectivePlan): boolean {
-  return plan === "trial" || plan === "starter" || plan === "pro";
+  return plan === "trial" || plan === "basic" || plan === "starter" || plan === "pro";
 }
 
-/** Export CSV : Pro / Scale / essai — Dropshipping uniquement. */
+/** Export CSV : inclus dès Basic (+ hérités + essai). */
 export function canExportCsv(plan: EffectivePlan, mode: BusinessMode = "dropshipping"): boolean {
   if (mode === "cod") return false;
-  return plan === "trial" || plan === "starter" || plan === "pro";
+  return plan === "trial" || plan === "basic" || plan === "starter" || plan === "pro";
 }
 
-/** Analytics Pro : Scale + essai (Dropshipping uniquement côté UI). */
+/** Analytics Pro : forfait Pro (et essai) uniquement — PAS le forfait Basic. */
 export function canUseAnalyticsPro(plan: EffectivePlan): boolean {
-  return plan === "pro" || plan === "trial";
+  return plan === "pro" || plan === "starter" || plan === "trial";
 }
 
-/** Decision Engine (Scale / Watch / Kill) : Scale + essai, Drop uniquement. */
+/** Decision Engine (Scale / Watch / Kill) : dans Analytics Pro. */
 export function canUseDecisionEngine(plan: EffectivePlan): boolean {
-  return plan === "pro" || plan === "trial";
+  return plan === "pro" || plan === "starter" || plan === "trial";
 }

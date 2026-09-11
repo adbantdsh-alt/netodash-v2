@@ -2,13 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Mapping interne ↔ label public :
- *   - trial    → Essai 14j (accès complet)
- *   - cod      → Plan COD $10 (COD uniquement)
- *   - basic    → Starter Drop $12 (+ COD inclus)
- *   - starter  → Pro $29
- *   - pro      → Scale $79
- *   - free     → Free
+ * Grille actuelle (2 forfaits) :
+ *   - trial    → Essai gratuit 7 jours, accès complet mais 3 produits max
+ *   - basic    → Basic $10/mois : produits illimités, sans Analytics Pro
+ *   - pro      → Pro $15/mois : Basic + Analytics Pro (+ Decision Engine)
+ *   - free     → post-essai sans abonnement
+ *
+ * Clés héritées conservées pour les abonnés existants (aucun changement de
+ * prix ni de droits pour eux) :
+ *   - cod      → ancien plan COD $10
+ *   - starter  → ancien plan Pro $29
  */
 export type RawPlan = "trial" | "cod" | "basic" | "starter" | "pro";
 export type EffectivePlan = RawPlan | "free";
@@ -94,7 +97,8 @@ function computeEffective(row: SubscriptionRow | null): SubscriptionState {
   const isProOrBetter = plan === "pro" || plan === "starter" || plan === "trial";
   const isDropPaid = plan === "basic" || plan === "starter" || plan === "pro";
   const isBasicOrBetter = plan !== "free";
-  const hasAnalytics = isScale || plan === "trial";
+  // Analytics Pro : forfait Pro (et essai). Le forfait Basic ne l'inclut pas.
+  const hasAnalytics = plan === "pro" || plan === "starter" || plan === "trial";
 
   return {
     loading: false,
@@ -157,16 +161,16 @@ export function useSubscription(userId: string | undefined): SubscriptionState {
 
 export const PLAN_LABELS: Record<EffectivePlan, string> = {
   trial: "Essai gratuit",
-  cod: "COD",
-  basic: "Starter",
-  starter: "Pro",
-  pro: "Netodash",
+  cod: "COD (hérité)",
+  basic: "Basic",
+  starter: "Pro (hérité)",
+  pro: "Pro",
   free: "Free",
 };
 
 export const PLAN_PRICES = {
   cod: { amount: 10, currency: "USD", display: "$10/mois" },
-  basic: { amount: 12, currency: "USD", display: "$12/mois" },
+  basic: { amount: 10, currency: "USD", display: "$10/mois" },
   starter: { amount: 29, currency: "USD", display: "$29/mois" },
-  pro: { amount: 20, currency: "USD", display: "$20/mois" },
+  pro: { amount: 15, currency: "USD", display: "$15/mois" },
 } as const;

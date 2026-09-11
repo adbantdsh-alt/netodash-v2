@@ -400,7 +400,8 @@ export function Pricing({
   fcfaEquivalent?: boolean;
 }) {
   const fcfaMap: Record<string, string> = {
-    "$20": "≈ 12 000 F",
+    "$10": "≈ 6 000 F",
+    "$15": "≈ 9 000 F",
   };
 
   return (
@@ -538,7 +539,9 @@ type CompRow = { label: string; netodash: CompCell; tableur: CompCell; brutes: C
  * frais XaalipSay, ni le reste à encaisser des acomptes).
  */
 const COMP_ROWS: CompRow[] = [
-  { label: "Prix mensuel", netodash: "$20", tableur: "Gratuit (ton temps)", brutes: "Inclus", highlight: true },
+  { label: "Prix mensuel", netodash: "$10 / $15", tableur: "Gratuit (ton temps)", brutes: "Inclus", highlight: true },
+  { label: "Essai gratuit 7 jours (3 produits)", netodash: true, tableur: false, brutes: true },
+  { label: "Produits illimités inclus", netodash: true, tableur: true, brutes: true },
   { label: "Ventes CopyX consolidées", netodash: true, tableur: "À la main", brutes: true },
   { label: "Acomptes vs paiements intégraux", netodash: true, tableur: "Rarement", brutes: "Non" },
   { label: "Reste à encaisser à la livraison", netodash: true, tableur: "Non", brutes: "Non" },
@@ -650,10 +653,11 @@ export function CompetitorComparison() {
           })}
         </div>
 
-        {/* Pricing trio rappel */}
+        {/* Pricing duo rappel */}
         <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {[
-            { name: "Netodash", price: "$20", desc: "Tout illimité · Analytics Pro · Decision Engine · WhatsApp", featured: true },
+            { name: "Basic", price: "$10", desc: "Produits illimités · Dashboard complet · Upsells · Export CSV", featured: false },
+            { name: "Pro", price: "$15", desc: "Basic + Analytics Pro · Decision Engine · Insights", featured: true },
           ].map((p) => (
             <div
               key={p.name}

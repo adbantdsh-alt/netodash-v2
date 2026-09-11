@@ -6,34 +6,36 @@ import { type StripeEnv, createStripeClient } from "@/lib/stripe.server";
 
 /**
  * Actions disponibles sur un abonnement :
- *  - downgrade_to_pro : Premium ($27) → Pro ($17), pro-rata Stripe
- *  - downgrade_to_basic : Premium ou Pro → Basic ($5), pro-rata Stripe
- *  - cancel_to_free : annulation programmée en fin de période payée
+ *  - switch_to_pro   : Basic ($10) → Pro ($15), pro-rata Stripe
+ *  - switch_to_basic : Pro ($15) → Basic ($10), pro-rata Stripe
+ *  - cancel_to_free  : annulation programmée en fin de période payée
  */
 export type ChangeSubscriptionAction =
-  | "downgrade_to_pro"
-  | "downgrade_to_basic"
+  | "switch_to_pro"
+  | "switch_to_basic"
   | "cancel_to_free";
 
 const Input = z.object({
-  action: z.enum(["downgrade_to_pro", "downgrade_to_basic", "cancel_to_free"]),
+  action: z.enum(["switch_to_pro", "switch_to_basic", "cancel_to_free"]),
   environment: z.enum(["sandbox", "live"]),
 });
 
 // Mapping action → (lookup_key cible Stripe, plans DB autorisés en source)
-const DOWNGRADE_TARGET: Record<
-  "downgrade_to_pro" | "downgrade_to_basic",
+const SWITCH_TARGET: Record<
+  "switch_to_pro" | "switch_to_basic",
   { lookupKey: string; allowedFrom: string[]; metaPriceId: string }
 > = {
-  downgrade_to_pro: {
-    lookupKey: "pro_monthly_v4",
-    allowedFrom: ["pro"], // Scale → Pro uniquement
-    metaPriceId: "pro_monthly_v4",
+  switch_to_pro: {
+    lookupKey: "pro_monthly_v5",
+    allowedFrom: ["basic"],
+    metaPriceId: "pro_monthly_v5",
   },
-  downgrade_to_basic: {
-    lookupKey: "basic_monthly_v4",
-    allowedFrom: ["pro", "starter"], // Scale ou Pro → Starter
-    metaPriceId: "basic_monthly_v4",
+  switch_to_basic: {
+    lookupKey: "basic_monthly_v5",
+    // Les abonnés hérités (starter = ancien Pro $29, pro = ancien Scale $79)
+    // peuvent aussi descendre sur Basic.
+    allowedFrom: ["pro", "starter"],
+    metaPriceId: "basic_monthly_v5",
   },
 };
 
@@ -65,7 +67,7 @@ export const changeSubscription = createServerFn({ method: "POST" })
       return { ok: true, action: "cancel_to_free" as const };
     }
 
-    const target = DOWNGRADE_TARGET[data.action];
+    const target = SWITCH_TARGET[data.action];
     if (!target.allowedFrom.includes(sub.plan as string)) {
       throw new Error("Ce changement n'est pas disponible depuis ton plan actuel.");
     }

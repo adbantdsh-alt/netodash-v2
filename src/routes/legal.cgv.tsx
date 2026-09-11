@@ -19,9 +19,10 @@ function CgvPage() {
     <LegalShell title="Conditions Générales de Vente">
       <h2>Offres et tarifs</h2>
       <p>
-        NETODASH propose un essai gratuit de 7 jours (accès complet, sans carte bancaire),
-        puis un abonnement unique : Netodash à $20/mois, tout illimité — produits illimités,
-        Analytics Pro, Decision Engine, upsells, multi-zones et export CSV.
+        NETODASH propose un essai gratuit de 7 jours (accès complet, 3 produits
+        maximum, sans carte bancaire), puis deux forfaits mensuels :
+        Basic à $10/mois (produits illimités, sans Analytics) et
+        Pro à $15/mois (Basic + accès Analytics).
         Les prix sont affichés en dollar américain, hors taxes locales applicables.
       </p>
 
@@ -33,9 +34,9 @@ function CgvPage() {
 
       <h2>Essai gratuit</h2>
       <p>
-        L'essai gratuit de 7 jours est sans carte bancaire et offre un accès complet.
-        À la fin de l'essai, l'abonnement Netodash ($20/mois) est nécessaire pour
-        continuer à utiliser NETODASH.
+        L'essai gratuit de 7 jours est sans carte bancaire et offre un accès complet
+        limité à 3 produits. À la fin de l'essai, un abonnement Basic ($10/mois) ou
+        Pro ($15/mois) est nécessaire pour continuer à utiliser NETODASH.
       </p>
 
       <h2>Résiliation et remboursement</h2>

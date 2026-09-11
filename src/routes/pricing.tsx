@@ -4,7 +4,7 @@ import { SignupCtaButton } from "@/components/SignupCtaButton";
 const PRICING_URL = "https://netodash.com/pricing";
 const PRICING_TITLE = "Tarifs — NETODASH | Marge nette de ta boutique CopyX";
 const PRICING_DESC =
-  "7 jours d'essai gratuit, sans carte. Ensuite $20/mois, tout illimité : ventes CopyX, acomptes, encaissements XaalipSay, Analytics Pro.";
+  "7 jours d'essai gratuit (3 produits max), sans carte. Ensuite Basic $10/mois (produits illimités) ou Pro $15/mois (+ Analytics).";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/pricing")({
 });
 
 type PaidPlan = {
-  name: "Netodash";
+  name: "Basic" | "Pro";
   monthly: number;
   tagline: string;
   features: string[];
@@ -49,19 +49,32 @@ type PaidPlan = {
 
 const DROPSHIP_PLANS: PaidPlan[] = [
   {
-    name: "Netodash",
-    monthly: 20,
-    tagline: "Tout illimité, tout inclus",
+    name: "Basic",
+    monthly: 10,
+    tagline: "Produits illimités, sans Analytics",
     features: [
-      "Ventes CopyX illimitées",
-      "Suivi acomptes + encaissements XaalipSay",
-      "Analytics Pro (scoring, waterfall, break-even, simulateur)",
-      "Decision Engine · Insights automatiques",
-      "Upsells · Export CSV",
+      "Produits illimités",
+      "Ventes CopyX : acomptes + encaissements XaalipSay",
+      "Marge nette, ROAS net, CPA max, classement produits",
+      "Upsells · Multi-zones · Export CSV",
       "Historique illimité",
       "Support WhatsApp",
     ],
-    cta: "Choisir Netodash",
+    cta: "Choisir Basic",
+    highlight: false,
+  },
+  {
+    name: "Pro",
+    monthly: 15,
+    tagline: "Basic + accès Analytics",
+    features: [
+      "Tout le forfait Basic",
+      "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+      "Decision Engine · Insights automatiques",
+      "Historique illimité",
+      "Support WhatsApp",
+    ],
+    cta: "Choisir Pro",
     highlight: true,
   },
 ];
@@ -93,9 +106,10 @@ function PricingPage() {
           PAS DE PIÈGE.
         </h1>
         <p className="font-mono text-sm md:text-base text-muted-foreground mt-6 max-w-2xl">
-          7 jours d'essai gratuit avec accès complet, sans carte bancaire.
-          Puis $20/mois — tout illimité, pour piloter la marge nette de ta
-          boutique CopyX (acomptes, encaissements XaalipSay, pub, COGS, livraison).
+          7 jours d'essai gratuit (3 produits max, accès complet), sans carte
+          bancaire. Ensuite Basic à $10/mois — produits illimités — ou Pro à
+          $15/mois qui ajoute l'accès Analytics, pour piloter la marge nette de
+          ta boutique CopyX (acomptes, XaalipSay, pub, COGS, livraison).
         </p>
 
         {/* Essai */}
@@ -108,7 +122,7 @@ function PricingPage() {
               <span className="font-mono text-sm text-muted-foreground">/ 7 jours</span>
             </div>
             <p className="font-mono text-xs text-muted-foreground mb-5">
-              Accès complet 7 jours, sans carte bancaire
+              Accès complet 7 jours, sans carte bancaire — limité à 3 produits
             </p>
             <SignupCtaButton variant="card" />
           </div>
@@ -119,9 +133,10 @@ function PricingPage() {
             LES PLANS
           </h2>
           <p className="font-mono text-sm text-muted-foreground mb-6 max-w-2xl">
-            Un seul plan, tout illimité — facturation mensuelle, sans engagement.
+            Deux forfaits, facturation mensuelle, sans engagement. Basic $10/mois
+            (produits illimités) ou Pro $15/mois (Basic + accès Analytics).
           </p>
-          <div className="grid md:grid-cols-1 gap-6 max-w-2xl">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl">
             {DROPSHIP_PLANS.map((p) => (
               <div
                 key={p.name}
@@ -167,15 +182,15 @@ function PricingPage() {
             {[
               {
                 q: "Comment fonctionne l'essai gratuit ?",
-                a: "7 jours complets, sans carte bancaire, avec accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
+                a: "7 jours complets, sans carte bancaire, avec accès complet — limité à 3 produits suivis. À la fin, tu choisis Basic ($10/mois) ou Pro ($15/mois) — ou tu arrêtes, sans frais.",
               },
               {
-                q: "Y a-t-il plusieurs plans ?",
-                a: "Non, un seul plan : $20/mois, tout illimité. Produits illimités, Analytics Pro, Decision Engine, upsells, export CSV et support WhatsApp. Aucun palier à choisir, aucune fonctionnalité bridée.",
+                q: "Quelle différence entre Basic et Pro ?",
+                a: "Basic ($10/mois) : produits illimités, dashboard complet (marge nette, ROAS net, CPA max, classement des produits), upsells, multi-zones et export CSV. Pro ($15/mois) ajoute l'accès Analytics : scoring produits, waterfall des coûts, break-even, simulateur de scaling et Decision Engine.",
               },
               {
-                q: "Puis-je changer de plan ou annuler ?",
-                a: "Oui, à tout moment depuis Mon plan. Paiement par carte via Stripe. Tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+                q: "Puis-je changer de forfait ou annuler ?",
+                a: "Oui, à tout moment depuis Mon plan : passage Basic ↔ Pro en un clic (prorata Stripe). Paiement par carte via Stripe. Tu annules quand tu veux — ton accès reste actif jusqu'à la fin de la période payée.",
               },
             ].map((item) => (
               <div key={item.q} className="brutal-border-thin p-6">

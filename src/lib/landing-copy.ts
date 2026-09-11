@@ -305,16 +305,16 @@ const COPYX: LandingCopy = {
   pricingTitle: "PENSÉ POUR LES",
   pricingTitleAccent: "MARCHANDS COPYX.",
   pricingLead:
-    "7 jours d'essai gratuit avec accès complet, sans carte bancaire. Ensuite : $20/mois, tout illimité — ventes CopyX, acomptes, Analytics Pro, Decision Engine, export CSV.",
+    "7 jours d'essai gratuit (3 produits max, accès complet), sans carte bancaire. Ensuite : Basic à $10/mois — produits illimités — ou Pro à $15/mois, qui ajoute l'accès Analytics.",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 $",
       period: "/ 7 jours",
-      tagline: "Accès complet 7 jours, sans carte bancaire",
+      tagline: "Accès complet, limité à 3 produits",
       features: [
-        "Tout débloqué pendant l'essai",
-        "Saisies cumulées multi-jours",
+        "Accès complet pendant 7 jours",
+        "Jusqu'à 3 produits suivis",
         "Aucun engagement",
         "Aucune carte bancaire",
       ],
@@ -322,25 +322,43 @@ const COPYX: LandingCopy = {
       highlight: false,
     },
     {
-      name: "Netodash",
-      price: "$20",
+      name: "Basic",
+      price: "$10",
       period: "/mois",
-      tagline: "Tout illimité, tout inclus",
+      tagline: "Produits illimités, sans Analytics",
       features: [
-        "Ventes CopyX illimitées",
-        "Suivi acomptes + encaissements XaalipSay",
-        "Analytics Pro (scoring, waterfall, break-even, simulateur)",
-        "Decision Engine · Insights automatiques",
-        "Upsells · Export CSV",
+        "Produits illimités",
+        "Ventes CopyX : acomptes + encaissements XaalipSay",
+        "Marge nette, ROAS net, CPA max",
+        "Upsells · Multi-zones · Export CSV",
         "Historique illimité",
         "Support WhatsApp",
       ],
-      cta: "Choisir Netodash",
+      cta: "Choisir Basic",
+      highlight: false,
+    },
+    {
+      name: "Pro",
+      price: "$15",
+      period: "/mois",
+      tagline: "Basic + accès Analytics",
+      features: [
+        "Tout le forfait Basic",
+        "Analytics Pro (scoring, waterfall, break-even, simulateur)",
+        "Decision Engine · Insights automatiques",
+        "Historique illimité",
+        "Support WhatsApp",
+      ],
+      cta: "Choisir Pro",
       highlight: true,
     },
   ],
 
   faq: [
+    {
+      q: "Comment fonctionne l'essai gratuit ?",
+      a: "7 jours complets, sans carte bancaire, accès complet mais limité à 3 produits suivis. À la fin, tu choisis Basic ($10/mois, produits illimités) ou Pro ($15/mois, Basic + Analytics) — ou tu arrêtes, sans frais.",
+    },
     {
       q: "Est-ce que ça marche avec ma boutique CopyX ?",
       a: "Oui, c'est exactement notre base : Netodash est calibré à 100 % pour les ventes de ta boutique CopyX. Tu saisis tes ventes du jour (1 minute), ou tu connectes ton compte CopyX depuis l'onglet Synchro, et Netodash calcule ta marge nette réelle.",
@@ -354,19 +372,19 @@ const COPYX: LandingCopy = {
       a: "Pub + taxe Meta, COGS, livraison, frais XaalipSay (5 % à l'encaissement, retrait gratuit) et remboursements. Tout est paramétrable sur ton profil.",
     },
     {
-      q: "Comment fonctionne l'essai gratuit ?",
-      a: "7 jours complets, sans carte bancaire, accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
+      q: "Quelle différence entre Basic et Pro ?",
+      a: "Basic ($10/mois) : produits illimités, dashboard complet (marge nette, ROAS net, CPA max, classement produits), upsells, multi-zones et export CSV. Pro ($15/mois) ajoute l'accès Analytics : scoring produits, waterfall des coûts, break-even, simulateur de scaling et Decision Engine.",
     },
     {
-      q: "Puis-je changer de plan ou annuler ?",
-      a: "Oui, à tout moment depuis Mon plan. Tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+      q: "Puis-je changer de forfait ou annuler ?",
+      a: "Oui, à tout moment depuis Mon plan. Tu passes de Basic à Pro (ou l'inverse) en un clic, prorata calculé par Stripe. Tu annules quand tu veux — ton accès reste actif jusqu'à la fin de la période payée.",
     },
   ],
 
   ctaTitle: "ARRÊTE DE DEVINER.",
   ctaTitleAccent: "MESURE.",
   ctaLead:
-    "7 jours d'essai gratuit. Aucune carte requise. Saisis tes ventes CopyX, Netodash te dit ce qu'il te reste.",
+    "7 jours d'essai gratuit, 3 produits max. Aucune carte requise. Saisis tes ventes CopyX, Netodash te dit ce qu'il te reste.",
   ctaButton: "Créer mon compte →",
 
   footerTagline: "Le cockpit de rentabilité des marchands CopyX.",

@@ -444,7 +444,7 @@ function ProductsPage() {
         <div className="brutal-border-thin p-4 mb-6 bg-muted/40 flex flex-wrap items-center justify-between gap-3">
           <div className="text-sm font-mono">
             <span className="font-bold uppercase tracking-wider">Dropshipping indisponible</span> · Ton ancien plan COD
-            ne couvre que le mode COD. Passe au plan Netodash (20 $/mois) pour gérer une boutique CopyX complète.
+            ne couvre que le mode COD. Passe au forfait Basic ($10/mois) ou Pro ($15/mois) pour gérer une boutique CopyX complète.
           </div>
           <Link
             to="/plan"
@@ -458,9 +458,19 @@ function ProductsPage() {
       {limitReached && !showForm && productCount > 0 && (
         <div className="brutal-border-thin p-4 mb-6 bg-amber-50 text-amber-900 flex items-center justify-between flex-wrap gap-3">
           <div className="text-sm">
-            <span className="font-bold uppercase tracking-wider">Limite atteinte</span> · Ton plan{" "}
-            <strong>{sub.plan}</strong> autorise {productLimitLabel(sub.plan, activeMode)} produit
-            {limit > 1 ? "s" : ""}.
+            <span className="font-bold uppercase tracking-wider">Limite atteinte</span> ·{" "}
+            {sub.plan === "trial" ? (
+              <>
+                L'essai gratuit est limité à <strong>3 produits</strong>. Passe au
+                forfait Basic ($10/mois, produits illimités) ou Pro ($15/mois, + Analytics).
+              </>
+            ) : (
+              <>
+                Ton plan <strong>{sub.plan}</strong> autorise{" "}
+                {productLimitLabel(sub.plan, activeMode)} produit
+                {limit > 1 ? "s" : ""}.
+              </>
+            )}
           </div>
           <Link
             to="/plan"
@@ -656,7 +666,7 @@ function ProductsPage() {
               </div>
               {!multiZonesAllowed && (
                 <div className="brutal-border-thin border-dashed p-3 mb-3 text-[11px] font-mono text-muted-foreground">
-                  🔒 Multi-zones réservé au plan Netodash (20 $/mois).{" "}
+                  🔒 Multi-zones réservé aux forfaits Basic ($10) et Pro ($15).{" "}
                   <Link to="/plan" className="underline font-bold text-foreground">
                     Upgrade →
                   </Link>

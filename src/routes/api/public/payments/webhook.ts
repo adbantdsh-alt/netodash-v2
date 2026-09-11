@@ -15,14 +15,15 @@ function getSupabase() {
 
 function planFromPriceId(priceId: string | undefined | null): "cod" | "basic" | "starter" | "pro" | null {
   if (!priceId) return null;
-  // v5 — plan COD dédié
-  if (priceId === "cod_monthly_v1") return "cod";
-  // v4 = Starter / Pro / Scale (Drop)
-  // Labels publics → IDs internes : Starter=basic, Pro=starter, Scale=pro
-  // Mensuel
-  // v6 — plan unique a 20 $/mois, tout illimite (mappe sur la cle `pro`,
-  // qui debloque deja toutes les fonctionnalites).
+  // Grille actuelle — 2 forfaits (labels publics → clés internes) :
+  //   Basic $10/mois → `basic` · Pro $15/mois (Basic + Analytics) → `pro`
+  if (priceId === "basic_monthly_v5") return "basic";
+  if (priceId === "pro_monthly_v5") return "pro";
+  // Ancien plan unique à 20 $/mois (grandfathering : abos en cours conservés)
   if (priceId === "unlimited_monthly_v6") return "pro";
+  // v5 — plan COD dédié (plus vendu, abos existants)
+  if (priceId === "cod_monthly_v1") return "cod";
+  // v4 = ancienne grille Starter / Pro / Scale
   if (priceId === "scale_monthly_v4") return "pro";
   if (priceId === "pro_monthly_v4") return "starter";
   if (priceId === "basic_monthly_v4") return "basic";

@@ -48,8 +48,8 @@ function AnalyticsPage() {
         </div>
         <div className="brutal-border p-6 md:p-8 bg-muted/30">
           <p className="font-mono text-sm text-muted-foreground max-w-2xl">
-            Analytics Pro est inclus dans l'abonnement <strong className="text-foreground">Netodash</strong> (20 $/mois,
-            tout illimité). Il n'est pas disponible avec l'ancien plan COD : utilise le dashboard basique (7j / 30j).
+            Analytics Pro est inclus dans le forfait <strong className="text-foreground">Pro</strong> ($15/mois,
+            Basic + Analytics). Il n'est pas disponible avec l'ancien plan COD : utilise le dashboard basique (7j / 30j).
           </p>
         </div>
       </div>
