@@ -17,7 +17,7 @@ import {
   normalizeDropshippingCurrency,
   type DropshippingCurrency,
 } from "@/lib/calc";
-import { ShopifySyncButton, type ShopifyPreview, type ShopifyDraft } from "@/components/ShopifySyncButton";
+import type { ShopifyPreview, ShopifyDraft } from "@/lib/import-drafts.types";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -599,7 +599,7 @@ function EntriesPage() {
         </div>
       ) : (
         <div className="brutal-border p-6 md:p-8 mb-10 grid gap-4">
-          {/* Barre d'actions : Shopify + ajout manuel */}
+          {/* Barre d'actions : ajout manuel */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="text-2xl font-black">NOUVELLE SAISIE</h2>
             <div className="flex items-center gap-2 flex-wrap">
@@ -721,14 +721,6 @@ function EntriesPage() {
                     : "Ajouter 1 saisie cumulée"
                   : "Ajouter une saisie"}
               </button>
-              {/* Synchro Shopify désactivée temporairement (en attente publication App Store) */}
-              {false && (
-                <ShopifySyncButton
-                  from={manualFromISO}
-                  to={manualToISO}
-                  onPreview={setShopifyPreview}
-                />
-              )}
             </div>
           </div>
 
@@ -736,7 +728,7 @@ function EntriesPage() {
             Ajoute une saisie manuelle vide pour un jour donné. Ça prend moins d'1 minute.
           </p>
 
-          {/* Panneau brouillons Shopify */}
+          {/* Panneau brouillons d'import (dormant) */}
           {shopifyPreview && viewPreview && (
             <div className="brutal-border-thin border-accent bg-accent/5 p-4 grid gap-3">
               <div className="flex items-center justify-between gap-2 flex-wrap">

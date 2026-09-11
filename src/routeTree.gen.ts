@@ -52,8 +52,6 @@ import { Route as AdminAdminExportRouteImport } from './routes/_admin.admin.expo
 import { Route as AdminAdminCommunicationRouteImport } from './routes/_admin.admin.communication'
 import { Route as AdminAdminBetaTestersRouteImport } from './routes/_admin.admin.beta-testers'
 import { Route as AdminAdminAffiliatesRouteImport } from './routes/_admin.admin.affiliates'
-import { Route as ApiPublicShopifyInstallRouteImport } from './routes/api/public/shopify/install'
-import { Route as ApiPublicShopifyCallbackRouteImport } from './routes/api/public/shopify/callback'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AdminAdminUsersIdRouteImport } from './routes/_admin.admin.users.$id'
 
@@ -270,17 +268,6 @@ const AdminAdminAffiliatesRoute = AdminAdminAffiliatesRouteImport.update({
   path: '/affiliates',
   getParentRoute: () => AdminAdminRoute,
 } as any)
-const ApiPublicShopifyInstallRoute = ApiPublicShopifyInstallRouteImport.update({
-  id: '/api/public/shopify/install',
-  path: '/api/public/shopify/install',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicShopifyCallbackRoute =
-  ApiPublicShopifyCallbackRouteImport.update({
-    id: '/api/public/shopify/callback',
-    path: '/api/public/shopify/callback',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -337,8 +324,6 @@ export interface FileRoutesByFullPath {
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
-  '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
-  '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -382,8 +367,6 @@ export interface FileRoutesByTo {
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
-  '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
-  '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -432,8 +415,6 @@ export interface FileRoutesById {
   '/api/public/unitech-webhook': typeof ApiPublicUnitechWebhookRoute
   '/_admin/admin/users/$id': typeof AdminAdminUsersIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
-  '/api/public/shopify/callback': typeof ApiPublicShopifyCallbackRoute
-  '/api/public/shopify/install': typeof ApiPublicShopifyInstallRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -481,8 +462,6 @@ export interface FileRouteTypes {
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
     | '/api/public/payments/webhook'
-    | '/api/public/shopify/callback'
-    | '/api/public/shopify/install'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -526,8 +505,6 @@ export interface FileRouteTypes {
     | '/api/public/unitech-webhook'
     | '/admin/users/$id'
     | '/api/public/payments/webhook'
-    | '/api/public/shopify/callback'
-    | '/api/public/shopify/install'
   id:
     | '__root__'
     | '/'
@@ -575,8 +552,6 @@ export interface FileRouteTypes {
     | '/api/public/unitech-webhook'
     | '/_admin/admin/users/$id'
     | '/api/public/payments/webhook'
-    | '/api/public/shopify/callback'
-    | '/api/public/shopify/install'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -602,8 +577,6 @@ export interface RootRouteChildren {
   ApiPublicExtensionTrackRoute: typeof ApiPublicExtensionTrackRoute
   ApiPublicUnitechWebhookRoute: typeof ApiPublicUnitechWebhookRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
-  ApiPublicShopifyCallbackRoute: typeof ApiPublicShopifyCallbackRoute
-  ApiPublicShopifyInstallRoute: typeof ApiPublicShopifyInstallRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -909,20 +882,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminAffiliatesRouteImport
       parentRoute: typeof AdminAdminRoute
     }
-    '/api/public/shopify/install': {
-      id: '/api/public/shopify/install'
-      path: '/api/public/shopify/install'
-      fullPath: '/api/public/shopify/install'
-      preLoaderRoute: typeof ApiPublicShopifyInstallRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/shopify/callback': {
-      id: '/api/public/shopify/callback'
-      path: '/api/public/shopify/callback'
-      fullPath: '/api/public/shopify/callback'
-      preLoaderRoute: typeof ApiPublicShopifyCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -1061,8 +1020,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicExtensionTrackRoute: ApiPublicExtensionTrackRoute,
   ApiPublicUnitechWebhookRoute: ApiPublicUnitechWebhookRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
-  ApiPublicShopifyCallbackRoute: ApiPublicShopifyCallbackRoute,
-  ApiPublicShopifyInstallRoute: ApiPublicShopifyInstallRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

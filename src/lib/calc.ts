@@ -45,7 +45,7 @@ export type DailyEntry = {
   total_revenue?: number | null;
   /** Si true, on applique la taxe Meta Ads (case informative seulement pour l'instant). */
   include_meta_tax?: boolean | null;
-  /** Si true, on applique les frais Shopify/Stripe Payments (2.9%) sur le CA. */
+  /** Si true, on applique les frais de paiement (2,9 %) sur le CA. */
   include_shopify_fees?: boolean | null;
   /** Si true, on applique les frais Wave (1%) sur le cash encaissé (COD). */
   include_wave_fees?: boolean | null;
@@ -237,7 +237,7 @@ export type KPIs = {
   adSpend: number;
   /** Taxe Meta Ads (% défini sur le profil) sur le budget pub. */
   metaTax: number;
-  /** Frais Shopify/Stripe Payments (2.9%) sur le CA. */
+  /** Frais de paiement (2,9 %) sur le CA. */
   shopifyFees: number;
   /** Frais Wave (1%) sur le cash encaissé (COD). */
   waveFees: number;

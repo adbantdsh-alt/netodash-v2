@@ -27,7 +27,6 @@ import {
   type DropshippingCurrency,
 } from "@/lib/calc";
 import { regionsFor } from "@/lib/regions";
-import { ShopifyConnectCard } from "@/components/ShopifyConnectCard";
 
 export const Route = createFileRoute("/_app/products")({
   head: () => ({ meta: [{ title: "Produits — NETODASH" }] }),
@@ -404,12 +403,6 @@ function ProductsPage() {
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-10">
-      {/* Synchro Shopify désactivée temporairement (en attente publication App Store) */}
-      {false && (
-        <div className="mb-6">
-          <ShopifyConnectCard />
-        </div>
-      )}
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6 md:mb-8">
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">

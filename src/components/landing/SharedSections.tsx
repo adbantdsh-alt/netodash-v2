@@ -346,7 +346,6 @@ export function Testimonials({ copy }: { copy: LandingCopy }) {
 export function TrustSecurity() {
   const items = [
     { Icon: ShieldCheck, t: "Tes données t'appartiennent", d: "Isolation stricte par compte (RLS Postgres). Personne ne lit tes chiffres. Jamais.", tag: "RLS · AES-256" },
-    { Icon: Lock, t: "Shopify en lecture seule", d: "Sync OAuth read-only sur les commandes. Déconnexion en 1 clic. Aucune écriture sur ta boutique.", tag: "OAuth read-only" },
     { Icon: XCircle, t: "Annulation en 1 clic", d: "Sans engagement, sans hotline. L'accès reste actif jusqu'à la fin de la période payée.", tag: "Sans friction" },
   ];
 

@@ -23,7 +23,7 @@ import {
 } from "@/lib/calc";
 import { PeriodPicker, type Preset, type CustomRange } from "@/components/PeriodPicker";
 
-// Palette de couleurs distinctes par produit (style Shopify)
+// Palette de couleurs distinctes par produit
 const PALETTE = [
   "#2563eb", "#dc2626", "#16a34a", "#ea580c", "#9333ea",
   "#0891b2", "#ca8a04", "#db2777", "#65a30d", "#7c3aed",

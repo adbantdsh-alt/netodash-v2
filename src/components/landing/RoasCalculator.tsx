@@ -49,7 +49,7 @@ export function RoasCalculator() {
           {/* Sliders */}
           <div className="lg:col-span-3 brutal-border p-6 md:p-8 bg-background space-y-7">
             <SliderRow
-              label="CA Shopify (30j)"
+              label="CA (30j)"
               value={revenue}
               min={1000}
               max={100000}

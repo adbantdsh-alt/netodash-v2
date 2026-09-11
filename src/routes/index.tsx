@@ -149,7 +149,7 @@ function HomeLanding() {
               <div className="absolute -inset-3 bg-accent/10 -z-10 brutal-border-thin border-accent" />
               <img
                 src={heroDropshipping}
-                alt="Aperçu du dashboard Netodash — ROAS net, profit et ranking produits Shopify"
+                alt="Aperçu du dashboard Netodash — ROAS net, profit et classement des produits"
                 width={1408}
                 height={1024}
                 loading="lazy"

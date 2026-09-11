@@ -1,5 +1,4 @@
 import type { BusinessMode } from "@/lib/use-active-mode";
-import shopifyLogo from "@/assets/platforms/shopify.webp";
 import wooLogo from "@/assets/platforms/woocommerce.webp";
 import youcanLogo from "@/assets/platforms/youcan.webp";
 import lucasPhoto from "@/assets/testimonials/lucas.jpg";
@@ -68,7 +67,7 @@ export type LandingCopy = {
   showcaseTitleHtml: { before: string; accent: string; after: string };
   showcaseLead: string;
   showcaseList: readonly string[];
-  // Avant/Après
+  // Avant/AprÃ¨s
   beforeAfterEyebrow: string;
   beforeAfterTitle: string;
   beforeAfterAccent: string;
@@ -121,34 +120,33 @@ export type LandingCopy = {
   footerBaseline: string;
 };
 
-// ───────────── DROPSHIPPING ─────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ DROPSHIPPING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DROPSHIPPING: LandingCopy = {
   seoTitle:
-    "Netodash — Dashboard de rentabilité Shopify (ROAS net, marge réelle Meta Ads)",
+    "Netodash â€” Dashboard de rentabilitÃ© (ROAS net, marge rÃ©elle Meta Ads)",
   seoDescription:
-    "Netodash : le dashboard de rentabilité réelle pour les marchands Shopify. Calcule ton ROAS net après coût produit, fulfillment, frais Stripe et taxes pub Meta / TikTok / Google.",
+    "Netodash : le dashboard de rentabilitÃ© rÃ©elle pour les marchands. Calcule ton ROAS net aprÃ¨s coÃ»t produit, livraison, frais de paiement et taxes pub Meta / TikTok / Google.",
 
-  heroBadge: "Built for Shopify",
-  heroH1Line1: "TON SHOPIFY DIT $10K.",
-  heroH1Line2: "COMBIEN AS-TU GARDÉ ?",
+  heroBadge: "Pilotage de rentabilitÃ©",
+  heroH1Line1: "TA BOUTIQUE DIT 6M.",
+  heroH1Line2: "COMBIEN AS-TU GARDÃ‰ ?",
   heroSubtitle:
-    "Netodash te montre le vrai profit derrière chaque produit, chaque pub et chaque vente —",
+    "Netodash te montre le vrai profit derriÃ¨re chaque produit, chaque pub et chaque vente â€”",
   heroSubtitleBold:
     "pour savoir exactement quoi scaler, surveiller ou couper.",
-  heroCtaPrimary: "Essayer gratuitement 7 jours →",
+  heroCtaPrimary: "Essayer gratuitement 7 jours â†’",
   heroCtaSecondary: "Voir les tarifs",
-  heroSmallprint: "Aucune carte bancaire requise · Plan Pro débloqué · Annule à tout moment",
+  heroSmallprint: "Aucune carte bancaire requise Â· Plan Pro dÃ©bloquÃ© Â· Annule Ã  tout moment",
 
   trustStats: [
     { v: "+800", l: "Marchands actifs" },
-    { v: "$4.2M", l: "CA piloté chaque mois" },
-    { v: "32 %", l: "De marge nette gagnée en moyenne" },
+    { v: "$4.2M", l: "CA pilotÃ© chaque mois" },
+    { v: "32 %", l: "De marge nette gagnÃ©e en moyenne" },
     { v: "4,9 / 5", l: "Note utilisateurs" },
   ],
 
   platformsHeading: "Compatible avec ton stack",
   platforms: [
-    { src: shopifyLogo, alt: "Shopify" },
     { src: wooLogo, alt: "WooCommerce" },
     { src: youcanLogo, alt: "YouCan" },
   ],
@@ -156,71 +154,71 @@ const DROPSHIPPING: LandingCopy = {
   pillars: [
     {
       n: "01",
-      t: "MARGE NETTE RÉELLE",
-      d: "CA Shopify moins pub, COGS, fulfillment, frais Stripe et refunds. Le seul chiffre qui paie ton loyer.",
+      t: "MARGE NETTE RÃ‰ELLE",
+      d: "CA moins pub, COGS, livraison, frais de paiement et remboursements. Le seul chiffre qui paie ton loyer.",
     },
     {
       n: "02",
       t: "ROAS NET",
-      d: "Pas le ROAS gonflé de Meta. Le ratio entre ce que tu encaisses vraiment et ce que tu dépenses, toutes plateformes confondues.",
+      d: "Pas le ROAS gonflÃ© de Meta. Le ratio entre ce que tu encaisses vraiment et ce que tu dÃ©penses, toutes plateformes confondues.",
     },
     {
       n: "03",
-      t: "DÉCISION PAR PRODUIT",
-      d: "Sache exactement quel produit te rapporte, lequel te coule, et lequel mérite d'être scalé sans hésiter.",
+      t: "DÃ‰CISION PAR PRODUIT",
+      d: "Sache exactement quel produit te rapporte, lequel te coule, et lequel mÃ©rite d'Ãªtre scalÃ© sans hÃ©siter.",
     },
   ],
 
-  showcaseEyebrow: "▍ L'OPERATOR CONSOLE",
+  showcaseEyebrow: "â– L'OPERATOR CONSOLE",
   showcaseTitleHtml: {
-    before: "Pilote ton Shopify ",
+    before: "Pilote ta rentabilitÃ© ",
     accent: "comme un trader",
     after: " pilote son book.",
   },
   showcaseLead:
-    "Connecte Shopify ou saisis tes chiffres. Netodash classe tes produits par profit net et te dit, en un mot, lequel scaler, lequel surveiller, lequel couper.",
+    "Saisis tes chiffres. Netodash classe tes produits par profit net et te dit, en un mot, lequel scaler, lequel surveiller, lequel couper.",
   showcaseList: [
     "Product Profit Ranking quotidien",
-    "Winners / Losers en un coup d'œil",
-    "Décision Scale / Watch / Kill par produit",
+    "Winners / Losers en un coup d'Å“il",
+    "DÃ©cision Scale / Watch / Kill par produit",
   ],
 
-  beforeAfterEyebrow: "ÇA TE PARLE ?",
-  beforeAfterTitle: "$12 480 DE CA SHOPIFY.",
+  beforeAfterEyebrow: "Ã‡A TE PARLE ?",
+  beforeAfterTitle: "$12 480 DE CA.",
   beforeAfterAccent: "EST-CE QUE TU GAGNES VRAIMENT DE L'ARGENT ?",
-  beforeAfterBeforeBadge: "😵‍💫 Sans NETODASH",
-  beforeAfterAfterBadge: "✅ Avec NETODASH",
+  beforeAfterBeforeBadge: "ðŸ˜µâ€ðŸ’« Sans NETODASH",
+  beforeAfterAfterBadge: "âœ… Avec NETODASH",
   beforeAfterBeforeRows: [
-    { k: "CA Shopify (30j)", v: "$12 480" },
+    { k: "CA (30j)", v: "$12 480" },
     { k: "Budget Meta Ads", v: "$5 200" },
-    { k: "ROAS affiché Meta", v: "2,4 ✨", mode: "accent" },
-    { k: "COGS / fulfillment ?", v: "¯\\_(ツ)_/¯", mode: "accent" },
-    { k: "Frais Stripe + refunds ?", v: "≈ ?", mode: "accent" },
-    { k: "Marge nette réelle", v: "AUCUNE IDÉE.", mode: "accent" },
+    { k: "ROAS affichÃ© Meta", v: "2,4 âœ¨", mode: "accent" },
+    { k: "COGS / fulfillment ?", v: "Â¯\\_(ãƒ„)_/Â¯", mode: "accent" },
+    { k: "Frais Stripe + refunds ?", v: "â‰ˆ ?", mode: "accent" },
+    { k: "Marge nette rÃ©elle", v: "AUCUNE IDÃ‰E.", mode: "accent" },
   ],
   beforeAfterAfterRows: [
-    { k: "CA encaissé net", v: "$11 856" },
-    { k: "− COGS + fulfillment", v: "− $3 940" },
-    { k: "− Meta Ads + taxe 18%", v: "− $6 136" },
-    { k: "− Stripe + refunds", v: "− $612" },
+    { k: "CA encaissÃ© net", v: "$11 856" },
+    { k: "âˆ’ COGS + fulfillment", v: "âˆ’ $3 940" },
+    { k: "âˆ’ Meta Ads + taxe 18%", v: "âˆ’ $6 136" },
+    { k: "âˆ’ Stripe + refunds", v: "âˆ’ $612" },
     { k: "Marge nette", v: "$1 168", mode: "accent" },
-    { k: "ROAS net réel", v: "1,9", mode: "accent" },
+    { k: "ROAS net rÃ©el", v: "1,9", mode: "accent" },
   ],
   beforeAfterBeforeFooter: {
     plain:
-      "Tu scales sur le ROAS Meta. Mais à la fin du mois tu regardes ton Stripe et tu te demandes : ",
-    bold: "« Pourquoi je n'ai presque rien gardé ? »",
+      "Tu scales sur le ROAS Meta. Mais Ã  la fin du mois tu regardes ton Stripe et tu te demandes : ",
+    bold: "Â« Pourquoi je n'ai presque rien gardÃ© ? Â»",
   },
   beforeAfterAfterFooter: {
     plain: "Tu sais ",
-    bold: "exactement ce que tu gardes, sur quel produit, et quelle créa scaler la semaine prochaine.",
+    bold: "exactement ce que tu gardes, sur quel produit, et quelle crÃ©a scaler la semaine prochaine.",
   },
   beforeAfterTagline: {
-    plain: "9 marchands sur 10 scalent sur le ROAS Meta gonflé. ",
+    plain: "9 marchands sur 10 scalent sur le ROAS Meta gonflÃ©. ",
     bold: "NETODASH te montre la vraie marge en 2 minutes par jour.",
   },
 
-  rankingEyebrow: "▍ PRODUCT PROFIT RANKING",
+  rankingEyebrow: "â– PRODUCT PROFIT RANKING",
   rankingTitle: "QUELS PRODUITS TE FONT",
   rankingTitleAccent: "VRAIMENT GAGNER DE L'ARGENT",
   rankingLead:
@@ -234,64 +232,64 @@ const DROPSHIPPING: LandingCopy = {
   ],
   rankingCurrencyPrefix: "$",
   rankingFooter:
-    "→ Tu vois immédiatement où mettre ton budget pub, et où arrêter de saigner.",
+    "â†’ Tu vois immÃ©diatement oÃ¹ mettre ton budget pub, et oÃ¹ arrÃªter de saigner.",
 
-  decisionEyebrow: "▍ DECISION ENGINE",
+  decisionEyebrow: "â– DECISION ENGINE",
   decisionTitle: { a: "RENTABLE.", b: "BREAK EVEN.", c: "PAS RENTABLE." },
   decisionLead:
-    "Trois statuts. Une logique hybride marge + ROAS net. Pas de débat, pas de feeling — juste la décision.",
+    "Trois statuts. Une logique hybride marge + ROAS net. Pas de dÃ©bat, pas de feeling â€” juste la dÃ©cision.",
   decisionRules: [
     {
-      name: "🚀 RENTABLE",
+      name: "ðŸš€ RENTABLE",
       ruleA: "Marge > 30%",
       ruleConn: "ET",
       ruleB: "ROAS net > 2.5",
       copy: "Pousse le budget. Le produit tient la route en volume.",
     },
     {
-      name: "⚖ BREAK EVEN",
-      ruleA: "Marge 15–30%",
+      name: "âš– BREAK EVEN",
+      ruleA: "Marge 15â€“30%",
       ruleConn: "OU",
-      ruleB: "ROAS 1.8–2.5",
-      copy: "Optimise créa, prix ou COGS avant de scaler.",
+      ruleB: "ROAS 1.8â€“2.5",
+      copy: "Optimise crÃ©a, prix ou COGS avant de scaler.",
     },
     {
-      name: "🛑 PAS RENTABLE",
+      name: "ðŸ›‘ PAS RENTABLE",
       ruleA: "Marge < 15%",
       ruleConn: "OU",
       ruleB: "ROAS < 1.8",
-      copy: "Coupe ou pivote. Tu perds de l'argent à chaque vente.",
+      copy: "Coupe ou pivote. Tu perds de l'argent Ã  chaque vente.",
     },
   ],
 
-  testimonialsEyebrow: "▍ RÉSULTATS RÉELS",
+  testimonialsEyebrow: "â– RÃ‰SULTATS RÃ‰ELS",
   testimonialsTitle: "AVANT NETODASH.",
-  testimonialsTitleAccent: "APRÈS NETODASH.",
+  testimonialsTitleAccent: "APRÃˆS NETODASH.",
   testimonialsLead:
-    "Pas de quotes vagues. Juste des chiffres avant / après — sur les mêmes boutiques.",
+    "Pas de quotes vagues. Juste des chiffres avant / aprÃ¨s â€” sur les mÃªmes boutiques.",
   testimonials: [
     {
       photo: claraPhoto,
       name: "Clara M.",
-      city: "Paris 🇫🇷",
-      niche: "Beauté / skincare",
+      city: "Paris ðŸ‡«ðŸ‡·",
+      niche: "BeautÃ© / skincare",
       before: { label: "ROAS net", v: "1.4" },
       after: { label: "ROAS net", v: "2.2" },
-      note: "+57% en 6 semaines après avoir killé 2 produits qui maquillaient les chiffres.",
+      note: "+57% en 6 semaines aprÃ¨s avoir killÃ© 2 produits qui maquillaient les chiffres.",
     },
     {
       photo: lucasPhoto,
       name: "Lucas D.",
-      city: "Lyon 🇫🇷",
+      city: "Lyon ðŸ‡«ðŸ‡·",
       niche: "Accessoires tech",
       before: { label: "Profit / mois", v: "$2 100" },
       after: { label: "Profit / mois", v: "$5 300" },
-      note: "Le ranking m'a montré que 1 produit faisait 70% de mon profit. J'ai scalé que lui.",
+      note: "Le ranking m'a montrÃ© que 1 produit faisait 70% de mon profit. J'ai scalÃ© que lui.",
     },
     {
       photo: awaPhoto,
       name: "Awa T.",
-      city: "Dakar 🇸🇳",
+      city: "Dakar ðŸ‡¸ðŸ‡³",
       niche: "Bijoux fantaisie",
       before: { label: "Marge nette", v: "8%" },
       after: { label: "Marge nette", v: "27%" },
@@ -300,45 +298,45 @@ const DROPSHIPPING: LandingCopy = {
     {
       photo: kouassiPhoto,
       name: "Kouassi R.",
-      city: "Abidjan 🇨🇮",
+      city: "Abidjan ðŸ‡¨ðŸ‡®",
       niche: "Gadgets maison",
-      before: { label: "Décisions / sem.", v: "Au feeling" },
-      after: { label: "Décisions / sem.", v: "Scale / Kill" },
-      note: "2 min/jour. Je sais exactement où mettre $100 de plus, ou couper.",
+      before: { label: "DÃ©cisions / sem.", v: "Au feeling" },
+      after: { label: "DÃ©cisions / sem.", v: "Scale / Kill" },
+      note: "2 min/jour. Je sais exactement oÃ¹ mettre $100 de plus, ou couper.",
     },
   ],
 
-  pricingEyebrow: "▍ PRICING",
-  pricingTitle: "PENSÉ POUR LES",
-  pricingTitleAccent: "OPÉRATEURS SHOPIFY SÉRIEUX.",
+  pricingEyebrow: "â– PRICING",
+  pricingTitle: "PENSÃ‰ POUR LES",
+  pricingTitleAccent: "OPÃ‰RATEURS SÃ‰RIEUX.",
   pricingLead:
-    "7 jours d'essai gratuit avec accès complet, sans carte bancaire. Ensuite : $20/mois, tout illimité — produits, Analytics Pro, Decision Engine, upsells, export CSV.",
+    "7 jours d'essai gratuit avec accÃ¨s complet, sans carte bancaire. Ensuite : $20/mois, tout illimitÃ© â€” produits, Analytics Pro, Decision Engine, upsells, export CSV.",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 $",
       period: "/ 7 jours",
-      tagline: "Accès complet 7 jours, sans carte bancaire",
+      tagline: "AccÃ¨s complet 7 jours, sans carte bancaire",
       features: [
-        "Tout débloqué pendant l'essai",
-        "Saisies cumulées multi-jours",
+        "Tout dÃ©bloquÃ© pendant l'essai",
+        "Saisies cumulÃ©es multi-jours",
         "Aucun engagement",
         "Aucune carte bancaire",
       ],
-      cta: "Démarrer l'essai",
+      cta: "DÃ©marrer l'essai",
       highlight: false,
     },
     {
       name: "Netodash",
       price: "$20",
       period: "/mois",
-      tagline: "Tout illimité, tout inclus",
+      tagline: "Tout illimitÃ©, tout inclus",
       features: [
-        "Produits illimités",
+        "Produits illimitÃ©s",
         "Analytics Pro (scoring, waterfall, break-even, simulateur)",
-        "Decision Engine · Insights automatiques",
-        "Upsells · Export CSV",
-        "Historique illimité",
+        "Decision Engine Â· Insights automatiques",
+        "Upsells Â· Export CSV",
+        "Historique illimitÃ©",
         "Support WhatsApp",
       ],
       cta: "Choisir Netodash",
@@ -349,60 +347,59 @@ const DROPSHIPPING: LandingCopy = {
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "7 jours complets, sans carte bancaire, accès complet. À la fin, tu passes à $20/mois tout illimité — ou tu arrêtes, sans frais.",
+      a: "7 jours complets, sans carte bancaire, accÃ¨s complet. Ã€ la fin, tu passes Ã  $20/mois tout illimitÃ© â€” ou tu arrÃªtes, sans frais.",
     },
     {
       q: "C'est pour quel type d'e-commerce ?",
-      a: "NETODASH pilote ta rentabilité réelle : ROAS net, marge après coûts produits, fulfillment, frais Stripe et taxes publicitaires. Connecté à Shopify, WooCommerce et YouCan, compatible Meta / TikTok / Google Ads.",
+      a: "NETODASH pilote ta rentabilitÃ© rÃ©elle : ROAS net, marge aprÃ¨s coÃ»ts produits, livraison, frais de paiement et taxes publicitaires. Compatible Meta, TikTok et Google Ads.",
     },
     {
       q: "Quel plan choisir ?",
-      a: "Un seul plan : $20/mois, tout illimité. Produits illimités, Analytics Pro (scoring, waterfall, break-even, simulateur, insights), Decision Engine, upsells, export CSV et support WhatsApp. Pas de palier à choisir.",
+      a: "Un seul plan : $20/mois, tout illimitÃ©. Produits illimitÃ©s, Analytics Pro (scoring, waterfall, break-even, simulateur, insights), Decision Engine, upsells, export CSV et support WhatsApp. Pas de palier Ã  choisir.",
     },
     {
       q: "Puis-je changer de plan ou annuler ?",
-      a: "Oui, à tout moment depuis Mon plan. Tu annules en un clic — ton accès reste actif jusqu'à la fin de la période payée.",
+      a: "Oui, Ã  tout moment depuis Mon plan. Tu annules en un clic â€” ton accÃ¨s reste actif jusqu'Ã  la fin de la pÃ©riode payÃ©e.",
     },
   ],
 
-  ctaTitle: "ARRÊTE DE DEVINER.",
+  ctaTitle: "ARRÃŠTE DE DEVINER.",
   ctaTitleAccent: "MESURE.",
   ctaLead: "7 jours d'essai gratuit. Aucune carte requise. Sors enfin de l'aveugle.",
-  ctaButton: "Créer mon compte →",
+  ctaButton: "CrÃ©er mon compte â†’",
 
   footerTagline:
-    "Le dashboard de rentabilité réelle pour les marchands Shopify.",
-  footerBaseline: "BUILT FOR SHOPIFY MERCHANTS",
+    "Le dashboard de rentabilitÃ© rÃ©elle pour les marchands.",
+  footerBaseline: "BUILT FOR MERCHANTS",
 };
 
-// ───────────── COD AFRIQUE ─────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ COD AFRIQUE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const COD: LandingCopy = {
   seoTitle:
-    "Netodash COD — Dashboard rentabilité Cash on Delivery (Sénégal, Côte d'Ivoire, FCFA)",
+    "Netodash COD â€” Dashboard rentabilitÃ© Cash on Delivery (SÃ©nÃ©gal, CÃ´te d'Ivoire, FCFA)",
   seoDescription:
-    "Le dashboard de rentabilité pour le COD en Afrique de l'Ouest. Suis taux de confirmation, taux de livraison, coût par zone et profit net en FCFA. Conçu pour le call center et la logistique terrain.",
+    "Le dashboard de rentabilitÃ© pour le COD en Afrique de l'Ouest. Suis taux de confirmation, taux de livraison, coÃ»t par zone et profit net en FCFA. ConÃ§u pour le call center et la logistique terrain.",
 
-  heroBadge: "Conçu pour le COD en Afrique de l'Ouest",
+  heroBadge: "ConÃ§u pour le COD en Afrique de l'Ouest",
   heroH1Line1: "TU FAIS 100 COMMANDES/JOUR.",
-  heroH1Line2: "COMBIEN SONT VRAIMENT PAYÉES ?",
+  heroH1Line2: "COMBIEN SONT VRAIMENT PAYÃ‰ES ?",
   heroSubtitle:
-    "Netodash mesure ce qui compte vraiment en COD : confirmation, livraison, coût par zone et pub —",
+    "Netodash mesure ce qui compte vraiment en COD : confirmation, livraison, coÃ»t par zone et pub â€”",
   heroSubtitleBold:
     "pour savoir exactement ce que ta boutique te rapporte en FCFA chaque jour.",
-  heroCtaPrimary: "Tester gratuitement 14 jours →",
+  heroCtaPrimary: "Tester gratuitement 14 jours â†’",
   heroCtaSecondary: "Voir les tarifs",
-  heroSmallprint: "Sans carte bancaire · Plan Pro débloqué · Annule à tout moment",
+  heroSmallprint: "Sans carte bancaire Â· Plan Pro dÃ©bloquÃ© Â· Annule Ã  tout moment",
 
   trustStats: [
     { v: "+400", l: "Vendeurs COD actifs" },
     { v: "65 %", l: "Taux de livraison moyen suivi" },
-    { v: "−28 %", l: "De pertes logistiques évitées" },
+    { v: "âˆ’28 %", l: "De pertes logistiques Ã©vitÃ©es" },
     { v: "4,8 / 5", l: "Note utilisateurs Afrique" },
   ],
 
-  platformsHeading: "Compatible avec ton stack COD (Sénégal · CI · Mali · Bénin)",
+  platformsHeading: "Compatible avec ton stack COD (SÃ©nÃ©gal Â· CI Â· Mali Â· BÃ©nin)",
   platforms: [
-    { src: shopifyLogo, alt: "Shopify" },
     { src: youcanLogo, alt: "YouCan" },
     { src: wooLogo, alt: "WooCommerce" },
   ],
@@ -411,63 +408,63 @@ const COD: LandingCopy = {
     {
       n: "01",
       t: "TAUX DE CONFIRMATION",
-      d: "Mesure combien de commandes reçues passent vraiment au closing. Repère tes meilleures sources de leads et les agents qui convertissent le mieux.",
+      d: "Mesure combien de commandes reÃ§ues passent vraiment au closing. RepÃ¨re tes meilleures sources de leads et les agents qui convertissent le mieux.",
     },
     {
       n: "02",
       t: "TAUX DE LIVRAISON",
-      d: "Suis le ratio confirmées → livrées. C'est là que ton cash se gagne ou se perd. Tableau de bord clair en FCFA.",
+      d: "Suis le ratio confirmÃ©es â†’ livrÃ©es. C'est lÃ  que ton cash se gagne ou se perd. Tableau de bord clair en FCFA.",
     },
     {
       n: "03",
-      t: "COÛT LIVRAISON PAR ZONE",
-      d: "Définis tes zones (Dakar, régions, hors-pays). Chaque livraison est imputée à sa zone : tu connais ton vrai coût logistique.",
+      t: "COÃ›T LIVRAISON PAR ZONE",
+      d: "DÃ©finis tes zones (Dakar, rÃ©gions, hors-pays). Chaque livraison est imputÃ©e Ã  sa zone : tu connais ton vrai coÃ»t logistique.",
     },
   ],
 
-  showcaseEyebrow: "▍ L'OPERATOR CONSOLE COD",
+  showcaseEyebrow: "â– L'OPERATOR CONSOLE COD",
   showcaseTitleHtml: {
     before: "Pilote ton COD ",
     accent: "comme un directeur d'agence",
     after: " pilote son call center.",
   },
   showcaseLead:
-    "Saisis tes commandes reçues, confirmées, livrées par zone. Netodash calcule ton profit net en FCFA, par jour, par produit, et te dit quel canal pousser.",
+    "Saisis tes commandes reÃ§ues, confirmÃ©es, livrÃ©es par zone. Netodash calcule ton profit net en FCFA, par jour, par produit, et te dit quel canal pousser.",
   showcaseList: [
     "Taux confirmation / livraison quotidien",
-    "Coût livraison ventilé par zone",
+    "CoÃ»t livraison ventilÃ© par zone",
     "Profit net en FCFA, par produit",
   ],
 
-  beforeAfterEyebrow: "ÇA TE PARLE ?",
-  beforeAfterTitle: "300 COMMANDES REÇUES.",
-  beforeAfterAccent: "COMBIEN SONT VRAIMENT PAYÉES À LA FIN DU MOIS ?",
-  beforeAfterBeforeBadge: "😵‍💫 Sans NETODASH",
-  beforeAfterAfterBadge: "✅ Avec NETODASH",
+  beforeAfterEyebrow: "Ã‡A TE PARLE ?",
+  beforeAfterTitle: "300 COMMANDES REÃ‡UES.",
+  beforeAfterAccent: "COMBIEN SONT VRAIMENT PAYÃ‰ES Ã€ LA FIN DU MOIS ?",
+  beforeAfterBeforeBadge: "ðŸ˜µâ€ðŸ’« Sans NETODASH",
+  beforeAfterAfterBadge: "âœ… Avec NETODASH",
   beforeAfterBeforeRows: [
-    { k: "Commandes reçues (30j)", v: "300" },
-    { k: "Confirmées (closing)", v: "180" },
-    { k: "Taux de livraison ?", v: "≈ 60 % ?", mode: "accent" },
-    { k: "Coût livraison par zone ?", v: "¯\\_(ツ)_/¯", mode: "accent" },
-    { k: "Retours non payés ?", v: "≈ ?", mode: "accent" },
-    { k: "Profit net réel", v: "AUCUNE IDÉE.", mode: "accent" },
+    { k: "Commandes reÃ§ues (30j)", v: "300" },
+    { k: "ConfirmÃ©es (closing)", v: "180" },
+    { k: "Taux de livraison ?", v: "â‰ˆ 60 % ?", mode: "accent" },
+    { k: "CoÃ»t livraison par zone ?", v: "Â¯\\_(ãƒ„)_/Â¯", mode: "accent" },
+    { k: "Retours non payÃ©s ?", v: "â‰ˆ ?", mode: "accent" },
+    { k: "Profit net rÃ©el", v: "AUCUNE IDÃ‰E.", mode: "accent" },
   ],
   beforeAfterAfterRows: [
-    { k: "Livrées payées net", v: "168 cmd" },
-    { k: "− Coût produit (livrées)", v: "− 1 260 000 F" },
-    { k: "− Livraison ventilée par zone", v: "− 420 000 F" },
-    { k: "− Budget pub (Meta/TikTok)", v: "− 850 000 F" },
+    { k: "LivrÃ©es payÃ©es net", v: "168 cmd" },
+    { k: "âˆ’ CoÃ»t produit (livrÃ©es)", v: "âˆ’ 1 260 000 F" },
+    { k: "âˆ’ Livraison ventilÃ©e par zone", v: "âˆ’ 420 000 F" },
+    { k: "âˆ’ Budget pub (Meta/TikTok)", v: "âˆ’ 850 000 F" },
     { k: "Profit net (FCFA)", v: "+ 720 000 F", mode: "accent" },
     { k: "Marge nette", v: "21 %", mode: "accent" },
   ],
   beforeAfterBeforeFooter: {
     plain:
-      "Tu paies des livraisons que tu ne récupères pas, ton call center pousse fort mais ton cash en fin de mois te dit : ",
-    bold: "« Où est passé l'argent ? »",
+      "Tu paies des livraisons que tu ne rÃ©cupÃ¨res pas, ton call center pousse fort mais ton cash en fin de mois te dit : ",
+    bold: "Â« OÃ¹ est passÃ© l'argent ? Â»",
   },
   beforeAfterAfterFooter: {
     plain: "Tu sais ",
-    bold: "exactement quelle zone te coûte trop cher, quel produit livre vraiment, et quel agent ferme le mieux.",
+    bold: "exactement quelle zone te coÃ»te trop cher, quel produit livre vraiment, et quel agent ferme le mieux.",
   },
   beforeAfterTagline: {
     plain:
@@ -475,43 +472,43 @@ const COD: LandingCopy = {
     bold: "NETODASH te le montre en FCFA, en 2 minutes par jour.",
   },
 
-  rankingEyebrow: "▍ PROFIT RANKING PAR PRODUIT",
+  rankingEyebrow: "â– PROFIT RANKING PAR PRODUIT",
   rankingTitle: "QUELS PRODUITS LIVRENT",
-  rankingTitleAccent: "ET QUELS PRODUITS TE COÛTENT",
+  rankingTitleAccent: "ET QUELS PRODUITS TE COÃ›TENT",
   rankingLead:
-    "Netodash classe tes produits par profit net en FCFA, après livraison ventilée par zone. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
-  rankingCols: ["Produit", "Reçues", "Livrées", "Profit net (F)", "Marge", "Status"],
+    "Netodash classe tes produits par profit net en FCFA, aprÃ¨s livraison ventilÃ©e par zone. Chaque ligne te dit, en un mot, quoi faire aujourd'hui.",
+  rankingCols: ["Produit", "ReÃ§ues", "LivrÃ©es", "Profit net (F)", "Marge", "Status"],
   rankingRows: [
-    { name: "Montre Connectée Pro", rev: 180, ads: 105, profit: 1_240_000, margin: 28.5, status: "RENTABLE" },
-    { name: "Lampe LED Décorative", rev: 120, ads: 72, profit: 540_000, margin: 18.0, status: "BREAK EVEN" },
+    { name: "Montre ConnectÃ©e Pro", rev: 180, ads: 105, profit: 1_240_000, margin: 28.5, status: "RENTABLE" },
+    { name: "Lampe LED DÃ©corative", rev: 120, ads: 72, profit: 540_000, margin: 18.0, status: "BREAK EVEN" },
     { name: "Casque Bluetooth X3", rev: 95, ads: 38, profit: 120_000, margin: 6.5, status: "PAS RENTABLE" },
     { name: "Diffuseur Parfum Auto", rev: 70, ads: 48, profit: 680_000, margin: 31.2, status: "RENTABLE" },
   ],
   rankingCurrencyPrefix: "",
   rankingFooter:
-    "→ Tu vois immédiatement quelle zone arrêter de livrer, et quel produit pousser cette semaine.",
+    "â†’ Tu vois immÃ©diatement quelle zone arrÃªter de livrer, et quel produit pousser cette semaine.",
 
-  decisionEyebrow: "▍ DECISION ENGINE COD",
+  decisionEyebrow: "â– DECISION ENGINE COD",
   decisionTitle: { a: "RENTABLE.", b: "BREAK EVEN.", c: "PAS RENTABLE." },
   decisionLead:
-    "Trois statuts. Logique hybride taux de livraison + marge nette FCFA. Pas de feeling — juste la décision.",
+    "Trois statuts. Logique hybride taux de livraison + marge nette FCFA. Pas de feeling â€” juste la dÃ©cision.",
   decisionRules: [
     {
-      name: "🚀 RENTABLE",
+      name: "ðŸš€ RENTABLE",
       ruleA: "Livraison > 60 %",
       ruleConn: "ET",
       ruleB: "Marge > 25 %",
       copy: "Pousse le budget pub. Renforce le stock et les agents closers.",
     },
     {
-      name: "⚖ BREAK EVEN",
-      ruleA: "Livraison 45–60 %",
+      name: "âš– BREAK EVEN",
+      ruleA: "Livraison 45â€“60 %",
       ruleConn: "OU",
-      ruleB: "Marge 10–25 %",
-      copy: "Optimise le closing, change de transporteur, renégocie le COGS.",
+      ruleB: "Marge 10â€“25 %",
+      copy: "Optimise le closing, change de transporteur, renÃ©gocie le COGS.",
     },
     {
-      name: "🛑 PAS RENTABLE",
+      name: "ðŸ›‘ PAS RENTABLE",
       ruleA: "Livraison < 45 %",
       ruleConn: "OU",
       ruleB: "Marge < 10 %",
@@ -519,80 +516,80 @@ const COD: LandingCopy = {
     },
   ],
 
-  testimonialsEyebrow: "▍ RÉSULTATS RÉELS · AFRIQUE DE L'OUEST",
+  testimonialsEyebrow: "â– RÃ‰SULTATS RÃ‰ELS Â· AFRIQUE DE L'OUEST",
   testimonialsTitle: "AVANT NETODASH.",
-  testimonialsTitleAccent: "APRÈS NETODASH.",
+  testimonialsTitleAccent: "APRÃˆS NETODASH.",
   testimonialsLead:
-    "Pas de quotes vagues. Juste des chiffres avant / après — sur les mêmes boutiques COD.",
+    "Pas de quotes vagues. Juste des chiffres avant / aprÃ¨s â€” sur les mÃªmes boutiques COD.",
   testimonials: [
     {
       photo: yaoPhoto,
       name: "Mamadou S.",
-      city: "Dakar 🇸🇳",
+      city: "Dakar ðŸ‡¸ðŸ‡³",
       niche: "Gadgets & accessoires",
       before: { label: "Taux livraison", v: "48 %" },
       after: { label: "Taux livraison", v: "67 %" },
-      note: "J'ai vu que la zone régions me coûtait 3× plus cher. J'ai recadré le transporteur et tout a changé.",
+      note: "J'ai vu que la zone rÃ©gions me coÃ»tait 3Ã— plus cher. J'ai recadrÃ© le transporteur et tout a changÃ©.",
     },
     {
       photo: awaPhoto,
-      name: "Aïssatou D.",
-      city: "Abidjan 🇨🇮",
-      niche: "Beauté & cosmétique",
+      name: "AÃ¯ssatou D.",
+      city: "Abidjan ðŸ‡¨ðŸ‡®",
+      niche: "BeautÃ© & cosmÃ©tique",
       before: { label: "Profit / mois", v: "320 000 F" },
       after: { label: "Profit / mois", v: "1 150 000 F" },
-      note: "Je voyais 200 commandes/mois et je pensais cartonner. Le dashboard m'a montré 38 % de livraison. J'ai killé 1 produit, scalé l'autre.",
+      note: "Je voyais 200 commandes/mois et je pensais cartonner. Le dashboard m'a montrÃ© 38 % de livraison. J'ai killÃ© 1 produit, scalÃ© l'autre.",
     },
     {
       photo: fatouPhoto,
       name: "Fatou K.",
-      city: "Bamako 🇲🇱",
-      niche: "Maison & déco",
+      city: "Bamako ðŸ‡²ðŸ‡±",
+      niche: "Maison & dÃ©co",
       before: { label: "Marge nette", v: "6 %" },
       after: { label: "Marge nette", v: "24 %" },
-      note: "Le coût par zone, c'est ce qui m'a sauvé. Je savais pas que la zone hors-Bamako me bouffait toute ma marge.",
+      note: "Le coÃ»t par zone, c'est ce qui m'a sauvÃ©. Je savais pas que la zone hors-Bamako me bouffait toute ma marge.",
     },
     {
       photo: kouassiPhoto,
       name: "Ousmane B.",
-      city: "Dakar 🇸🇳",
-      niche: "Tech & santé",
-      before: { label: "Décisions / sem.", v: "Au feeling" },
-      after: { label: "Décisions / sem.", v: "Scale / Kill" },
+      city: "Dakar ðŸ‡¸ðŸ‡³",
+      niche: "Tech & santÃ©",
+      before: { label: "DÃ©cisions / sem.", v: "Au feeling" },
+      after: { label: "DÃ©cisions / sem.", v: "Scale / Kill" },
       note: "Mes 3 agents closers ont chacun leur stat de confirmation. Je sais qui pousser, qui former. Game changer.",
     },
   ],
 
-  pricingEyebrow: "▍ PRICING",
-  pricingTitle: "PENSÉ POUR LES",
+  pricingEyebrow: "â– PRICING",
+  pricingTitle: "PENSÃ‰ POUR LES",
   pricingTitleAccent: "VENDEURS COD QUI VEULENT SCALER PROPRE.",
   pricingLead:
-    "14 jours d'essai gratuit avec accès complet. Ensuite, Plan COD à $10/mois (COD uniquement, produits illimités), Starter à $12/mois (Drop + COD), Pro à $29/mois (upsells, multi-zones), Scale à $79/mois (Analytics Pro).",
+    "14 jours d'essai gratuit avec accÃ¨s complet. Ensuite, Plan COD Ã  $10/mois (COD uniquement, produits illimitÃ©s), Starter Ã  $12/mois (Drop + COD), Pro Ã  $29/mois (upsells, multi-zones), Scale Ã  $79/mois (Analytics Pro).",
   plans: [
     {
       name: "Essai gratuit",
       price: "0 F",
       period: "/ 14 jours",
-      tagline: "Accès complet 14j, sans carte bancaire",
+      tagline: "AccÃ¨s complet 14j, sans carte bancaire",
       features: [
-        "Jusqu'à 10 produits",
-        "Mode COD ET Dropshipping en parallèle",
+        "Jusqu'Ã  10 produits",
+        "Mode COD ET Dropshipping en parallÃ¨le",
         "Dashboard COD complet (zones, profit FCFA)",
-        "Analytics Pro débloqué pendant l'essai",
-        "Saisies cumulées multi-jours",
+        "Analytics Pro dÃ©bloquÃ© pendant l'essai",
+        "Saisies cumulÃ©es multi-jours",
       ],
-      cta: "Démarrer l'essai",
+      cta: "DÃ©marrer l'essai",
       highlight: false,
     },
     {
       name: "Starter",
       price: "$12",
       period: "/mois",
-      tagline: "Démarrer en Drop avec le COD inclus",
+      tagline: "DÃ©marrer en Drop avec le COD inclus",
       features: [
         "3 produits Dropshipping max",
         "Mode COD inclus (dashboard basique)",
-        "Produits COD illimités",
+        "Produits COD illimitÃ©s",
         "Dashboard COD complet (zones, profit FCFA)",
         "1 zone de livraison",
         "Historique 60 jours",
@@ -604,15 +601,15 @@ const COD: LandingCopy = {
       name: "Pro",
       price: "$29",
       period: "/mois",
-      tagline: "Piloter ton call center & 2–3 winners",
+      tagline: "Piloter ton call center & 2â€“3 winners",
       features: [
         "10 produits actifs",
-        "COD ET Dropshipping en parallèle",
+        "COD ET Dropshipping en parallÃ¨le",
         "Upsells (ventes additionnelles)",
-        "Zones de livraison multi-tarifs illimitées",
+        "Zones de livraison multi-tarifs illimitÃ©es",
         "ROAS net Meta / TikTok / Google",
         "Profit net FCFA par produit",
-        "Historique illimité · Export CSV",
+        "Historique illimitÃ© Â· Export CSV",
         "Support email + WhatsApp",
       ],
       cta: "Choisir Pro",
@@ -624,8 +621,8 @@ const COD: LandingCopy = {
       period: "/mois",
       tagline: "Scaler avec Analytics Pro",
       features: [
-        "Produits illimités",
-        "Upsells illimités",
+        "Produits illimitÃ©s",
+        "Upsells illimitÃ©s",
         "Tout ce qui est inclus dans Pro",
         "Analytics Pro EXCLUSIF (scoring, waterfall, break-even, simulateur, insights)",
         "Support prioritaire WhatsApp",
@@ -638,31 +635,31 @@ const COD: LandingCopy = {
   faq: [
     {
       q: "Comment fonctionne l'essai gratuit ?",
-      a: "14 jours complets, sans carte bancaire, accès complet quel que soit le mode au signup. À la fin, tu choisis Plan COD ($10), Starter, Pro ou Scale — ou tu arrêtes, sans frais.",
+      a: "14 jours complets, sans carte bancaire, accÃ¨s complet quel que soit le mode au signup. Ã€ la fin, tu choisis Plan COD ($10), Starter, Pro ou Scale â€” ou tu arrÃªtes, sans frais.",
     },
     {
-      q: "Ça marche pour le COD en Afrique de l'Ouest ?",
-      a: "Oui. NETODASH est conçu pour le COD au Sénégal, Côte d'Ivoire, Mali, Bénin, Burkina, Togo, Guinée. Devise FCFA gérée nativement, zones de livraison personnalisables par pays.",
+      q: "Ã‡a marche pour le COD en Afrique de l'Ouest ?",
+      a: "Oui. NETODASH est conÃ§u pour le COD au SÃ©nÃ©gal, CÃ´te d'Ivoire, Mali, BÃ©nin, Burkina, Togo, GuinÃ©e. Devise FCFA gÃ©rÃ©e nativement, zones de livraison personnalisables par pays.",
     },
     {
-      q: "Comment je définis mes zones de livraison ?",
-      a: "Depuis tes produits, tu définis tes zones (Dakar, régions, Thiès…). Multi-zones dès le plan Pro Drop ($29). Le plan COD $10 inclut 1 zone.",
+      q: "Comment je dÃ©finis mes zones de livraison ?",
+      a: "Depuis tes produits, tu dÃ©finis tes zones (Dakar, rÃ©gions, ThiÃ¨sâ€¦). Multi-zones dÃ¨s le plan Pro Drop ($29). Le plan COD $10 inclut 1 zone.",
     },
     {
       q: "Faut-il connecter Shopify ?",
-      a: "Pas obligatoire. Tu peux fonctionner en saisie manuelle quotidienne (idéal pour les boutiques YouCan ou formulaire). Connexion Shopify dispo en OAuth read-only si tu en as une.",
+      a: "Pas obligatoire. Tu peux fonctionner en saisie manuelle quotidienne (idÃ©al pour les boutiques YouCan ou formulaire). Connexion Shopify dispo en OAuth read-only si tu en as une.",
     },
   ],
 
-  ctaTitle: "ARRÊTE DE PAYER",
+  ctaTitle: "ARRÃŠTE DE PAYER",
   ctaTitleAccent: "DES LIVRAISONS PERDUES.",
   ctaLead:
     "14 jours d'essai gratuit. Sans carte. Pilote enfin ton COD avec des chiffres exacts en FCFA.",
-  ctaButton: "Créer mon compte →",
+  ctaButton: "CrÃ©er mon compte â†’",
 
   footerTagline:
-    "Le dashboard de rentabilité réelle pour le COD en Afrique de l'Ouest.",
-  footerBaseline: "CONÇU POUR LE COD EN AFRIQUE DE L'OUEST · FCFA",
+    "Le dashboard de rentabilitÃ© rÃ©elle pour le COD en Afrique de l'Ouest.",
+  footerBaseline: "CONÃ‡U POUR LE COD EN AFRIQUE DE L'OUEST Â· FCFA",
 };
 
 export const LANDING_COPY: Record<BusinessMode, LandingCopy> = {

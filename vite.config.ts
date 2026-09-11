@@ -123,16 +123,6 @@ export default defineConfig({
         workers_dev: true,
       },
     },
-    // Active le runtime de tâches Nitro → génère les `crons` dans la config
-    // wrangler et branche le handler `scheduled` du Worker.
-    experimental: {
-      tasks: true,
-    },
-    // Cron Triggers Cloudflare : remplace l'endpoint HTTP non authentifié
-    // /api/public/hooks/shopify-sync (voir server/tasks/shopify-sync.ts).
-    scheduledTasks: {
-      "0 */2 * * *": ["shopify-sync"],
-    },
     // Le hook rollup:before s'exécute APRÈS que la config par défaut de Nitro est prête
     // (avec ses plugins inject+alias déjà en place). On peut donc ajouter notre plugin
     // sans être écrasé par le defu qui ignore rollupConfig.plugins si le default existe déjà.

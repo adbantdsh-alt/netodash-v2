@@ -17,7 +17,7 @@ const STEP_CONTENT: Record<
   },
   2: {
     title: "Étape 2 — Fais ta première saisie",
-    body: "Chaque jour, entre tes commandes Shopify, tes commandes livrées et ton budget pub. Plus tu saisis, plus les données sont précises.",
+    body: "Chaque jour, entre tes commandes, tes commandes livrées et ton budget pub. Plus tu saisis, plus les données sont précises.",
     tour: "entries-form",
     cta: "J'ai fait ma saisie",
   },

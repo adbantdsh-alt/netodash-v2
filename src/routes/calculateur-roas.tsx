@@ -63,7 +63,7 @@ export const Route = createFileRoute("/calculateur-roas")({
       {
         name: "description",
         content:
-          "Calcule gratuitement ton Break-Even ROAS, ton ROAS actuel et ton CPA max. Outil simple pour Shopify, Meta Ads et TikTok Ads.",
+          "Calcule gratuitement ton Break-Even ROAS, ton ROAS actuel et ton CPA max. Outil simple pour Meta Ads et TikTok Ads.",
       },
       {
         name: "keywords",
@@ -219,7 +219,7 @@ function CalculateurRoasPage() {
               <Faq q="Sur quels coûts se base le calcul ?">
                 Le calcul utilise uniquement le prix de vente et le coût
                 produit (achat + livraison vers le client). Pour intégrer
-                frais Shopify, SAV, retours, etc., utilise la version avancée
+                frais de paiement, SAV, retours, etc., utilise la version avancée
                 dans l'app Netodash.
               </Faq>
               <Faq q="Pourquoi mon Target ROAS dit 'Impossible' ?">
