@@ -705,7 +705,7 @@ function RoasCalculatorPage() {
                     {h.mode === "actual" && (
                       <>
                         ROAS {(h.summary.roas ?? 0).toFixed(2)}x · Profit{" "}
-                        {formatCurrency(h.summary.netProfit ?? 0, h.currency)}
+                        {formatCurrency(h.summary.netProfit ?? 0, "XOF")}
                       </>
                     )}
                     {h.mode === "breakeven" && (
@@ -716,7 +716,7 @@ function RoasCalculatorPage() {
                     )}
                     {h.mode === "target" && (
                       <>
-                        CPA max {formatCurrency(h.summary.maxCpa ?? 0, h.currency)}{" "}
+                        CPA max {formatCurrency(h.summary.maxCpa ?? 0, "XOF")}{" "}
                         · ROAS cible {(h.summary.targetRoas ?? 0).toFixed(2)}x
                       </>
                     )}
