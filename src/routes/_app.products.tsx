@@ -445,8 +445,8 @@ function ProductsPage() {
       {dropBlocked && (
         <div className="brutal-border-thin p-4 mb-6 bg-muted/40 flex flex-wrap items-center justify-between gap-3">
           <div className="text-sm font-mono">
-            <span className="font-bold uppercase tracking-wider">Dropshipping indisponible</span> · Ton plan COD
-            ($10) ne couvre que le mode COD. Passe à Starter Drop pour ajouter des produits Dropshipping.
+            <span className="font-bold uppercase tracking-wider">Dropshipping indisponible</span> · Ton ancien plan COD
+            ne couvre que le mode COD. Passe au plan Netodash (20 $/mois) pour ajouter des produits Dropshipping.
           </div>
           <Link
             to="/plan"

@@ -89,7 +89,7 @@ export function ProductRankingTab({ preset, customRange }: Props) {
           </button>
         ) : (
           <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-            🔒 Export CSV · plan Pro Drop
+            🔒 Export CSV · abonnement Netodash
           </span>
         )}
       </div>
@@ -143,7 +143,7 @@ export function ProductRankingTab({ preset, customRange }: Props) {
       </div>
 
       <div className="brutal-border-thin p-4 bg-muted/30 text-xs font-mono text-muted-foreground space-y-1">
-        <p><strong>Score</strong> : pondère marge nette, bénéfice/€ pub, ROAS vs break-even et taux de remboursement.</p>
+        <p><strong>Score</strong> : pondère marge nette, bénéfice/FCFA investi en pub, ROAS vs break-even et taux de remboursement.</p>
         <p><strong>F profit / F pub</strong> : combien tu gagnes par franc investi en publicité (le KPI roi du dropshipping).</p>
         <p><strong>Verdicts</strong> : 🟢 winner ≥65 · 🟡 watch 40-64 · 🔴 loser &lt;40.</p>
       </div>

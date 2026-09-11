@@ -25,13 +25,13 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ["roas", "meta ads", "rentabilité"],
     html: `
 <h2>Le ROAS brut Meta est un mensonge</h2>
-<p>Quand Meta t'affiche un ROAS de 3.5, ça veut dire : 1 € dépensé en ads = 3,50 € de chiffre d'affaires <strong>attribué</strong>. Ça ne veut PAS dire que tu gagnes 2,50 €. Voici ce qui manque :</p>
+<p>Quand Meta t'affiche un ROAS de 3.5, ça veut dire : 1 000 FCFA dépensé en ads = 3 500 FCFA de chiffre d'affaires <strong>attribué</strong>. Ça ne veut PAS dire que tu gagnes 2 500 FCFA. Voici ce qui manque :</p>
 <ul>
 <li>Le <strong>coût produit</strong> (achat + frais fournisseur)</li>
-<li>Les <strong>frais de paiement</strong> Stripe / PayPal (2,9 % + 0,25 € en moyenne)</li>
+<li>Les <strong>frais de paiement</strong> Wave / Orange Money (≈ 1 % + 200 FCFA par transaction)</li>
 <li>Les <strong>remboursements et litiges</strong> (5 à 15 % du CA en moyenne)</li>
-<li>Les <strong>taxes pub Meta</strong> (jusqu'à 20 % en France)</li>
-<li>Le <strong>delta d'attribution</strong> entre Meta et Shopify (Meta surestime de 20 à 40 %)</li>
+<li>Les <strong>taxes pub Meta</strong> (jusqu'à 20 % au Sénégal, 0 % dans certains pays)</li>
+<li>Le <strong>delta d'attribution</strong> entre Meta et ta boutique (Meta surestime de 20 à 40 %)</li>
 </ul>
 
 <h2>Les 3 ROAS à connaître</h2>
@@ -39,7 +39,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <h3>1. Break-Even ROAS (point mort)</h3>
 <p>Le ROAS minimum pour ne PAS perdre d'argent. La formule :</p>
 <pre><code>Break-Even ROAS = Prix de vente / Marge brute par commande</code></pre>
-<p><strong>Exemple :</strong> tu vends une montre à 49 €. Coût produit + livraison + Stripe = 18 €. Marge brute = 31 €. Break-Even ROAS = 49 / 31 = <strong>1.58</strong>.</p>
+<p><strong>Exemple :</strong> tu vends une montre à 32 000 FCFA. Coût produit + livraison + paiement = 11 750 FCFA. Marge brute = 20 250 FCFA. Break-Even ROAS = 32 000 / 20 250 = <strong>1.58</strong>.</p>
 <p>En dessous de 1.58 de ROAS, tu perds de l'argent.</p>
 
 <h3>2. ROAS actuel (réel)</h3>
@@ -47,31 +47,31 @@ export const BLOG_POSTS: BlogPost[] = [
 <p>C'est ce que Netodash calcule par défaut. Pas le ROAS Meta — le ROAS basé sur les commandes <strong>réellement payées et livrées</strong>.</p>
 
 <h3>3. Target ROAS (objectif marge)</h3>
-<p>Pour gagner X € de marge nette sur chaque vente :</p>
+<p>Pour gagner X FCFA de marge nette sur chaque vente :</p>
 <pre><code>Target ROAS = Prix de vente / (Marge brute - X)</code></pre>
-<p>Pour la montre à 49 €, viser 15 € de marge nette par commande : Target ROAS = 49 / (31 - 15) = <strong>3.06</strong>.</p>
+<p>Pour la montre à 32 000 FCFA, viser 9 800 FCFA de marge nette par commande : Target ROAS = 32 000 / (20 250 - 9 800) = <strong>3.06</strong>.</p>
 
 <h2>Le CPA max — la métrique qui change tout</h2>
 <p>Ton CPA max (coût par acquisition maximum) est la dépense ads MAX par commande pour rester rentable :</p>
 <pre><code>CPA max = Marge brute par commande</code></pre>
-<p>Sur la montre à 31 € de marge brute, ton CPA max théorique = 31 €. Au-dessus, tu perds. En réglant ton enchère Meta sur "Coût par achat = 31 €", tu protèges ta marge automatiquement.</p>
+<p>Sur la montre à 20 250 FCFA de marge brute, ton CPA max théorique = 20 250 FCFA. Au-dessus, tu perds. En réglant ton enchère Meta sur "Coût par achat = 20 250 FCFA", tu protèges ta marge automatiquement.</p>
 
 <h2>Exemple chiffré complet</h2>
 <table>
 <thead><tr><th>Métrique</th><th>Valeur</th></tr></thead>
 <tbody>
-<tr><td>Prix de vente</td><td>49 €</td></tr>
-<tr><td>Coût produit + livraison</td><td>15 €</td></tr>
-<tr><td>Frais Stripe (2.9 % + 0.25)</td><td>1,67 €</td></tr>
-<tr><td>Marge brute par commande</td><td>32,33 €</td></tr>
-<tr><td>Dépense ads (1 commande)</td><td>22 €</td></tr>
-<tr><td>Taxe pub Meta (20 %)</td><td>4,40 €</td></tr>
-<tr><td><strong>Marge nette réelle</strong></td><td><strong>5,93 €</strong></td></tr>
-<tr><td>ROAS Meta affiché</td><td>2.23</td></tr>
+<tr><td>Prix de vente</td><td>32 000 FCFA</td></tr>
+<tr><td>Coût produit + livraison</td><td>10 400 FCFA</td></tr>
+<tr><td>Frais Wave / Orange Money (1 % + 200 FCFA)</td><td>520 FCFA</td></tr>
+<tr><td>Marge brute par commande</td><td>21 080 FCFA</td></tr>
+<tr><td>Dépense ads (1 commande)</td><td>14 400 FCFA</td></tr>
+<tr><td>Taxe pub Meta (20 %)</td><td>2 880 FCFA</td></tr>
+<tr><td><strong>Marge nette réelle</strong></td><td><strong>3 800 FCFA</strong></td></tr>
+<tr><td>ROAS Meta affiché</td><td>2.22</td></tr>
 <tr><td>ROAS réel Netodash</td><td>1.85</td></tr>
 </tbody>
 </table>
-<p>Le ROAS Meta dit 2.23, mais ta vraie rentabilité est 1.85. Si tu pilotes ton budget sur le ROAS Meta, tu scales un produit qui ne te laisse que 5,93 € — soit 12 % de marge nette.</p>
+<p>Le ROAS Meta dit 2.22, mais ta vraie rentabilité est 1.85. Si tu pilotes ton budget sur le ROAS Meta, tu scales un produit qui ne te laisse que 3 800 FCFA — soit 12 % de marge nette.</p>
 
 <h2>Conclusion</h2>
 <p>Tant que tu ne calcules pas ton ROAS réel, tu ne pilotes rien. Netodash le fait automatiquement : tu rentres tes coûts une fois, et chaque jour ton vrai ROAS s'affiche, par produit, par campagne.</p>
@@ -149,7 +149,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Calcul détaillé de la marge nette : produit, livraison, ads, taxes, remboursements. Exemple chiffré et erreurs courantes.",
     excerpt:
-      "Tu fais 30 000 € de CA et tu te demandes pourquoi ton compte bancaire ne suit pas ? Tu confonds chiffre d'affaires et marge nette. Voici la vraie formule.",
+      "Tu fais 20 000 000 FCFA de CA et tu te demandes pourquoi ton compte bancaire ne suit pas ? Tu confonds chiffre d'affaires et marge nette. Voici la vraie formule.",
     category: "Rentabilité",
     readMin: 6,
     publishedAt: "2026-06-05",
@@ -158,40 +158,40 @@ export const BLOG_POSTS: BlogPost[] = [
 <h2>La vraie formule de la marge nette</h2>
 <pre><code>Marge nette = CA livré
   - Coût produit total
-  - Frais paiement (Stripe / PayPal)
+  - Frais paiement (Wave / Orange Money)
   - Remboursements
   - Dépense ads + taxes pub
-  - Frais Shopify + apps
+  - Frais boutique + apps
   - Frais bancaires
 </code></pre>
 
 <h2>Les 6 coûts que tu sous-estimes</h2>
 <ol>
-<li><strong>Frais Stripe / PayPal :</strong> 2,9 % + 0,25 € par transaction. Sur 1 000 commandes à 50 €, c'est 1 700 € rien que là.</li>
+<li><strong>Frais Wave / Orange Money :</strong> ≈ 1 % + 200 FCFA par transaction. Sur 1 000 commandes à 32 000 FCFA, c'est 520 000 FCFA rien que là.</li>
 <li><strong>Remboursements :</strong> compte 5 à 15 % du CA. Beaucoup oublient.</li>
-<li><strong>Taxe pub Meta :</strong> jusqu'à 20 % en France selon ton statut.</li>
-<li><strong>Apps Shopify :</strong> Klaviyo, DSers, ReConvert, etc. — vite 200 à 500 € / mois.</li>
+<li><strong>Taxe pub Meta :</strong> jusqu'à 20 % au Sénégal selon ton statut (0 % dans certains pays).</li>
+<li><strong>Apps de ta boutique :</strong> Klaviyo, DSers, ReConvert, etc. — vite 130 000 à 330 000 FCFA / mois.</li>
 <li><strong>Frais bancaires & change :</strong> 1 à 3 % sur les paiements internationaux.</li>
-<li><strong>Sponsoring créa :</strong> UGC, vidéos. 200 – 1 000 € / mois pour scaler.</li>
+<li><strong>Sponsoring créa :</strong> UGC, vidéos. 130 000 – 660 000 FCFA / mois pour scaler.</li>
 </ol>
 
-<h2>Exemple : 30 000 € de CA — combien tu touches vraiment ?</h2>
+<h2>Exemple : 20 000 000 FCFA de CA — combien tu touches vraiment ?</h2>
 <table>
 <thead><tr><th>Poste</th><th>Montant</th></tr></thead>
 <tbody>
-<tr><td>CA brut Shopify</td><td>30 000 €</td></tr>
-<tr><td>Remboursements (10 %)</td><td>-3 000 €</td></tr>
-<tr><td>CA livré</td><td>27 000 €</td></tr>
-<tr><td>Coût produit (30 %)</td><td>-8 100 €</td></tr>
-<tr><td>Stripe (3 %)</td><td>-810 €</td></tr>
-<tr><td>Dépense ads</td><td>-12 000 €</td></tr>
-<tr><td>Taxe pub (20 %)</td><td>-2 400 €</td></tr>
-<tr><td>Shopify + apps</td><td>-400 €</td></tr>
-<tr><td>UGC + créa</td><td>-500 €</td></tr>
-<tr><td><strong>Marge nette</strong></td><td><strong>2 790 €</strong></td></tr>
+<tr><td>CA brut boutique</td><td>20 000 000 FCFA</td></tr>
+<tr><td>Remboursements (10 %)</td><td>-2 000 000 FCFA</td></tr>
+<tr><td>CA livré</td><td>18 000 000 FCFA</td></tr>
+<tr><td>Coût produit (30 %)</td><td>-5 400 000 FCFA</td></tr>
+<tr><td>Wave / Orange Money (3 %)</td><td>-540 000 FCFA</td></tr>
+<tr><td>Dépense ads</td><td>-8 000 000 FCFA</td></tr>
+<tr><td>Taxe pub (20 %)</td><td>-1 600 000 FCFA</td></tr>
+<tr><td>Boutique + apps</td><td>-260 000 FCFA</td></tr>
+<tr><td>UGC + créa</td><td>-330 000 FCFA</td></tr>
+<tr><td><strong>Marge nette</strong></td><td><strong>1 870 000 FCFA</strong></td></tr>
 </tbody>
 </table>
-<p>30 000 € de CA = 2 790 € de marge nette. Soit <strong>9,3 %</strong>. Beaucoup de drop-shippers se croient à 30 % parce qu'ils ne soustraient que le coût produit.</p>
+<p>20 000 000 FCFA de CA = 1 870 000 FCFA de marge nette. Soit <strong>9,3 %</strong>. Beaucoup de drop-shippers se croient à 30 % parce qu'ils ne soustraient que le coût produit.</p>
 
 <h2>Comment scaler intelligemment</h2>
 <p>Au lieu de scaler le CA, scale la <strong>marge nette par produit</strong>. Le tableau Netodash classe tes produits en :</p>
@@ -262,14 +262,14 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "Le CPM Meta a doublé en 3 ans. Stratégies concrètes pour rester rentable : créa UGC, scaling vertical, audience BOFU, ROAS net.",
     excerpt:
-      "CPM Meta à 25 €, audience saturée, concurrence agressive. Les méthodes de 2020 sont mortes. Voici ce qui fonctionne en 2026 — et pourquoi le ROAS net est ton seul KPI.",
+      "CPM Meta à 16 000 FCFA, audience saturée, concurrence agressive. Les méthodes de 2020 sont mortes. Voici ce qui fonctionne en 2026 — et pourquoi le ROAS net est ton seul KPI.",
     category: "Rentabilité",
     readMin: 7,
     publishedAt: "2026-06-05",
     tags: ["meta ads", "scaling"],
     html: `
 <h2>Le constat : CPM x2 en 3 ans</h2>
-<p>En 2023, un CPM Meta France tournait à 12 €. En 2026, on est régulièrement à 25 – 35 € sur les audiences premium. Les raisons :</p>
+<p>En 2023, un CPM Meta en Afrique de l'Ouest tournait à 8 000 FCFA. En 2026, on est régulièrement à 16 000 – 23 000 FCFA sur les audiences premium. Les raisons :</p>
 <ul>
 <li>Saturation publicitaire (iOS 17, Meta IA).</li>
 <li>Hausse des enchères (concurrence des grandes marques).</li>
@@ -279,7 +279,7 @@ export const BLOG_POSTS: BlogPost[] = [
 <h2>Les 4 leviers qui marchent encore</h2>
 
 <h3>1. UGC + créa native</h3>
-<p>Les créa "studio" sont mortes. Le format vertical, brut, "filmé au téléphone par un vrai client" double le CTR. Compter 200 – 500 € / créa, en produire 3 nouvelles par semaine.</p>
+<p>Les créa "studio" sont mortes. Le format vertical, brut, "filmé au téléphone par un vrai client" double le CTR. Compter 130 000 – 330 000 FCFA / créa, en produire 3 nouvelles par semaine.</p>
 
 <h3>2. Scaling vertical, pas horizontal</h3>
 <p>Au lieu de dupliquer 20 ad sets, mets tout le budget sur 1 – 2 audiences qui convertissent et monte le budget par paliers de +20 % tous les 3 jours. Stop le CBO multi-adsets.</p>

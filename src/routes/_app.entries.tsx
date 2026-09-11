@@ -916,8 +916,8 @@ function EntriesPage() {
             )}
             {entriesQ.data?.map((e: any) => {
               const p = productMap.get(e.product_id);
-              const adCur = e.ad_budget_currency ?? "XOF";
-              const revenueCur = e.total_revenue_currency ?? (p as any)?.currency ?? "XOF";
+              const adCur = cleanCurrency(e.ad_budget_currency);
+              const revenueCur = cleanCurrency(e.total_revenue_currency ?? (p as any)?.currency);
               const isCod = activeMode === "cod";
               // Fallback : anciennes saisies COD ont la valeur dans shopify_orders
               const receivedDisplay = isCod
@@ -1470,7 +1470,7 @@ function UpsellSection({
   onChange: (patch: Partial<PendingEntry>) => void;
 }) {
   const isCod = mode === "cod";
-  const lockedCur: AppCurrency = isCod ? ("XOF" as AppCurrency) : entry.total_revenue_currency;
+  const lockedCur: AppCurrency = cleanCurrency(entry.total_revenue_currency);
   const symbol = isCod ? "XOF" : lockedCur;
 
   if (!canUseUpsells) {
@@ -1479,7 +1479,7 @@ function UpsellSection({
         <div className="text-[11px] font-mono leading-snug">
           <span className="font-bold uppercase tracking-widest">🔒 Upsell</span>
           <span className="block text-muted-foreground mt-0.5 text-[10px]">
-            Ventes additionnelles — réservé au plan Pro Drop ($29) en mode Dropshipping.
+            Ventes additionnelles — incluses dans l'abonnement Netodash (20 $/mois, tout illimité).
           </span>
         </div>
         <Link

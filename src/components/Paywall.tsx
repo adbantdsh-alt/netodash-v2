@@ -47,7 +47,7 @@ export function Paywall({ variant, trialDaysLeft }: Props) {
         </h2>
         <p className="font-mono text-sm text-muted-foreground max-w-2xl">
           Tu vois les chiffres bruts, mais pas <strong className="text-foreground">la lecture qui transforme un test en winner</strong>.
-          Passe au plan <strong className="text-foreground">Scale</strong> pour débloquer le hub de rentabilité avancée.
+          Passe au plan <strong className="text-foreground">Netodash</strong> pour débloquer le hub de rentabilité avancée.
         </p>
         {trialDaysLeft != null && trialDaysLeft <= 2 && (
           <div className="font-mono text-xs text-accent mt-4 font-bold">
