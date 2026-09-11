@@ -87,7 +87,7 @@ export function upsellTotalsForEntry(
   let units = 0;
   const fxOpts: DropshippingFxOptions = {
     ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
   };
   for (const u of list) {
     if (!u || !u.product_id) continue;
@@ -159,7 +159,7 @@ export function adSpendInCurrency(
 ): number {
   const fxOpts: DropshippingFxOptions = {
     ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
   };
   return convertDropshippingCurrency(
     Number(entry.ad_budget),
@@ -211,7 +211,7 @@ function euImportDutyForEntry(
   if (entry.include_eu_import_duty === false || orders <= 0) return 0;
   const fxOpts: DropshippingFxOptions = {
     ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
   };
   return convertDropshippingCurrency(
     orders * EU_IMPORT_DUTY_EUR,
@@ -268,7 +268,7 @@ export function computeKPIs(
   const productMap = new Map(products.map((p) => [p.id, p]));
   const fxOpts: DropshippingFxOptions = {
     ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
   };
   let revenue = 0;
   let cogs = 0;
@@ -499,7 +499,7 @@ export function computeDailySeries(
   const productMap = new Map(products.map((p) => [p.id, p]));
   const fxOpts: DropshippingFxOptions = {
     ...fx,
-    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "EUR"),
+    displayCurrency: normalizeDropshippingCurrency(targetCurrency, fx?.displayCurrency ?? "XOF"),
   };
   const filtered = productId ? entries.filter((e) => e.product_id === productId) : entries;
   const byDay = new Map<string, DailyKPI>();
