@@ -52,6 +52,11 @@ export function SiteFooter({
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link to="/auth" className="text-background/70 hover:text-accent">
+                  Connexion
+                </Link>
+              </li>
             </ul>
           </div>
 

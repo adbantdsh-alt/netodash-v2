@@ -88,7 +88,10 @@ function PricingPage() {
             <Logo size="sm" />
           </Link>
           <nav className="flex items-center gap-2">
-            <Link to="/" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
+            <Link to="/auth" className="px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:text-accent">
+              Connexion
+            </Link>
+            <Link to="/" className="brutal-border-thin px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:bg-foreground hover:text-background">
               ← Accueil
             </Link>
           </nav>

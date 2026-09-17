@@ -50,6 +50,12 @@ export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } =
               >
                 Contact
               </Link>
+              <Link
+                to="/auth"
+                className="brutal-border-thin px-4 py-2.5 font-bold uppercase tracking-wider text-sm hover:bg-foreground hover:text-background"
+              >
+                Connexion
+              </Link>
             </>
           )}
         </nav>
@@ -95,9 +101,16 @@ export function SiteHeader({ variant = "dropshipping" }: { variant?: Variant } =
             <Link
               to="/contact"
               onClick={() => setOpen(false)}
-              className="px-2 py-3 font-bold uppercase tracking-wider text-sm"
+              className="px-2 py-3 font-bold uppercase tracking-wider text-sm border-b border-foreground/20"
             >
               Contact
+            </Link>
+            <Link
+              to="/auth"
+              onClick={() => setOpen(false)}
+              className="px-2 py-3 font-bold uppercase tracking-wider text-sm"
+            >
+              Connexion
             </Link>
           </nav>
         </div>
