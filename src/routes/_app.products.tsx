@@ -74,24 +74,27 @@ function ProductsPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const { mode: activeMode } = useActiveMode();
+  const { mode: activeMode, currency: modeCurrency, dropshippingCurrency } = useActiveMode();
+  const isCopyx = activeMode === "copyx";
   const productsQ = useProducts(user?.id);
   const profileQ = useProfile(user?.id);
   const sub = useSubscription(user?.id);
-  const isCod = activeMode === "cod";
+  // L'ancienne ligne COD a été retirée : la ligne CopyX remplace
+  // l'ancien comportement « dropshipping » et reste en FCFA.
+  const isCod = false; // ancienne ligne COD retirée
   const productCount = productsQ.data?.length ?? 0;
   const legacyDual = Boolean((profileQ.data as { legacy_dual_mode?: boolean } | undefined)?.legacy_dual_mode);
   const limit = productLimitFor(sub.plan, activeMode);
   const limitReached = !canAddProduct(sub.plan, productCount, activeMode);
   const multiZonesAllowed = canUseMultiZonesCod(sub.plan);
-  const dropBlocked = !isCod && !canAccessDropshipping(sub.plan, legacyDual);
+  const dropBlocked = !false && !canAccessDropshipping(sub.plan, legacyDual);
   const range = useMemo(() => dateRangeForPreset("30d"), []);
   const entriesQ = useEntries(user?.id, range);
   const { fx: dropshippingFx } = useDropshippingFx(user?.id);
   const metaTaxPct = Number((profileQ.data as { meta_tax_pct?: number } | undefined)?.meta_tax_pct ?? 0);
 
   const COUNTRIES = isCod ? COD_COUNTRIES : DROPSHIP_COUNTRIES;
-  const defaultCountry = isCod ? "SN" : "FR";
+  const defaultCountry = isCopyx ? "SN" : "FR";
 
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -107,7 +110,9 @@ function ProductsPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   // Pays cible : multi-sélection (surtout utile en COD pour couvrir plusieurs pays).
   const [countries, setCountries] = useState<Set<string>>(new Set([defaultCountry]));
-  const [currency, setCurrency] = useState<DropshippingCurrency>("XOF");
+  // Devise du produit : FCFA imposé sur la ligne CopyX, au choix (EUR / USD /
+  // GBP / FCFA) sur la ligne Dropshipping. La valeur suit la ligne active.
+  const [currency, setCurrency] = useState<DropshippingCurrency>(modeCurrency);
   // Zones de livraison COD : chaque zone est un groupe de régions avec un coût.
   type ZoneDraft = { name: string; cost: string; regions: string[] };
   const defaultZones = (): ZoneDraft[] => [
@@ -131,8 +136,8 @@ function ProductsPage() {
   };
 
   // Devise affichée dans le formulaire selon le mode
-  const formCurrency = isCod ? "XOF" : currency;
-  const currencySymbol = isCod ? "FCFA" : formCurrency;
+  const formCurrency = isCopyx ? "XOF" : currency;
+  const currencySymbol = isCopyx ? "FCFA" : formCurrency;
 
   const allIds = productsQ.data?.map((p) => p.id) ?? [];
   const allSelected = allIds.length > 0 && selected.size === allIds.length;
@@ -341,7 +346,7 @@ function ProductsPage() {
       toast.error(parsed.error.issues[0].message);
       return;
     }
-    if (isCod && cleanZones.length === 0) {
+    if (false && cleanZones.length === 0) {
       toast.error("Ajoute au moins une zone de livraison.");
       return;
     }
@@ -404,7 +409,7 @@ function ProductsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6 md:mb-8">
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
-            {isCod ? "CATALOGUE COD · AFRIQUE" : "CATALOGUE PRODUITS · COPYX"}
+            {isCopyx ? "CATALOGUE COPYX" : "CATALOGUE DROPSHIPPING"}
           </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">PRODUITS</h1>
         </div>
@@ -499,7 +504,7 @@ function ProductsPage() {
               value={form.cost_price}
               onChange={(v) => setForm({ ...form, cost_price: v })}
             />
-            {!isCod && (
+            {!false && (
               <Field
                 label={`Coût d'expédition / commande (${currencySymbol})`}
                 type="number"
@@ -558,14 +563,14 @@ function ProductsPage() {
             </div>
           )}
 
-          {isCod ? (
+          {isCopyx ? (
             <div className="brutal-border-thin p-4 bg-accent/10">
               <div className="text-xs uppercase tracking-widest font-bold mb-1">
                 Devise du produit
               </div>
               <div className="font-mono text-sm">
                 <span className="font-black">FCFA (XOF)</span>{" "}
-                <span className="text-muted-foreground">— verrouillée en mode COD</span>
+                <span className="text-muted-foreground">— verrouillée sur la ligne CopyX</span>
               </div>
             </div>
           ) : (
@@ -574,9 +579,16 @@ function ProductsPage() {
                 Devise du produit <span className="text-accent">*</span>
               </div>
               <div className="flex gap-2 flex-wrap">
-                {(["XOF"] as const).map((c) => {
+                {(["EUR", "USD", "GBP", "XOF"] as const).map((c) => {
                   const active = currency === c;
-                  const label = "FCFA (XOF)";
+                  const label =
+                    c === "EUR"
+                      ? "Euro (€)"
+                      : c === "USD"
+                        ? "Dollar US ($)"
+                        : c === "GBP"
+                          ? "Livre (£)"
+                          : "FCFA (XOF)";
                   return (
                     <button
                       key={c}
@@ -595,19 +607,19 @@ function ProductsPage() {
           )}
 
           {/* ÉTAPE 1 — Pays cible. En COD, c'est obligatoire avant de définir les zones */}
-          <div className={`brutal-border-thin p-4 ${isCod && countries.size === 0 ? "border-accent border-2 bg-accent/5" : ""}`}>
+          <div className={`brutal-border-thin p-4 ${false && countries.size === 0 ? "border-accent border-2 bg-accent/5" : ""}`}>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              {isCod && (
+              {false && (
                 <span className="text-[10px] font-mono brutal-border-thin px-2 py-0.5 bg-foreground text-background font-bold uppercase tracking-widest">
                   Étape 1
                 </span>
               )}
               <div className="text-xs uppercase tracking-widest font-bold">
                 Pays cible <span className="text-accent">*</span>
-                {isCod && <span className="text-muted-foreground font-mono normal-case ml-2">— multi-sélection</span>}
+                {false && <span className="text-muted-foreground font-mono normal-case ml-2">— multi-sélection</span>}
               </div>
             </div>
-            {isCod && (
+            {false && (
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-3">
                 Sélectionne d'abord tous les pays où tu livres ce produit — les régions disponibles s'afficheront ensuite dans les zones de livraison. Tu peux en cocher plusieurs.
               </div>
@@ -633,7 +645,7 @@ function ProductsPage() {
           </div>
 
           {/* ÉTAPE 2 — Zones de livraison COD. Dépend des pays sélectionnés */}
-          {isCod && (
+          {false && (
             <div className={`brutal-border-thin p-4 ${availableRegions.length === 0 ? "opacity-60" : ""}`}>
               <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
                 <div>
@@ -855,7 +867,7 @@ function ProductsPage() {
               : p.name.toLowerCase().includes(search.trim().toLowerCase()),
           )
           .map((p, i) => {
-          const pCur = isCod ? "XOF" : normalizeDropshippingCurrency((p as any).currency);
+          const pCur = isCopyx ? "XOF" : normalizeDropshippingCurrency((p as any).currency, modeCurrency);
           const margin =
             Number(p.sale_price) -
             Number(p.cost_price) -

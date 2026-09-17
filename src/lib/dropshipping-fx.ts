@@ -1,23 +1,25 @@
 /**
- * Conversions monétaires de l'application. Devise unique : FCFA (XOF).
+ * Conversions monétaires — deux lignes de business :
  *
- * Historique : ce module n'acceptait que EUR / USD / GBP pour isoler le
- * dropshipping du COD. Le COD a été retiré et l'app est mono-devise FCFA.
+ *  - ligne **CopyX** : devises forcées à XOF (FCFA), acomptes + XaalipSay ;
+ *  - ligne **Dropshipping** : la devise de la boutique est choisie par le
+ *    marchand (EUR / USD / GBP / XOF) et la devise du compte pub peut différer.
  *
- * IMPORTANT — les codes EUR / USD / GBP restent dans le type uniquement pour
- * relire d'anciennes lignes en base. Ils sont désormais *ramenés à XOF sans
- * conversion* : les montants saisis par les opérateurs ouest-africains étaient
- * des montants FCFA mal étiquetés après le changement de devise. Convertir avec
- * un taux (×655) ferait exploser tous les historiques ; on conserve donc la
- * valeur telle qu'elle a été saisie, seul le symbole change.
+ * Aucun mélange entre les deux lignes : la devise d'affichage vient toujours du
+ * mode actif (voir `use-active-mode.ts`), et les montants d'une ligne ne sont
+ * jamais additionnés à ceux de l'autre.
  */
 
 export type DropshippingCurrency = "EUR" | "USD" | "GBP" | "XOF";
 
-export const DROPSHIPPING_CURRENCIES: DropshippingCurrency[] = ["XOF"];
+/** Devises proposées sur la ligne Dropshipping. */
+export const DROPSHIPPING_CURRENCIES: DropshippingCurrency[] = ["EUR", "USD", "GBP", "XOF"];
 
-/** Devise unique de l'application (affichage + saisie + stockage). */
+/** Devise de la ligne CopyX (imposée). */
 export const APP_CURRENCY: DropshippingCurrency = "XOF";
+
+/** Devise par défaut d'une nouvelle boutique Dropshipping. */
+export const DEFAULT_DROPSHIPPING_CURRENCY: DropshippingCurrency = "EUR";
 
 /** 1 unité de devise → valeur en USD (taux indicatifs, overridables partiellement). */
 export const DEFAULT_USD_PER_UNIT: Record<DropshippingCurrency, number> = {
@@ -33,13 +35,13 @@ export function isDropshippingCurrency(value?: string | null): value is Dropship
 }
 
 /**
- * Normalise un code devise vers la devise unique FCFA.
- * Les codes hérités (EUR / USD / GBP) sont ramenés à XOF sans conversion, et une
- * valeur vide ou inconnue retombe aussi sur XOF.
+ * Normalise un code devise. Les devises supportées sont conservées telles
+ * quelles (EUR / USD / GBP / XOF) ; une valeur vide ou inconnue retombe sur
+ * `fallback` (EUR par défaut côté Dropshipping, XOF côté CopyX).
  */
 export function normalizeDropshippingCurrency(
   currency?: string | null,
-  fallback: DropshippingCurrency = APP_CURRENCY,
+  fallback: DropshippingCurrency = DEFAULT_DROPSHIPPING_CURRENCY,
 ): DropshippingCurrency {
   const cur = String(currency ?? fallback).toUpperCase();
   return isDropshippingCurrency(cur) ? cur : fallback;
@@ -75,8 +77,9 @@ export function convertDropshippingCurrency(
   opts?: DropshippingFxOptions,
 ): number {
   const raw = Number(value) || 0;
-  const from = normalizeDropshippingCurrency(fromCurrency, opts?.displayCurrency ?? APP_CURRENCY);
-  const to = normalizeDropshippingCurrency(toCurrency, opts?.displayCurrency ?? APP_CURRENCY);
+  const fallback = opts?.displayCurrency ?? DEFAULT_DROPSHIPPING_CURRENCY;
+  const from = normalizeDropshippingCurrency(fromCurrency, fallback);
+  const to = normalizeDropshippingCurrency(toCurrency, fallback);
   if (from === to) return raw;
 
   const amountUsd = raw * usdPerUnit(from, opts);
@@ -111,7 +114,7 @@ export function dropshippingFxOptionsFromProfile(
 ): DropshippingFxOptions {
   const displayCurrency = normalizeDropshippingCurrency(
     profile?.dropshipping_currency ?? profile?.currency,
-    APP_CURRENCY,
+    DEFAULT_DROPSHIPPING_CURRENCY,
   );
   return {
     displayCurrency,

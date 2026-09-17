@@ -3,26 +3,51 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { APP_CURRENCY } from "@/lib/dropshipping-fx";
+import {
+  APP_CURRENCY,
+  DEFAULT_DROPSHIPPING_CURRENCY,
+  normalizeDropshippingCurrency,
+  type DropshippingCurrency,
+} from "@/lib/dropshipping-fx";
 
-export type BusinessMode = "cod" | "dropshipping";
+/**
+ * Lignes de business du compte.
+ *
+ *  - `copyx`         → boutique CopyX : FCFA (XOF) uniquement, acomptes 10 %,
+ *                      encaissements XaalipSay (5 % à l'encaissement).
+ *  - `dropshipping`  → dropshipping international : devise au choix
+ *                      (EUR / USD / GBP / XOF), devise pub possiblement distincte.
+ *
+ * Les deux lignes sont cloisonnées : produits, saisies et KPI sont filtrés par
+ * `business_mode`, et aucune devise n'est mélangée entre elles.
+ *
+ * (La valeur héritée `cod` n'est plus proposée ; les comptes qui l'ont encore
+ *  en base sont ramenés sur `copyx` à l'affichage.)
+ */
+export type BusinessMode = "copyx" | "dropshipping";
 
 export type ActiveModeState = {
   mode: BusinessMode;
-  /** Devise affichée dans toute l'app pour le mode actif. */
-  currency: string;
-  /** Devise spécifique au mode dropshipping (config). */
-  dropshippingCurrency: string;
-  /** Devise COD (figée à XOF pour le MVP Sénégal). */
-  codCurrency: string;
+  /** Devise d'affichage de la ligne active. */
+  currency: DropshippingCurrency;
+  /** Devise de la ligne CopyX (toujours FCFA). */
+  copyxCurrency: DropshippingCurrency;
+  /** Devise choisie pour la ligne Dropshipping. */
+  dropshippingCurrency: DropshippingCurrency;
+  /** Taux saisi : 1 USD = N devises d'affichage (ligne Dropshipping). */
+  dropshippingUsdRate: number | null;
   isLoading: boolean;
   setMode: (mode: BusinessMode, options?: { silent?: boolean }) => Promise<void>;
 };
 
+function readMode(value: unknown): BusinessMode {
+  // Toute valeur inconnue (dont l'ancien `cod`) retombe sur la ligne CopyX.
+  return String(value ?? "").toLowerCase() === "dropshipping" ? "dropshipping" : "copyx";
+}
+
 /**
- * Hook central qui expose le mode business actif (COD ou Dropshipping)
- * et la devise associée. Tout le code de l'app doit passer par ce hook
- * pour filtrer les données et afficher la bonne devise.
+ * Hook central : expose la ligne de business active et sa devise. Tout le code
+ * de l'app passe par ce hook pour filtrer les données et afficher la bonne devise.
  */
 export function useActiveMode(): ActiveModeState {
   const { user } = useAuth();
@@ -43,12 +68,18 @@ export function useActiveMode(): ActiveModeState {
   });
 
   const profile = profileQ.data as any;
-  const mode: BusinessMode = (profile?.active_mode ?? "dropshipping") as BusinessMode;
-  // App mono-devise : tout l'affichage est en FCFA, quel que soit le mode ou la
-  // devise historiquement stockée sur le profil (anciens comptes EUR / USD).
-  const codCurrency = APP_CURRENCY;
-  const dropshippingCurrency = APP_CURRENCY;
-  const currency = APP_CURRENCY;
+  const mode = readMode(profile?.active_mode);
+
+  const copyxCurrency = APP_CURRENCY;
+  const dropshippingCurrency = normalizeDropshippingCurrency(
+    profile?.dropshipping_currency ?? profile?.currency,
+    DEFAULT_DROPSHIPPING_CURRENCY,
+  );
+  const currency = mode === "dropshipping" ? dropshippingCurrency : copyxCurrency;
+
+  const rawRate = Number(profile?.dropshipping_usd_fx);
+  const dropshippingUsdRate =
+    Number.isFinite(rawRate) && rawRate > 0 && rawRate < 5000 ? rawRate : null;
 
   const mutation = useMutation({
     mutationFn: async (next: BusinessMode) => {
@@ -63,8 +94,11 @@ export function useActiveMode(): ActiveModeState {
     onSuccess: (_next, _vars, _ctx) => {
       if (!user?.id) return;
       qc.invalidateQueries({ queryKey: ["profile", user.id] });
+      // Les listes filtrées par `business_mode` doivent être rechargées.
+      qc.invalidateQueries({ queryKey: ["products"] });
+      qc.invalidateQueries({ queryKey: ["entries"] });
     },
-    onError: (e: any) => toast.error(e?.message ?? "Échec du changement de mode"),
+    onError: (e: any) => toast.error(e?.message ?? "Échec du changement de ligne"),
   });
 
   const { mutateAsync } = mutation;
@@ -74,17 +108,22 @@ export function useActiveMode(): ActiveModeState {
       if (next === mode) return;
       await mutateAsync(next);
       if (!options?.silent) {
-        toast.success(next === "cod" ? "Mode COD activé" : "Mode Dropshipping activé");
+        toast.success(
+          next === "copyx"
+            ? "Ligne CopyX activée (FCFA)"
+            : `Ligne Dropshipping activée (${dropshippingCurrency})`,
+        );
       }
     },
-    [mode, mutateAsync],
+    [mode, mutateAsync, dropshippingCurrency],
   );
 
   return {
     mode,
     currency,
-    codCurrency,
+    copyxCurrency,
     dropshippingCurrency,
+    dropshippingUsdRate,
     isLoading: profileQ.isLoading,
     setMode,
   };

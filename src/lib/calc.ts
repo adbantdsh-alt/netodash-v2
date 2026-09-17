@@ -376,27 +376,32 @@ export function roasVerdict(roas: number, hasSpend: boolean): RoasVerdict {
   };
 }
 
-/** Symboles monétaires réellement utilisés dans l'app. */
+/** Symboles monétaires utilisés dans l'app (CopyX : XOF · Dropshipping : les 4). */
 const CURRENCY_SYMBOLS: Record<string, string> = {
+  EUR: "€",
   USD: "$",
+  GBP: "£",
   XOF: "FCFA",
 };
 
 /**
- * Formate un montant. Deux devises existent dans l'app :
- * - XOF (FCFA) : devise unique de l'utilisateur, par défaut ;
- * - USD : uniquement pour les montants Stripe du back-office.
- * Tout autre code (EUR, GBP, héritage) est ramené au FCFA : plus aucun symbole
- * européen ne peut être affiché.
+ * Formate un montant dans sa devise.
+ *
+ * - ligne **CopyX** : toujours FCFA (la devise vient de `useActiveMode`) ;
+ * - ligne **Dropshipping** : EUR / USD / GBP / FCFA selon la boutique ;
+ * - back-office : USD pour les montants Stripe.
+ *
+ * Le symbole est placé APRÈS le montant (« 1 200 FCFA », « 49 $ »), sauf pour
+ * € / £ où l'usage français le veut après également — d'où un format unique.
  */
 export function formatCurrency(value: number, currency = "XOF"): string {
-  const raw = String(currency ?? "XOF").toUpperCase();
-  const code = raw === "USD" ? "USD" : "XOF";
+  const code = normalizeCurrency(currency);
   const sym = CURRENCY_SYMBOLS[code] || code;
   const safeValue = Number.isFinite(Number(value)) ? Number(value) : 0;
+  // FCFA/XOF et les devises entières : pas de décimales inutiles.
   const decimals = code === "XOF" || Math.abs(safeValue - Math.round(safeValue)) < 0.005 ? 0 : 2;
-  // Pour FCFA on met l'unité après avec un espace insécable (lecture locale).
-  return `${safeValue.toLocaleString("fr-FR", {
+  const sign = safeValue < 0 ? "−" : "";
+  return `${sign}${Math.abs(safeValue).toLocaleString("fr-FR", {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   })} ${sym}`;

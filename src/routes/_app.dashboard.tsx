@@ -246,43 +246,6 @@ function DashboardPage() {
     return a;
   }, [hasData, kpis, beRoas, toKill, currency, showDecisionEngine]);
 
-  // === Branche dédiée mode COD ===
-  if (activeMode === "cod") {
-    return (
-      <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <PeriodPicker
-            value={preset}
-            onChange={(p) => {
-              setPreset(p);
-              if (p !== "custom") setCustomRange(null);
-            }}
-            customRange={customRange}
-            onCustomChange={setCustomRange}
-          />
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="brutal-border-thin bg-background px-3 py-2 text-xs font-black uppercase tracking-widest hover:bg-foreground hover:text-background"
-          >
-            <span className={refreshing ? "inline-block animate-spin mr-1" : "inline-block mr-1"}>↻</span>
-            Rafraîchir
-          </button>
-        </div>
-        <DashboardCod
-          entries={entries as any}
-          products={products as any}
-          currency={currency}
-          range={range}
-          productId={productId}
-          setProductId={setProductId}
-          usdToXofRate={codUsdToXofRate}
-          metaTaxPct={metaTaxPct}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-6 md:py-10">
 
@@ -424,7 +387,7 @@ function DashboardPage() {
                 <div className="leading-tight">
                   <div className="font-black tracking-tight text-sm">NETODASH</div>
                   <div className="text-[9px] font-mono uppercase tracking-[0.2em] opacity-80">
-                    COPYX
+                    {activeMode === "copyx" ? "COPYX" : "DROPSHIPPING"}
                   </div>
                 </div>
               </div>

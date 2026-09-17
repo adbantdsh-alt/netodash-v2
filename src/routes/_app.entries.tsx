@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useSubscription } from "@/lib/use-subscription";
 import { canUseUpsells } from "@/lib/plan-limits";
 import { useEntries, useProducts, useProfile } from "@/lib/queries";
-import { useActiveMode } from "@/lib/use-active-mode";
+import { useActiveMode, type BusinessMode } from "@/lib/use-active-mode";
 import {
   dateRangeForPreset,
   formatCurrency,
@@ -23,8 +23,15 @@ import { cn } from "@/lib/utils";
 
 type AppCurrency = DropshippingCurrency;
 
-function cleanCurrency(currency?: string | null): AppCurrency {
-  return normalizeDropshippingCurrency(currency);
+/**
+ * Devise d'affichage d'une saisie.
+ *
+ *  - ligne CopyX : tout est ramené au FCFA (mono-devise) ;
+ *  - ligne Dropshipping : on respecte la devise du produit / de la saisie
+ *    (EUR, USD, GBP ou FCFA), avec repli sur la devise de la ligne.
+ */
+function cleanCurrency(currency?: string | null, fallback: AppCurrency = "XOF"): AppCurrency {
+  return normalizeDropshippingCurrency(currency, fallback);
 }
 
 export const Route = createFileRoute("/_app/entries")({
@@ -166,7 +173,7 @@ function EntriesPage() {
   const entriesQ = useEntries(user?.id, range);
 
   const products = productsQ.data ?? [];
-  const profileCurrency = cleanCurrency(modeCurrency);
+  const profileCurrency = cleanCurrency(modeCurrency, modeCurrency);
 
   const [pendingEntries, setPendingEntries] = useState<PendingEntry[]>([]);
   const [bulkSaving, setBulkSaving] = useState(false);
@@ -184,7 +191,7 @@ function EntriesPage() {
   const manualDaysCount = enumerateDays(manualFromISO, manualToISO).length;
 
   function buildBlankEntry(p: any, entryDate: string, periodTo?: string): PendingEntry {
-    const revenueCur = cleanCurrency(p.currency || profileCurrency);
+    const revenueCur = cleanCurrency(p.currency || profileCurrency, modeCurrency);
     return {
       key: `manual-${entryDate}-${Date.now()}-${Math.random()}`,
       product_id: p.id,
@@ -201,7 +208,7 @@ function EntriesPage() {
       ad_budget_currency: profileCurrency,
       include_meta_tax: true,
       include_shopify_fees: true,
-      include_wave_fees: activeMode === "cod",
+      include_wave_fees: false,
       entry_cogs_per_unit: "",
       entry_shipping_per_unit: "",
       entry_cogs_currency: profileCurrency,
@@ -254,7 +261,9 @@ function EntriesPage() {
 
   async function savePending(entry: PendingEntry) {
     if (!user) return;
-    const isCod = activeMode === "cod";
+    // L'ancienne ligne COD a été retirée : la ligne CopyX remplace
+  // l'ancien comportement « dropshipping » et reste en FCFA.
+  const isCod = false;
     const validationError = validateEntry(entry, isCod);
     if (validationError) throw new Error(validationError);
     if (entry.upsells_enabled) {
@@ -287,13 +296,13 @@ function EntriesPage() {
       include_meta_tax: entry.include_meta_tax,
       include_shopify_fees: isCod ? false : entry.include_shopify_fees,
       include_wave_fees: isCod ? entry.include_wave_fees : false,
-      entry_cogs_per_unit: !isCod && entry.entry_cogs_per_unit !== ""
+      entry_cogs_per_unit: !false && entry.entry_cogs_per_unit !== ""
         ? Number(entry.entry_cogs_per_unit)
         : null,
-      entry_shipping_per_unit: !isCod && entry.entry_shipping_per_unit !== ""
+      entry_shipping_per_unit: !false && entry.entry_shipping_per_unit !== ""
         ? Number(entry.entry_shipping_per_unit)
         : null,
-      entry_cogs_currency: !isCod && (entry.entry_cogs_per_unit !== "" || entry.entry_shipping_per_unit !== "")
+      entry_cogs_currency: !false && (entry.entry_cogs_per_unit !== "" || entry.entry_shipping_per_unit !== "")
         ? (entry.entry_cogs_currency as string)
         : null,
       total_revenue: isCod
@@ -313,7 +322,7 @@ function EntriesPage() {
               .filter(([, v]) => Number(v) > 0),
           )
         : {},
-      visits: !isCod && entry.visits !== "" ? Number(entry.visits) : null,
+      visits: !false && entry.visits !== "" ? Number(entry.visits) : null,
       upsells: entry.upsells_enabled
         ? entry.upsells
             .filter((u) => u.product_id && Number(u.qty) > 0 && (u.offered || Number(u.unit_price) >= 0))
@@ -413,19 +422,19 @@ function EntriesPage() {
       productName: p.name,
       entry_date: e.entry_date,
       shopify_orders: isCod ? "" : String(e.shopify_orders ?? ""),
-      visits: !isCod && (e as any).visits != null ? String((e as any).visits) : "",
+      visits: !false && (e as any).visits != null ? String((e as any).visits) : "",
       refunded_orders: e.refunded_orders ? String(e.refunded_orders) : "",
       refunded_amount: e.refunded_amount ? String(e.refunded_amount) : "",
-      total_revenue: !isCod && e.total_revenue != null ? String(e.total_revenue) : "",
-      total_revenue_currency: cleanCurrency(e.total_revenue_currency ?? p.currency ?? profileCurrency),
+      total_revenue: !false && e.total_revenue != null ? String(e.total_revenue) : "",
+      total_revenue_currency: cleanCurrency(e.total_revenue_currency ?? p.currency ?? profileCurrency, modeCurrency),
       ad_budget: e.ad_budget ? String(e.ad_budget) : "",
-      ad_budget_currency: cleanCurrency(e.ad_budget_currency ?? profileCurrency),
+      ad_budget_currency: cleanCurrency(e.ad_budget_currency ?? profileCurrency, modeCurrency),
       include_meta_tax: e.include_meta_tax ?? true,
       include_shopify_fees: e.include_shopify_fees ?? false,
       include_wave_fees: e.include_wave_fees ?? false,
       entry_cogs_per_unit: (e as any).entry_cogs_per_unit != null ? String((e as any).entry_cogs_per_unit) : "",
       entry_shipping_per_unit: (e as any).entry_shipping_per_unit != null ? String((e as any).entry_shipping_per_unit) : "",
-      entry_cogs_currency: cleanCurrency((e as any).entry_cogs_currency ?? p.currency ?? profileCurrency),
+      entry_cogs_currency: cleanCurrency((e as any).entry_cogs_currency ?? p.currency ?? profileCurrency, modeCurrency),
       received_orders: isCod ? String(e.received_orders ?? e.shopify_orders ?? "") : "",
       confirmed_orders: isCod ? String(e.confirmed_orders ?? "") : "",
       delivered_orders: isCod ? String(e.delivered_orders ?? "") : "",
@@ -440,7 +449,7 @@ function EntriesPage() {
             product_id: String(u.product_id ?? ""),
             qty: u.qty != null ? String(u.qty) : "",
             unit_price: u.unit_price != null ? String(u.unit_price) : "",
-            currency: cleanCurrency(u.currency ?? p.currency ?? profileCurrency),
+            currency: cleanCurrency(u.currency ?? p.currency ?? profileCurrency, modeCurrency),
             offered: !!u.offered,
           }))
         : [],
@@ -476,7 +485,7 @@ function EntriesPage() {
 
       <div className="mb-6 md:mb-8">
         <div className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
-          {activeMode === "cod" ? "COD · LIVRAISONS QUOTIDIENNES" : "COPYX · DONNÉES QUOTIDIENNES"}
+          {false ? "COD · LIVRAISONS QUOTIDIENNES" : "COPYX · DONNÉES QUOTIDIENNES"}
         </div>
         <h1 className="text-4xl md:text-6xl font-black tracking-tighter mt-1">SAISIES</h1>
       </div>
@@ -690,9 +699,9 @@ function EntriesPage() {
               <th className="text-left p-3">DATE</th>
               <th className="text-left p-3">PRODUIT</th>
               <th className="text-right p-3">REÇUES</th>
-              {activeMode === "cod" && <th className="text-right p-3">CONFIRMÉES</th>}
-              {activeMode === "cod" && <th className="text-right p-3">LIVRÉES</th>}
-              <th className="text-right p-3">{activeMode === "cod" ? "CASH" : "CA"}</th>
+              {false && <th className="text-right p-3">CONFIRMÉES</th>}
+              {false && <th className="text-right p-3">LIVRÉES</th>}
+              <th className="text-right p-3">{false ? "CASH" : "CA"}</th>
               <th className="text-right p-3">PUB</th>
               <th className="p-3 text-right">ACTIONS</th>
             </tr>
@@ -700,16 +709,18 @@ function EntriesPage() {
           <tbody>
             {entriesQ.data?.length === 0 && (
               <tr>
-                <td colSpan={activeMode === "cod" ? 8 : 6} className="text-center p-6 text-muted-foreground">
+                <td colSpan={false ? 8 : 6} className="text-center p-6 text-muted-foreground">
                   Aucune saisie sur la période.
                 </td>
               </tr>
             )}
             {entriesQ.data?.map((e: any) => {
               const p = productMap.get(e.product_id);
-              const adCur = cleanCurrency(e.ad_budget_currency);
-              const revenueCur = cleanCurrency(e.total_revenue_currency ?? (p as any)?.currency);
-              const isCod = activeMode === "cod";
+              const adCur = cleanCurrency(e.ad_budget_currency, modeCurrency);
+              const revenueCur = cleanCurrency(e.total_revenue_currency ?? (p as any)?.currency, modeCurrency);
+              // L'ancienne ligne COD a été retirée : la ligne CopyX remplace
+  // l'ancien comportement « dropshipping » et reste en FCFA.
+  const isCod = false;
               // Fallback : anciennes saisies COD ont la valeur dans shopify_orders
               const receivedDisplay = isCod
                 ? (e.received_orders ?? e.shopify_orders ?? 0)
@@ -720,7 +731,7 @@ function EntriesPage() {
                   <td className="p-3">{p?.name ?? "—"}</td>
                   <td className="p-3 text-right tabular">
                     {receivedDisplay}
-                    {!isCod && (Number(e.refunded_orders) > 0 || Number(e.refunded_amount) > 0) && (
+                    {!false && (Number(e.refunded_orders) > 0 || Number(e.refunded_amount) > 0) && (
                       <div className="text-[10px] text-muted-foreground font-normal mt-0.5 space-y-0.5">
                         {Number(e.refunded_orders) > 0 && (
                           <div className="text-destructive">↩ {e.refunded_orders} remb.</div>
@@ -733,10 +744,10 @@ function EntriesPage() {
                       </div>
                     )}
                   </td>
-                  {isCod && (
+                  {false && (
                     <td className="p-3 text-right tabular">{e.confirmed_orders ?? 0}</td>
                   )}
-                  {isCod && (
+                  {false && (
                     <td className="p-3 text-right tabular">{e.delivered_orders ?? 0}</td>
                   )}
                   <td className="p-3 text-right tabular">
@@ -791,13 +802,13 @@ function PendingCard({
 }: {
   entry: PendingEntry;
   products: any[];
-  mode: "cod" | "dropshipping";
+  mode: BusinessMode;
   canUseUpsells: boolean;
   onChange: (patch: Partial<PendingEntry>) => void;
   onRemove: () => void;
   onSave: () => void;
 }) {
-  const isCod = mode === "cod";
+  const isCod = false; // ancienne ligne COD retirée
   const currentProduct = products.find((p) => p.id === entry.product_id);
   const productZones: { name: string; cost: number }[] = Array.isArray(currentProduct?.shipping_zones)
     ? (currentProduct!.shipping_zones as any[]).map((z) => ({
@@ -805,7 +816,7 @@ function PendingCard({
         cost: Number(z.cost ?? 0),
       })).filter((z) => z.name.length > 0)
     : [];
-  const hasZones = isCod && productZones.length > 0;
+  const hasZones = false && productZones.length > 0;
   return (
     <div className="brutal-border-thin bg-background p-3 grid gap-3">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -817,7 +828,7 @@ function PendingCard({
               onChange({
                 product_id: e.target.value,
                 productName: next?.name ?? entry.productName,
-                total_revenue_currency: cleanCurrency(next?.currency ?? entry.total_revenue_currency),
+                total_revenue_currency: cleanCurrency(next?.currency ?? entry.total_revenue_currency, entry.total_revenue_currency),
                 delivered_by_zone: {},
               });
             }}
@@ -1242,13 +1253,12 @@ function UpsellSection({
 }: {
   entry: PendingEntry;
   products: any[];
-  mode: "cod" | "dropshipping";
+  mode: BusinessMode;
   canUseUpsells: boolean;
   onChange: (patch: Partial<PendingEntry>) => void;
 }) {
-  const isCod = mode === "cod";
-  const lockedCur: AppCurrency = cleanCurrency(entry.total_revenue_currency);
-  const symbol = isCod ? "XOF" : lockedCur;
+  const lockedCur: AppCurrency = cleanCurrency(entry.total_revenue_currency, entry.total_revenue_currency);
+  const symbol = lockedCur;
 
   if (!canUseUpsells) {
     return (
@@ -1278,7 +1288,7 @@ function UpsellSection({
       product_id: firstProduct.id,
       qty: "",
       unit_price: "",
-      currency: isCod ? ("XOF" as AppCurrency) : lockedCur,
+      currency: lockedCur,
     };
     onChange({ upsells: [...lines, newLine] });
   }
@@ -1309,7 +1319,7 @@ function UpsellSection({
                     product_id: products[0].id,
                     qty: "",
                     unit_price: "",
-                    currency: isCod ? ("XOF" as AppCurrency) : lockedCur,
+                    currency: lockedCur,
                   },
                 ],
               });

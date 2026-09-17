@@ -52,7 +52,7 @@ function AuthPage() {
   const [phoneCode, setPhoneCode] = useState("");
   const [phone, setPhone] = useState("");
   const [referralSource, setReferralSource] = useState("");
-  const [selectedMode, setSelectedMode] = useState<"dropshipping" | "cod">("dropshipping");
+  const [selectedMode, setSelectedMode] = useState<"copyx" | "dropshipping">("copyx");
   const [affiliateCode, setAffiliateCode] = useState(ref ?? "");
   const [affiliateInfo, setAffiliateInfo] = useState<{ valid: boolean; trial_days?: number; label?: string | null } | null>(null);
   const [busy, setBusy] = useState(false);

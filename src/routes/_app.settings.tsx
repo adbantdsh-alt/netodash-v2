@@ -6,6 +6,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useProfile } from "@/lib/queries";
+import {
+  DROPSHIPPING_CURRENCIES,
+  normalizeDropshippingCurrency,
+  type DropshippingCurrency,
+} from "@/lib/dropshipping-fx";
 import { deleteAccount } from "@/lib/account.functions";
 import { useOnboarding } from "@/lib/use-onboarding";
 import { useNavigate as useNav } from "@tanstack/react-router";
@@ -25,6 +30,9 @@ function SettingsPage() {
   // Profil
   const [displayName, setDisplayName] = useState("");
   const [metaTax, setMetaTax] = useState("18");
+  // Ligne Dropshipping : devise de la boutique + taux de conversion du budget pub
+  const [dsCurrency, setDsCurrency] = useState<DropshippingCurrency>("EUR");
+  const [usdRate, setUsdRate] = useState("");
   const [busyProfile, setBusyProfile] = useState(false);
 
   // Email
@@ -45,6 +53,14 @@ function SettingsPage() {
     if (profileQ.data) {
       setDisplayName(profileQ.data.display_name ?? "");
       setMetaTax(String((profileQ.data as any).meta_tax_pct ?? 18));
+      setDsCurrency(
+        normalizeDropshippingCurrency(
+          (profileQ.data as any).dropshipping_currency ?? profileQ.data.currency,
+          "EUR",
+        ),
+      );
+      const rate = Number((profileQ.data as any).dropshipping_usd_fx);
+      setUsdRate(Number.isFinite(rate) && rate > 0 ? String(rate) : "");
     }
   }, [profileQ.data]);
 
@@ -62,9 +78,12 @@ function SettingsPage() {
           id: user!.id,
           email: user!.email,
           display_name: displayName,
+          // Ligne CopyX : FCFA strict. La devise de la ligne Dropshipping est
+          // stockée séparément et n'influence jamais les calculs CopyX.
           currency: "XOF",
-          dropshipping_currency: "XOF",
+          dropshipping_currency: dsCurrency,
           cod_currency: "XOF",
+          dropshipping_usd_fx: Number(usdRate) > 0 ? Number(usdRate) : null,
           meta_tax_pct: tax,
         } as any,
         { onConflict: "id" },
@@ -173,12 +192,57 @@ function SettingsPage() {
             />
           </label>
           <label className="block scroll-mt-24" id="currency">
-            <div className="text-xs uppercase tracking-widest font-bold mb-2">Devise</div>
+            <div className="text-xs uppercase tracking-widest font-bold mb-2">
+              Ligne CopyX — devise
+            </div>
             <div className="w-full bg-muted/40 brutal-border-thin px-4 py-3 font-mono">
               FCFA — Franc CFA (XOF)
             </div>
             <p className="text-xs text-muted-foreground mt-1 font-mono">
-              Devise unique de l'app : tout est saisi et affiché en FCFA.
+              Verrouillé : la ligne CopyX est 100 % FCFA (acomptes 10 %, XaalipSay 5 %).
+            </p>
+          </label>
+          <label className="block">
+            <div className="text-xs uppercase tracking-widest font-bold mb-2">
+              Ligne Dropshipping — devise de la boutique
+            </div>
+            <select
+              value={dsCurrency}
+              onChange={(e) => setDsCurrency(e.target.value as DropshippingCurrency)}
+              className="w-full bg-background brutal-border-thin px-4 py-3 font-mono focus:border-accent focus:border-2 outline-none"
+            >
+              {DROPSHIPPING_CURRENCIES.map((c) => (
+                <option key={c} value={c}>
+                  {c === "EUR"
+                    ? "Euro (€)"
+                    : c === "USD"
+                      ? "Dollar US ($)"
+                      : c === "GBP"
+                        ? "Livre (£)"
+                        : "FCFA (XOF)"}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-muted-foreground mt-1 font-mono">
+              Utilisée pour les produits et les saisies de la ligne Dropshipping uniquement.
+            </p>
+          </label>
+          <label className="block">
+            <div className="text-xs uppercase tracking-widest font-bold mb-2">
+              Taux {dsCurrency === "XOF" ? "USD → FCFA" : `USD → ${dsCurrency}`} (optionnel)
+            </div>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={usdRate}
+              onChange={(e) => setUsdRate(e.target.value)}
+              placeholder={dsCurrency === "XOF" ? "ex. 600" : "ex. 0.92"}
+              className="w-full bg-background brutal-border-thin px-4 py-3 font-mono focus:border-accent focus:border-2 outline-none"
+            />
+            <p className="text-xs text-muted-foreground mt-1 font-mono">
+              1 USD = ? {dsCurrency}. Sert à convertir un budget pub facturé en dollars
+              vers ta devise, et à afficher un ROAS net comparable.
             </p>
           </label>
           <label className="block">

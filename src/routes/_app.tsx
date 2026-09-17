@@ -11,6 +11,7 @@ import { useActiveMode } from "@/lib/use-active-mode";
 import { usePlanCodModeSync } from "@/lib/use-plan-mode-sync";
 import { ImpersonationBanner } from "@/components/ImpersonationBanner";
 import { Logo } from "@/components/Logo";
+import { BusinessLineSwitch } from "@/components/BusinessLineSwitch";
 import { AnnouncementsBanner } from "@/components/AnnouncementsBanner";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
@@ -173,11 +174,14 @@ function AppLayout() {
       <AnnouncementsBanner userPlan={null} />
       <header className="brutal-border-thin border-t-0 border-l-0 border-r-0 sticky top-0 bg-background z-40">
         <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-3 md:gap-6">
-          {/* ZONE GAUCHE : Logo texte */}
-          <div className="flex items-center gap-3 md:gap-4 min-w-0">
+          {/* ZONE GAUCHE : Logo texte + ligne de business active */}
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
             <Link to="/dashboard" className="flex items-center min-w-0">
               <Logo size="sm" />
             </Link>
+            <div className="hidden sm:block">
+              <BusinessLineSwitch />
+            </div>
           </div>
 
           {/* ZONE CENTRE : Navigation principale */}
